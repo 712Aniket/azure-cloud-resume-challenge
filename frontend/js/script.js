@@ -1,7 +1,7 @@
 // Visitor Counter
 const visitorCountElement = document.getElementById("visitor-count");
 
-const API_URL = "http://localhost:7071/api/visitor-count";
+const API_URL = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
 
 async function updateVisitorCount() {
     try {
