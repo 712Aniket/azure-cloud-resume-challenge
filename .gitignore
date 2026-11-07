@@ -44,3 +44,6 @@ Thumbs.db
 
 # Keep certification PDFs private (local only)
 frontend/certifications/*.pdf
+
+# Azurite local storage emulator data
+.azurite/
