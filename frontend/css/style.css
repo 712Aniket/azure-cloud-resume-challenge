@@ -1,0 +1,468 @@
+/* Basic page styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Overall page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5F7FA;
+    color: #1E293B;
+    line-height: 1.6;
+}
+
+/* Hero / Header section */
+.hero {
+    background-color: #FFFFFF;
+    padding: 70px 10%;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.hero-content {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.hero-label {
+    color: #2563EB;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    color: #0F172A;
+    margin-bottom: 10px;
+}
+
+.hero h2 {
+    font-size: 23px;
+    color: #2563EB;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.hero-description {
+    max-width: 750px;
+    font-size: 16px;
+    color: #475569;
+    margin-bottom: 25px;
+}
+
+/* Hero action links */
+.hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.hero-links a {
+    display: inline-block;
+    text-decoration: none;
+    color: #2563EB;
+    background-color: #FFFFFF;
+    border: 1px solid #2563EB;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.hero-links a:hover {
+    color: #FFFFFF;
+    background-color: #2563EB;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.45);
+    transform: translateY(-3px);
+}
+
+/* Navigation bar */
+nav {
+    background-color: #FFFFFF;
+    padding: 18px 10%;
+    border-bottom: 1px solid #E2E8F0;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    color: #2563EB;
+    background-color: #DBEAFE;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+    transform: translateY(-2px);
+}
+
+nav a:hover {
+    color: #2563EB;
+}
+
+/* Main content sections */
+main {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 25px;
+}
+
+/* Individual section cards */
+main section {
+    background-color: #FFFFFF;
+    padding: 30px;
+    margin-bottom: 25px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+/* Section headings */
+main section h2 {
+    color: #0F172A;
+    font-size: 24px;
+    margin-bottom: 18px;
+}
+
+/* About Me paragraphs */
+#about p {
+    color: #475569;
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+/* About Me section */
+#about {
+    position: relative;
+    overflow: hidden;
+}
+
+/* About Me heading */
+#about h2 {
+    font-size: 26px;
+    color: #0F172A;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #DBEAFE;
+    position: relative;
+}
+
+//* About Me section */
+#about {
+    background: linear-gradient(135deg, #FFFFFF 70%, #EFF6FF 100%);
+    padding: 40px;
+    border-radius: 14px;
+    border-left: 5px solid #2563EB;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+/* About Me heading */
+#about h2 {
+    color: #0F172A;
+    font-size: 28px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #DBEAFE;
+}
+
+/* About Me paragraphs */
+#about p {
+    color: #475569;
+    font-size: 16px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+    max-width: 900px;
+}
+
+/* Remove final paragraph spacing */
+#about p:last-child {
+    margin-bottom: 0;
+}
+
+/* Highlight the final paragraph */
+#about p:last-child {
+    margin-bottom: 0;
+}
+
+/* Technical Skills */
+.skill-category {
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.skill-category h3 {
+    color: #2563EB;
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+.skill-category p {
+    color: #475569;
+    font-size: 15px;
+}
+
+/* Skill category hover effect */
+.skill-category:hover {
+    border-color: #2563EB;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Skill badges */
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.skill-list span {
+    display: inline-block;
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+    border: 1px solid #BFDBFE;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Skill badge hover */
+.skill-list span:hover {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+    transform: translateY(-3px);
+}
+
+/* Projects section */
+.project-card {
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.project-card h3 {
+    color: #1D4ED8;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.project-card p {
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.project-tech {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2563EB !important;
+}
+
+.project-status {
+    display: inline-block;
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Project card hover */
+.project-card:hover {
+    border-color: #2563EB;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Certification group headings */
+.certification-group-title {
+    color: #334155;
+    font-size: 19px;
+    margin: 25px 0 18px;
+}
+
+/* Certification grid */
+.certification-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Individual certification card */
+.certification-card {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    transition: all 0.3s ease;
+}
+
+
+.certification-card h3 {
+    color: #1E293B;
+    font-size: 17px;
+    margin: 15px 0 8px;
+}
+
+.certification-card p {
+    color: #64748B;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+/* Temporary logo labels */
+.cert-logo {
+    color: #2563EB;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+/* Certificate link */
+.certification-card a {
+    display: inline-block;
+    color: #2563EB;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.certification-card:hover {
+    border-color: #2563EB;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+    transform: translateY(-4px);
+}
+
+/* Card hover */
+.certification-card:hover {
+    border-color: #2563EB;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
+    transform: translateY(-4px);
+}
+
+/* Footer */
+footer {
+    background-color: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+    padding: 30px 20px;
+    text-align: center;
+    color: #64748B;
+    font-size: 14px;
+}
+
+footer p {
+    margin-top: 8px;
+}
+
+.visitor-counter {
+    margin-bottom: 15px;
+    color: #334155;
+    font-weight: 600;
+}
+
+#visitor-count {
+    color: #2563EB;
+    margin-left: 5px;
+}
+
+/* Mobile navigation */
+@media (max-width: 600px) {
+    nav {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 10px;
+    }
+
+    nav a {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .hero {
+        padding: 40px 20px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero h2 {
+        font-size: 20px;
+    }
+
+    main {
+        width: 100%;
+        margin: 25px auto;
+        padding: 0 15px;
+    }
+
+    main section {
+        width: 100%;
+        padding: 22px;
+    }
+
+    nav {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 10px;
+    }
+
+    .certification-list {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    footer {
+        width: 100%;
+    }
+}
+
+/* Certification badges */
+.certification-badge {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 15px;
+}

@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Azure Functions local configuration
+local.settings.json
+local.settings.*.json
+.python_packages/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Azure and application logs
+*.log
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+*.tfvars
+!*.tfvars.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editor settings
+.vscode/
+.idea/
+
+# Keep certification PDFs private (local only)
+frontend/certifications/*.pdf
