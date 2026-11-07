@@ -47,3 +47,9 @@ frontend/certifications/*.pdf
 
 # Azurite local storage emulator data
 .azurite/
+
+# Terraform
+terraform/terraform.tfvars
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform/
