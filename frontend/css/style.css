@@ -466,3 +466,110 @@ footer p {
     display: block;
     margin: 0 auto 15px;
 }
+
+
+/* Certificate full-screen viewer */
+.certification-card {
+    width: 100%;
+    font: inherit;
+    cursor: pointer;
+    color: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.certification-card .certificate-hint {
+    display: inline-block;
+    color: #2563EB;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.certification-card.is-flipping {
+    transform: perspective(700px) rotateY(90deg) scale(.96);
+    transition: transform .32s ease;
+}
+
+.certificate-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(15, 23, 42, .94);
+    padding: 16px;
+}
+
+.certificate-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.certificate-viewer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.certificate-toolbar {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4px 14px;
+}
+
+.zoom-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.certificate-toolbar button {
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #1E293B;
+    min-width: 42px;
+    min-height: 40px;
+    padding: 8px 14px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.certificate-image-container {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.certificate-image-container img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transform-origin: center center;
+    transition: transform .15s ease;
+}
+
+@media (max-width: 600px) {
+    .certificate-modal {
+        padding: 8px;
+    }
+
+    .certificate-toolbar {
+        padding-bottom: 8px;
+    }
+
+    .certificate-image-container {
+        justify-content: flex-start;
+    }
+}

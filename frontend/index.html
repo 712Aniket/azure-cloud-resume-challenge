@@ -131,105 +131,69 @@
     <h3 class="certification-group-title">Cloud & Technology</h3>
 
     <div class="certification-list">
-
-        <!-- AZ-104 -->
-        <div class="certification-card">
-            <img src="images/az-104.png"
-                 alt="Microsoft Azure Administrator Associate badge"
-                 class="certification-badge">
-
+        <button class="certification-card" data-certificate="images/certificates/final/AZ-104.png" aria-label="View Azure Administrator Associate certificate">
+            <img src="images/az-104.png" alt="Azure Administrator Associate badge" class="certification-badge">
             <h3>Azure Administrator Associate</h3>
             <p>Microsoft AZ-104</p>
+            <span class="certificate-hint">View Certificate ↗</span>
+        </button>
 
-            <a href="certifications/az-104.pdf"
-               target="_blank" rel="noopener noreferrer">
-                View Certificate ↗
-            </a>
-        </div>
-
-        <!-- AZ-900 -->
-        <div class="certification-card">
-            <img src="images/az-900.png"
-                 alt="Microsoft Azure Fundamentals badge"
-                 class="certification-badge">
-
+        <button class="certification-card" data-certificate="images/certificates/final/AZ-900.png" aria-label="View Azure Fundamentals certificate">
+            <img src="images/az-900.png" alt="Azure Fundamentals badge" class="certification-badge">
             <h3>Azure Fundamentals</h3>
             <p>Microsoft AZ-900</p>
+            <span class="certificate-hint">View Certificate ↗</span>
+        </button>
 
-            <a href="certifications/AZ-900.pdf"
-               target="_blank" rel="noopener noreferrer">
-                View Certificate ↗
-            </a>
-        </div>
-
-        <!-- AI-900 -->
-        <div class="certification-card">
-            <img src="images/ai-900.png"
-                 alt="Microsoft Azure AI Fundamentals badge"
-                 class="certification-badge">
-
+        <button class="certification-card" data-certificate="images/certificates/final/AI-900.png" aria-label="View Azure AI Fundamentals certificate">
+            <img src="images/ai-900.png" alt="Azure AI Fundamentals badge" class="certification-badge">
             <h3>Azure AI Fundamentals</h3>
             <p>Microsoft AI-900</p>
+            <span class="certificate-hint">View Certificate ↗</span>
+        </button>
 
-            <a href="certifications/AI-900.pdf"
-               target="_blank" rel="noopener noreferrer">
-                View Certificate ↗
-            </a>
-        </div>
-
-        <!-- AWS -->
-        <div class="certification-card">
-            <img src="images/aws-cloud-practitioner.png"
-                 alt="AWS Certified Cloud Practitioner badge"
-                 class="certification-badge">
-
+        <button class="certification-card" data-certificate="images/certificates/final/AWS-CCP.png" aria-label="View AWS Cloud Practitioner certificate">
+            <img src="images/aws-cloud-practitioner.png" alt="AWS Cloud Practitioner badge" class="certification-badge">
             <h3>AWS Certified Cloud Practitioner</h3>
             <p>Amazon Web Services</p>
+            <span class="certificate-hint">View Certificate ↗</span>
+        </button>
 
-            <a href="certifications/AWS-CCP.pdf"
-               target="_blank" rel="noopener noreferrer">
-                View Certificate ↗
-            </a>
-        </div>
-
-        <!-- Google Cloud -->
-        <div class="certification-card">
-            <img src="images/google-cloud-digital-leader.png"
-                 alt="Google Cloud Digital Leader badge"
-                 class="certification-badge">
-
+        <button class="certification-card" data-certificate="images/certificates/final/Google-Cloud-Digital-Leader.png" aria-label="View Google Cloud Digital Leader certificate">
+            <img src="images/google-cloud-digital-leader.png" alt="Google Cloud Digital Leader badge" class="certification-badge">
             <h3>Cloud Digital Leader</h3>
             <p>Google Cloud</p>
-
-            <a href="certifications/Google-Cloud-Digital-Leader.pdf"
-               target="_blank" rel="noopener noreferrer">
-                View Certificate ↗
-            </a>
-        </div>
-
+            <span class="certificate-hint">View Certificate ↗</span>
+        </button>
     </div>
 
     <h3 class="certification-group-title">IT Service Management</h3>
 
     <div class="certification-list">
-
-        <!-- ITIL -->
-        <div class="certification-card">
-            <img src="images/itil-4-foundation.png"
-                 alt="ITIL 4 Foundation badge"
-                 class="certification-badge">
-
+        <button class="certification-card" data-certificate="images/certificates/final/ITIL-4.png" aria-label="View ITIL 4 Foundation certificate">
+            <img src="images/itil-4-foundation.png" alt="ITIL 4 Foundation badge" class="certification-badge">
             <h3>ITIL 4 Foundation</h3>
             <p>PeopleCert</p>
-
-            <a href="certifications/ITIL-4.pdf"
-               target="_blank" rel="noopener noreferrer">
-                View Certificate ↗
-            </a>
-        </div>
-
+            <span class="certificate-hint">View Certificate ↗</span>
+        </button>
     </div>
 </section>
+
+<div class="certificate-modal" id="certificate-modal" aria-hidden="true">
+    <div class="certificate-viewer" role="dialog" aria-modal="true" aria-label="Certificate viewer">
+        <div class="certificate-toolbar">
+            <div class="zoom-controls">
+                <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+                <button type="button" id="zoom-reset">Fit</button>
+                <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+            </div>
+            <button type="button" id="certificate-close" aria-label="Close certificate">✕</button>
+        </div>
+        <div class="certificate-image-container">
+            <img id="certificate-image" src="" alt="Certificate">
+        </div>
+    </div>
+</div>
 
         <section id="contact">
     <h2>Let's Connect</h2>
