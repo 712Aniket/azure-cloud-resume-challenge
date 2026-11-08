@@ -1,0 +1,23 @@
+flowchart TD
+    A["Developer"] --> B["GitHub Repository"]
+
+    subgraph GITHUB["GitHub"]
+        B --> C["GitHub Actions<br/>CI/CD Workflow"]
+        B --> D["CodeQL<br/>Code Security Scanning"]
+    end
+
+    C -->|"Frontend deployment<br/>on resume-develop"| E["Azure Static Web Apps"]
+
+    C -.->|"Pull Request"| F["Preview Environment"]
+
+    A -->|"Infrastructure as Code"| G["Terraform"]
+
+    G --> H["Azure Resource Group"]
+
+    subgraph AZURE["Microsoft Azure"]
+        H --> E
+        H --> I["Azure Function App<br/>Python Backend"]
+        H --> J["Azure Cosmos DB"]
+        H --> K["Azure Storage"]
+        H --> L["Application Insights"]
+    end
