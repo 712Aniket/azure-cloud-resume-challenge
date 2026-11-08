@@ -1,0 +1,22 @@
+flowchart TD
+    A["Website Visitor"]
+    B["Azure Static Web Apps<br/>HTML, CSS, JavaScript"]
+    C["Azure Functions<br/>Python Backend<br/>HTTP Trigger"]
+    D[("Azure Cosmos DB<br/>portfolio-db<br/>visitor-counters")]
+
+    A -->|"Opens website"| B
+    B -->|"GET /api/visitor-count"| C
+    C -->|"Increment visitor count"| D
+    D -->|"Return updated count"| C
+    C -->|"JSON response"| B
+
+    subgraph SUPPORT["Supporting Azure Services"]
+        E["Managed Identity<br/>Secure resource access"]
+        F["Azure Storage<br/>Functions runtime storage"]
+        G["Application Insights<br/>Monitoring and diagnostics"]
+    end
+
+    C -.->|"Authentication"| E
+    E -.->|"Authorised access"| D
+    E -.->|"Passwordless access"| F
+    C -.->|"Telemetry"| G
