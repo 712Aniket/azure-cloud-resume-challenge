@@ -1,246 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Aniket Prakash Pawar | Cloud & Infrastructure Engineer</title>
-
-    <meta name="description" content="Aniket Prakash Pawar - Cloud and IT Support Professional transitioning into Cloud Infrastructure and DevOps Engineering.">
-
-    <link rel="stylesheet" href="css/style.css">
-
-    <script src="js/script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff7ed">
+  <title>Aniket Prakash Pawar | Cloud & Infrastructure Engineer</title>
+  <meta name="description" content="Aniket Pawar - Cloud and IT Support Professional transitioning into Cloud Infrastructure and DevOps Engineering.">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
 </head>
-
 <body>
-
-    <!-- Header -->
-    <header>
-
-        <header class="hero">
-
+  <header class="hero">
     <div class="hero-content">
+      <p class="hero-label">BUILDING IN CLOUD. AUTOMATING WITH DEVOPS.</p>
+      <span id="time-greeting" class="time-greeting" aria-live="polite" role="status"></span>
+      <h1>Aniket Pawar</h1>
+      <h2>Cloud & Infrastructure Operations Engineer</h2>
+      <p class="hero-description">
+        Cloud and IT support professional with 6+ years of experience
+        in enterprise support, incident management and infrastructure
+        troubleshooting. Passionate about cloud technologies,
+        automation and reliable infrastructure.
+      </p>
+      <div class="hero-links">
+        <a href="resume/Aniket_Pawar_Resume.pdf">Download Resume</a>
+        <a href="https://github.com/712Aniket" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </div>
+  </header>
 
-       <p class="hero-label">BUILDING IN CLOUD. AUTOMATING WITH DEVOPS.</p>
+  <nav aria-label="Main navigation">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#contact">Contact</a>
+    <button id="theme-toggle" class="theme-toggle" type="button"
+      aria-label="Switch theme" title="Switch theme">
+      <span id="theme-icon" aria-hidden="true">☀️</span>
+    </button>
+  </nav>
 
-        <h1>Aniket Prakash Pawar</h1>
+  <main>
+    <section id="about">
+      <h2 class="section-heading">About Me</h2>
+      <p>I'm an IT support professional with over 6 years of experience in enterprise technical support, incident management and infrastructure troubleshooting.</p>
+      <p>I hold certifications in Microsoft Azure, AWS and Google Cloud, and I'm developing practical skills in cloud infrastructure, Linux, Docker, Kubernetes, Terraform and CI/CD.</p>
+      <p>I'm currently focused on building hands-on cloud and DevOps projects to strengthen my knowledge of infrastructure automation, deployment pipelines and cloud operations.</p>
+    </section>
 
-        <h2>Cloud & Infrastructure Operations Engineer</h2>
-
-        <p class="hero-description">
-            Cloud and IT support professional with 6+ years of experience
-            in enterprise support, incident management and infrastructure
-            troubleshooting. Passionate about cloud technologies,
-            automation and reliable infrastructure.
-        </p>
-
-        <div class="hero-links">
-            <a href="resume/Aniket_Pawar_Resume.pdf">Download Resume</a>
-            <a href="https://github.com/712Aniket" target="_blank">GitHub</a>
-            <a href="https://www.linkedin.com/in/aniketprakash" target="_blank">LinkedIn</a>
+    <section id="skills">
+      <h2 class="section-heading">Technical Skills</h2>
+      <div class="skill-grid">
+        <div class="skill-category">
+          <h3>Cloud Platforms</h3>
+          <div class="skill-list">
+            <span class="skill-chip"><span class="tech-mark">Az</span>Microsoft Azure</span>
+            <span class="skill-chip"><span class="tech-mark">A</span>AWS</span>
+            <span class="skill-chip"><span class="tech-mark">G</span>Google Cloud</span>
+          </div>
         </div>
+        <div class="skill-category">
+          <h3>DevOps & Automation</h3>
+          <div class="skill-list">
+            <span class="skill-chip"><span class="tech-mark">Git</span>Git</span>
+            <span class="skill-chip"><span class="tech-mark">GL</span>GitLab CI/CD</span>
+            <span class="skill-chip"><span class="tech-mark">Tf</span>Terraform</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Containers & Orchestration</h3>
+          <div class="skill-list">
+            <span class="skill-chip"><span class="tech-mark">D</span>Docker</span>
+            <span class="skill-chip"><span class="tech-mark">K8s</span>Kubernetes</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Operating Systems</h3>
+          <div class="skill-list">
+            <span class="skill-chip"><span class="tech-mark">L</span>Linux</span>
+            <span class="skill-chip"><span class="tech-mark">W</span>Windows</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    </div>
+    <section id="projects">
+      <h2 class="section-heading">Projects</h2>
+      <div class="project-grid">
+        <article class="project-card">
+          <h3>Azure Cloud Resume Challenge</h3>
+          <p>Developed and deployed a cloud-hosted portfolio using Azure Static Web Apps, Azure Functions and Cosmos DB. Implemented a serverless visitor counter, Terraform infrastructure as code, GitHub Actions CI/CD and Azure monitoring.</p>
+          <p class="project-tech">HTML | CSS | JavaScript | Azure Functions | Cosmos DB | Terraform | GitHub Actions</p>
+          <span class="project-status">Completed</span>
+        </article>
+        <article class="project-card">
+          <h3>Azure Cloud Operations & Observability Platform</h3>
+          <p>A hands-on cloud operations platform focused on infrastructure automation, centralized monitoring, log analytics, alerting, incident troubleshooting and operational automation.</p>
+          <p class="project-tech">Azure | Terraform | Azure Monitor | Log Analytics | Python | GitHub Actions</p>
+          <span class="project-status">In progress</span>
+        </article>
+      </div>
+    </section>
 
-</header>
-
-    <!-- Navigation -->
-    <nav>
-
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#certifications">Certifications</a>
-        <a href="#contact">Contact</a>
-
-
-    </nav>
-
-    <!-- Main Content -->
-    <main>
-
-        <section id="about">
-    <h2>About Me</h2>
-
-    <p>
-        I'm an IT support professional with over 6 years of experience
-        in enterprise technical support, incident management and
-        infrastructure troubleshooting.
-    </p>
-
-    <p>
-        I hold certifications in Microsoft Azure, AWS and Google Cloud,
-        and I'm developing practical skills in cloud infrastructure,
-        Linux, Docker, Kubernetes, Terraform and CI/CD.
-    </p>
-
-    <p>
-        I'm currently focused on building hands-on cloud and DevOps
-        projects to strengthen my knowledge of infrastructure
-        automation, deployment pipelines and cloud operations.
-    </p>
-</section>
-
-        <section id="skills">
-    <h2>Technical Skills</h2>
-
-    <div class="skill-category">
-        <h3>Cloud Platforms</h3>
-        <p>Microsoft Azure, AWS, Google Cloud</p>
-    </div>
-
-    <div class="skill-category">
-        <h3>DevOps & Automation</h3>
-        <p>Git, GitLab CI/CD, Terraform</p>
-    </div>
-
-    <div class="skill-category">
-        <h3>Containers & Orchestration</h3>
-        <p>Docker, Kubernetes</p>
-    </div>
-
-    <div class="skill-category">
-        <h3>Operating Systems</h3>
-        <p>Linux, Windows</p>
-    </div>
-
-</section>
-
-        <section id="projects">
-    <h2>Projects</h2>
-
-    <!-- Project 1 -->
-    <div class="project-card">
-        <h3>Azure Cloud Resume Challenge</h3>
-        <p>
-            Developed and deployed a cloud-hosted portfolio using Azure Static
-            Web Apps, Azure Functions and Cosmos DB. Implemented a serverless
-            visitor counter, Terraform infrastructure as code, GitHub Actions
-            CI/CD and Azure monitoring.
-        </p>
-        <p class="project-tech">
-            HTML | CSS | JavaScript | Azure Functions | Cosmos DB |
-            Terraform | GitHub Actions
-        </p>
-        <span class="project-status">Completed</span>
-    </div>
-
-    <!-- Project 2 -->
-    <div class="project-card">
-        <h3>Azure Cloud Operations & Observability Platform</h3>
-        <p>
-            A hands-on cloud operations platform focused on infrastructure
-            automation, centralized monitoring, log analytics, alerting,
-            incident troubleshooting and operational automation.
-        </p>
-        <p class="project-tech">
-            Azure | Terraform | Azure Monitor | Log Analytics |
-            Python | GitHub Actions
-        </p>
-        <span class="project-status">In progress</span>
-    </div>
-</section>
-
-       <section id="certifications">
-    <h2>Certifications</h2>
-
-    <h3 class="certification-group-title">Cloud & Technology</h3>
-
-    <div class="certification-list">
-        <button class="certification-card" data-certificate="images/certificates/final/AZ-104.png" aria-label="View Azure Administrator Associate certificate">
-            <img src="images/az-104.png" alt="Azure Administrator Associate badge" class="certification-badge">
-            <h3>Azure Administrator Associate</h3>
-            <p>Microsoft AZ-104</p>
-            <span class="certificate-hint">View Certificate ↗</span>
+    <section id="certifications">
+      <h2 class="section-heading">Certifications</h2>
+      <h3 class="certification-group-title">Cloud & Technology</h3>
+      <div class="certification-list">
+        <button class="certification-card" type="button" data-certificate="images/certificates/final/AZ-104.png" aria-label="View Azure Administrator Associate certificate">
+          <img src="images/az-104.png" alt="Azure Administrator Associate badge" class="certification-badge">
+          <h3>Azure Administrator Associate</h3><p>Microsoft AZ-104</p><span class="certificate-hint">View Certificate ↗</span>
         </button>
-
-        <button class="certification-card" data-certificate="images/certificates/final/AZ-900.png" aria-label="View Azure Fundamentals certificate">
-            <img src="images/az-900.png" alt="Azure Fundamentals badge" class="certification-badge">
-            <h3>Azure Fundamentals</h3>
-            <p>Microsoft AZ-900</p>
-            <span class="certificate-hint">View Certificate ↗</span>
+        <button class="certification-card" type="button" data-certificate="images/certificates/final/AZ-900.png" aria-label="View Azure Fundamentals certificate">
+          <img src="images/az-900.png" alt="Azure Fundamentals badge" class="certification-badge">
+          <h3>Azure Fundamentals</h3><p>Microsoft AZ-900</p><span class="certificate-hint">View Certificate ↗</span>
         </button>
-
-        <button class="certification-card" data-certificate="images/certificates/final/AI-900.png" aria-label="View Azure AI Fundamentals certificate">
-            <img src="images/ai-900.png" alt="Azure AI Fundamentals badge" class="certification-badge">
-            <h3>Azure AI Fundamentals</h3>
-            <p>Microsoft AI-900</p>
-            <span class="certificate-hint">View Certificate ↗</span>
+        <button class="certification-card" type="button" data-certificate="images/certificates/final/AI-900.png" aria-label="View Azure AI Fundamentals certificate">
+          <img src="images/ai-900.png" alt="Azure AI Fundamentals badge" class="certification-badge">
+          <h3>Azure AI Fundamentals</h3><p>Microsoft AI-900</p><span class="certificate-hint">View Certificate ↗</span>
         </button>
-
-        <button class="certification-card" data-certificate="images/certificates/final/AWS-CCP.png" aria-label="View AWS Cloud Practitioner certificate">
-            <img src="images/aws-cloud-practitioner.png" alt="AWS Cloud Practitioner badge" class="certification-badge">
-            <h3>AWS Certified Cloud Practitioner</h3>
-            <p>Amazon Web Services</p>
-            <span class="certificate-hint">View Certificate ↗</span>
+        <button class="certification-card" type="button" data-certificate="images/certificates/final/AWS-CCP.png" aria-label="View AWS Cloud Practitioner certificate">
+          <img src="images/aws-cloud-practitioner.png" alt="AWS Cloud Practitioner badge" class="certification-badge">
+          <h3>AWS Certified Cloud Practitioner</h3><p>Amazon Web Services</p><span class="certificate-hint">View Certificate ↗</span>
         </button>
-
-        <button class="certification-card" data-certificate="images/certificates/final/Google-Cloud-Digital-Leader.png" aria-label="View Google Cloud Digital Leader certificate">
-            <img src="images/google-cloud-digital-leader.png" alt="Google Cloud Digital Leader badge" class="certification-badge">
-            <h3>Cloud Digital Leader</h3>
-            <p>Google Cloud</p>
-            <span class="certificate-hint">View Certificate ↗</span>
+        <button class="certification-card" type="button" data-certificate="images/certificates/final/Google-Cloud-Digital-Leader.png" aria-label="View Google Cloud Digital Leader certificate">
+          <img src="images/google-cloud-digital-leader.png" alt="Google Cloud Digital Leader badge" class="certification-badge">
+          <h3>Cloud Digital Leader</h3><p>Google Cloud</p><span class="certificate-hint">View Certificate ↗</span>
         </button>
-    </div>
-
-    <h3 class="certification-group-title">IT Service Management</h3>
-
-    <div class="certification-list">
-        <button class="certification-card" data-certificate="images/certificates/final/ITIL-4.png" aria-label="View ITIL 4 Foundation certificate">
-            <img src="images/itil-4-foundation.png" alt="ITIL 4 Foundation badge" class="certification-badge">
-            <h3>ITIL 4 Foundation</h3>
-            <p>PeopleCert</p>
-            <span class="certificate-hint">View Certificate ↗</span>
+      </div>
+      <h3 class="certification-group-title">IT Service Management</h3>
+      <div class="certification-list">
+        <button class="certification-card" type="button" data-certificate="images/certificates/final/ITIL-4.png" aria-label="View ITIL 4 Foundation certificate">
+          <img src="images/itil-4-foundation.png" alt="ITIL 4 Foundation badge" class="certification-badge">
+          <h3>ITIL 4 Foundation</h3><p>PeopleCert</p><span class="certificate-hint">View Certificate ↗</span>
         </button>
-    </div>
-</section>
+      </div>
+    </section>
 
-<div class="certificate-modal" id="certificate-modal" aria-hidden="true">
-    <div class="certificate-viewer" role="dialog" aria-modal="true" aria-label="Certificate viewer">
+    <div class="certificate-modal" id="certificate-modal" aria-hidden="true">
+      <div class="certificate-viewer" role="dialog" aria-modal="true" aria-label="Certificate viewer">
         <div class="certificate-toolbar">
-            <div class="zoom-controls">
-                <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
-                <button type="button" id="zoom-reset">Fit</button>
-                <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
-            </div>
-            <button type="button" id="certificate-close" aria-label="Close certificate">✕</button>
+          <div class="zoom-controls">
+            <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+            <button type="button" id="zoom-reset">Fit</button>
+            <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+          </div>
+          <button type="button" id="certificate-close" aria-label="Close certificate">✕</button>
         </div>
-        <div class="certificate-image-container">
-            <img id="certificate-image" src="" alt="Certificate">
+        <div class="certificate-image-container"><img id="certificate-image" src="" alt="Certificate"></div>
+      </div>
+    </div>
+
+    <section id="contact" class="contact-section">
+      <div class="contact-content">
+        <span class="contact-eyebrow">HAVE A PROJECT IN MIND?</span>
+        <h2>Let's Build Something <span>Together.</span></h2>
+        <p class="contact-intro">Interested in cloud engineering, DevOps, infrastructure or sharing ideas? I'd love to connect and explore opportunities to build something meaningful.</p>
+        <div class="contact-links">
+          <a href="mailto:712aniket@gmail.com" class="contact-button"><span>Get In Touch</span><span class="contact-arrow">↗</span></a>
         </div>
+        <p class="contact-location">Based in Pune, Maharashtra, India</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="visitor-counter"><span>Visitors:</span><span id="visitor-count">Loading...</span></div>
+    <div class="country-visitors" aria-label="Visitors by country">
+      <p class="country-visitors-title">Visitors around the world</p>
+      <div id="country-visitor-pills" class="country-visitor-pills">
+        <span class="country-visitors-pending">Country statistics will appear when the API provides them.</span>
+      </div>
     </div>
-</div>
-
-        <section id="contact">
-    <h2>Let's Connect</h2>
-
-    <p class="contact-intro">
-        Interested in discussing cloud engineering, DevOps,
-        infrastructure or career opportunities? Feel free to reach out.
-    </p>
-
-    <div class="contact-links">
-        <a href="mailto:712aniket@gmail.com">Email Me</a>
-    </div>
-
-    <p class="contact-location">
-        Pune, Maharashtra, India
-    </p>
-</section>
-
-    </main>
-
-    <footer>
-    <div class="visitor-counter">
-        <span>Visitors:</span>
-        <span id="visitor-count">Loading...</span>
-    </div>
-
     <p>© 2026 Aniket Pawar. All rights reserved.</p>
-
-</footer>
-
+  </footer>
 </body>
 </html>
