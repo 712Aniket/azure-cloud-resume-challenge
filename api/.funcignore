@@ -5,3 +5,5 @@ local.settings.json
 .vscode/
 .git/
 .python_packages/
+function_app.py.backup
+.pytest_cache/
