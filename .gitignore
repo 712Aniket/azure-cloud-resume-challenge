@@ -53,3 +53,4 @@ terraform/terraform.tfvars
 terraform/*.tfstate
 terraform/*.tfstate.*
 terraform/.terraform/
+frontend-backup-before-redesign/

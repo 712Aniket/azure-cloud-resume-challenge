@@ -1,179 +1,312 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff7ed">
-  <title>Aniket Prakash Pawar | Cloud & Infrastructure Engineer</title>
-  <meta name="description" content="Aniket Pawar - Cloud and IT Support Professional transitioning into Cloud Infrastructure and DevOps Engineering.">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js" defer></script>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aniket Pawar · Cloud &amp; Infrastructure Engineer</title>
+<meta name="description" content="Aniket Pawar, Pune. Six years in 24×7 enterprise production support, certified on Azure, AWS and Google Cloud, now building cloud infrastructure with Terraform, CI/CD and containers.">
+<meta name="theme-color" content="#0a1220">
+<meta property="og:title" content="Aniket Pawar · Cloud &amp; Infrastructure Engineer">
+<meta property="og:description" content="Six years keeping production up. Now building it with code.">
+<meta property="og:image" content="assets/aniket-photo.webp">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a1220'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23ffb224'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-content">
-      <p class="hero-label">BUILDING IN CLOUD. AUTOMATING WITH DEVOPS.</p>
-      <span id="time-greeting" class="time-greeting" aria-live="polite" role="status"></span>
-      <h1>Aniket Pawar</h1>
-      <h2>Cloud & Infrastructure Operations Engineer</h2>
-      <p class="hero-description">
-        Cloud and IT support professional with 6+ years of experience
-        in enterprise support, incident management and infrastructure
-        troubleshooting. Passionate about cloud technologies,
-        automation and reliable infrastructure.
-      </p>
-      <div class="hero-links">
-        <a href="resume/Aniket_Pawar_Resume.pdf">Download Resume</a>
-        <a href="https://github.com/712Aniket" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      </div>
-    </div>
-  </header>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="spot" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><i id="prog"></i></div>
+<a class="skip" href="#main">Skip to content</a>
 
-  <nav aria-label="Main navigation">
-    <a href="#about">About</a>
-    <a href="#skills">Skills</a>
-    <a href="#projects">Projects</a>
-    <a href="#certifications">Certifications</a>
-    <a href="#contact">Contact</a>
-    <button id="theme-toggle" class="theme-toggle" type="button"
-      aria-label="Switch theme" title="Switch theme">
-      <span id="theme-icon" aria-hidden="true">☀️</span>
-    </button>
+<header class="nav" id="nav">
+  <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+  <a class="logo" href="#top" aria-label="Aniket Pawar, home"><span class="dot"></span><span>aniket<span class="m">.pawar</span></span></a>
+  <nav aria-label="Main">
+    <a href="#log">Career</a><a href="#work">Projects</a><a href="#stack">Stack</a><a href="#certs">Certifications</a><a href="#contact">Contact</a>
   </nav>
+  <a class="btn sm" href="resume/Aniket_Pawar_Resume.pdf" download="">Resume</a>
+  <a class="navcv" href="resume/Aniket_Pawar_Resume.pdf" download="" aria-label="Download resume"><span aria-hidden="true">↓</span>CV</a>
+</header>
 
-  <main>
-    <section id="about">
-      <h2 class="section-heading">About Me</h2>
-      <p>I'm an IT support professional with over 6 years of experience in enterprise technical support, incident management and infrastructure troubleshooting.</p>
-      <p>I hold certifications in Microsoft Azure, AWS and Google Cloud, and I'm developing practical skills in cloud infrastructure, Linux, Docker, Kubernetes, Terraform and CI/CD.</p>
-      <p>I'm currently focused on building hands-on cloud and DevOps projects to strengthen my knowledge of infrastructure automation, deployment pipelines and cloud operations.</p>
-    </section>
-
-    <section id="skills">
-      <h2 class="section-heading">Technical Skills</h2>
-      <div class="skill-grid">
-        <div class="skill-category">
-          <h3>Cloud Platforms</h3>
-          <div class="skill-list">
-            <span class="skill-chip"><span class="tech-mark">Az</span>Microsoft Azure</span>
-            <span class="skill-chip"><span class="tech-mark">A</span>AWS</span>
-            <span class="skill-chip"><span class="tech-mark">G</span>Google Cloud</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h3>DevOps & Automation</h3>
-          <div class="skill-list">
-            <span class="skill-chip"><span class="tech-mark">Git</span>Git</span>
-            <span class="skill-chip"><span class="tech-mark">GL</span>GitLab CI/CD</span>
-            <span class="skill-chip"><span class="tech-mark">Tf</span>Terraform</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h3>Containers & Orchestration</h3>
-          <div class="skill-list">
-            <span class="skill-chip"><span class="tech-mark">D</span>Docker</span>
-            <span class="skill-chip"><span class="tech-mark">K8s</span>Kubernetes</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h3>Operating Systems</h3>
-          <div class="skill-list">
-            <span class="skill-chip"><span class="tech-mark">L</span>Linux</span>
-            <span class="skill-chip"><span class="tech-mark">W</span>Windows</span>
-          </div>
-        </div>
+<div class="dw" id="dw" aria-hidden="true">
+  <div class="dw-bg" data-close=""></div>
+  <div class="dw-panel" id="menu" role="dialog" aria-modal="true" aria-label="Menu" inert="">
+    <div class="dw-glow" aria-hidden="true"></div>
+    <div class="dw-top">
+      <a class="logo" href="#top" data-close=""><span class="dot"></span><span>aniket<span class="m">.pawar</span></span></a>
+      <button class="dw-x" type="button" data-close="" aria-label="Close menu">✕</button>
+    </div>
+    <svg class="dw-beat" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 H150 L160 12 L167 4 L175 21 L183 2 L191 18 L197 12 H400"></path></svg>
+    <div class="dw-body">
+      <div class="dw-tiles dw-in" style="--i:0">
+        <a class="tile ph" href="resume/Aniket_Pawar_Resume.pdf" download="" data-close="">
+          <img src="assets/aniket-photo.webp" alt="" width="261" height="261">
+          <span class="ic">↓</span><span class="tt"><b>Download resume</b><span>PDF · 1 page</span></span>
+        </a>
+        <a class="tile arch-t" href="#work" data-close="">
+          <span class="mini" aria-hidden="true"><i></i><i></i><i></i><i></i><em></em></span>
+          <span class="ic">▶</span><span class="tt"><b>See the Azure build</b><span>Live architecture</span></span>
+        </a>
       </div>
-    </section>
-
-    <section id="projects">
-      <h2 class="section-heading">Projects</h2>
-      <div class="project-grid">
-        <article class="project-card">
-          <h3>Azure Cloud Resume Challenge</h3>
-          <p>Developed and deployed a cloud-hosted portfolio using Azure Static Web Apps, Azure Functions and Cosmos DB. Implemented a serverless visitor counter, Terraform infrastructure as code, GitHub Actions CI/CD and Azure monitoring.</p>
-          <p class="project-tech">HTML | CSS | JavaScript | Azure Functions | Cosmos DB | Terraform | GitHub Actions</p>
-          <span class="project-status">Completed</span>
-        </article>
-        <article class="project-card">
-          <h3>Azure Cloud Operations & Observability Platform</h3>
-          <p>A hands-on cloud operations platform focused on infrastructure automation, centralized monitoring, log analytics, alerting, incident troubleshooting and operational automation.</p>
-          <p class="project-tech">Azure | Terraform | Azure Monitor | Log Analytics | Python | GitHub Actions</p>
-          <span class="project-status">In progress</span>
-        </article>
-      </div>
-    </section>
-
-    <section id="certifications">
-      <h2 class="section-heading">Certifications</h2>
-      <h3 class="certification-group-title">Cloud & Technology</h3>
-      <div class="certification-list">
-        <button class="certification-card" type="button" data-certificate="images/certificates/final/AZ-104.png" aria-label="View Azure Administrator Associate certificate">
-          <img src="images/az-104.png" alt="Azure Administrator Associate badge" class="certification-badge">
-          <h3>Azure Administrator Associate</h3><p>Microsoft AZ-104</p><span class="certificate-hint">View Certificate ↗</span>
-        </button>
-        <button class="certification-card" type="button" data-certificate="images/certificates/final/AZ-900.png" aria-label="View Azure Fundamentals certificate">
-          <img src="images/az-900.png" alt="Azure Fundamentals badge" class="certification-badge">
-          <h3>Azure Fundamentals</h3><p>Microsoft AZ-900</p><span class="certificate-hint">View Certificate ↗</span>
-        </button>
-        <button class="certification-card" type="button" data-certificate="images/certificates/final/AI-900.png" aria-label="View Azure AI Fundamentals certificate">
-          <img src="images/ai-900.png" alt="Azure AI Fundamentals badge" class="certification-badge">
-          <h3>Azure AI Fundamentals</h3><p>Microsoft AI-900</p><span class="certificate-hint">View Certificate ↗</span>
-        </button>
-        <button class="certification-card" type="button" data-certificate="images/certificates/final/AWS-CCP.png" aria-label="View AWS Cloud Practitioner certificate">
-          <img src="images/aws-cloud-practitioner.png" alt="AWS Cloud Practitioner badge" class="certification-badge">
-          <h3>AWS Certified Cloud Practitioner</h3><p>Amazon Web Services</p><span class="certificate-hint">View Certificate ↗</span>
-        </button>
-        <button class="certification-card" type="button" data-certificate="images/certificates/final/Google-Cloud-Digital-Leader.png" aria-label="View Google Cloud Digital Leader certificate">
-          <img src="images/google-cloud-digital-leader.png" alt="Google Cloud Digital Leader badge" class="certification-badge">
-          <h3>Cloud Digital Leader</h3><p>Google Cloud</p><span class="certificate-hint">View Certificate ↗</span>
-        </button>
-      </div>
-      <h3 class="certification-group-title">IT Service Management</h3>
-      <div class="certification-list">
-        <button class="certification-card" type="button" data-certificate="images/certificates/final/ITIL-4.png" aria-label="View ITIL 4 Foundation certificate">
-          <img src="images/itil-4-foundation.png" alt="ITIL 4 Foundation badge" class="certification-badge">
-          <h3>ITIL 4 Foundation</h3><p>PeopleCert</p><span class="certificate-hint">View Certificate ↗</span>
-        </button>
-      </div>
-    </section>
-
-    <div class="certificate-modal" id="certificate-modal" aria-hidden="true">
-      <div class="certificate-viewer" role="dialog" aria-modal="true" aria-label="Certificate viewer">
-        <div class="certificate-toolbar">
-          <div class="zoom-controls">
-            <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
-            <button type="button" id="zoom-reset">Fit</button>
-            <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
-          </div>
-          <button type="button" id="certificate-close" aria-label="Close certificate">✕</button>
-        </div>
-        <div class="certificate-image-container"><img id="certificate-image" src="" alt="Certificate"></div>
+      <nav class="dw-in" style="--i:1" aria-label="Site menu">
+        <p class="dw-h mono">// sections</p>
+        <ul class="dw-list">
+          <li><a href="#log" data-close=""><i>≡</i><span><b>Career</b><span>Kyndryl · Ubisoft · Amazon</span></span><em>›</em></a></li>
+          <li><a href="#work" data-close=""><i>ƒ</i><span><b>Work</b><span>Azure Resume Challenge + more</span></span><em>›</em></a></li>
+          <li><a href="#stack" data-close=""><i>▦</i><span><b>Stack</b><span>Azure · Terraform · Kubernetes</span></span><em>›</em></a></li>
+          <li><a href="#certs" data-close=""><i>✓</i><span><b>Certifications</b><span>AZ-104 · AWS · GCP · ITIL</span></span><em>›</em></a></li>
+          <li><a href="#contact" data-close=""><i>$</i><span><b>Contact</b><span>Open to DevOps roles</span></span><em>›</em></a></li>
+        </ul>
+        <ul class="dw-grid">
+          <li><a href="https://github.com/712Aniket" target="_blank" rel="noopener"><i>⌥</i>GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener"><i>in</i>LinkedIn</a></li>
+          <li><a href="mailto:712aniket@gmail.com"><i>@</i>Email</a></li>
+        </ul>
+      </nav>
+      <div class="dw-foot dw-in" style="--i:2">
+<p class="dw-status mono">
+  <span class="pulse"></span>
+  <span class="dw-location">Detecting location…</span> ·
+  <span class="dw-clock">--:--</span>
+</p>
+        <a class="btn" href="mailto:712aniket@gmail.com">Email Aniket</a>
       </div>
     </div>
+  </div>
+</div>
 
-    <section id="contact" class="contact-section">
-      <div class="contact-content">
-        <span class="contact-eyebrow">HAVE A PROJECT IN MIND?</span>
-        <h2>Let's Build Something <span>Together.</span></h2>
-        <p class="contact-intro">Interested in cloud engineering, DevOps, infrastructure or sharing ideas? I'd love to connect and explore opportunities to build something meaningful.</p>
-        <div class="contact-links">
-          <a href="mailto:712aniket@gmail.com" class="contact-button"><span>Get In Touch</span><span class="contact-arrow">↗</span></a>
-        </div>
-        <p class="contact-location">Based in Pune, Maharashtra, India</p>
+<main id="main">
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="globe" aria-hidden="true"></canvas>
+  <div class="hero-in wrap">
+<p class="status">
+  <span class="pulse"></span>
+  <span id="visitor-location">Detecting location…</span> ·
+  <span id="clock">--:--</span>
+</p>
+    <p class="cmd mono" aria-hidden="true"><span class="pr">$</span> <span id="typed"></span><span class="caret"></span></p>
+    <h1 class="name" aria-label="Aniket Pawar"><span class="l1" data-scr="" aria-hidden="true">Aniket</span><span class="l2" data-scr="" aria-hidden="true">Pawar</span></h1>
+    <p class="role">Cloud &amp; infrastructure operations engineer</p>
+    <p class="pitch">Enterprise IT support professional with six years of experience, transitioning into cloud and infrastructure engineering with hands-on experience across Azure, AWS and Google Cloud.</p>
+    <div class="ctas">
+      <a class="btn" href="resume/Aniket_Pawar_Resume.pdf" download="">Download resume <span aria-hidden="true">↓</span></a>
+      <a class="btn ghost" href="https://github.com/712Aniket" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+  <aside class="idcard" aria-label="Profile">
+    <div class="ph frame"><img src="assets/aniket-photo.webp" width="261" height="261" alt="Aniket Pawar"><b class="c tl"></b><b class="c tr"></b><b class="c bl"></b><b class="c br"></b><span class="scan"></span><span class="ring"></span></div>
+    <div class="idt">
+      <p class="mono k">engineer/aniket-pawar</p>
+      <dl>
+        <div><dt>now</dt><dd>Technical Support Representative, Kyndryl</dd></div>
+        <div><dt>next</dt><dd>DevOps / Cloud Infrastructure</dd></div>
+        <div><dt>clouds</dt><dd>Azure · AWS · Google Cloud</dd></div>
+        <div><dt>status</dt><dd class="ok">● open to roles</dd></div>
+      </dl>
+    </div>
+  </aside>
+</section>
+
+<!-- METRICS -->
+<section class="metrics wrap" aria-label="At a glance">
+  <svg class="beat" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 H180 L200 60 L215 30 L232 92 L250 18 L268 78 L282 60 H520 L540 60 L555 34 L572 88 L590 22 L608 74 L622 60 H860 L880 60 L895 30 L912 92 L930 18 L948 78 L962 60 H1200"></path></svg>
+  <div class="mt"><b data-count="6" data-suffix="+">6+</b><span>years in enterprise production support</span></div>
+  <div class="mt"><b>24×7</b><span>production environments, on incident duty</span></div>
+  <div class="mt"><b data-count="6">6</b><span>certifications: Azure, AWS, Google Cloud, ITIL</span></div>
+  <div class="mt"><b>3</b><span>cloud platforms: Azure, AWS &amp; Google Cloud</span></div>
+</section>
+
+<!-- ABOUT -->
+<section class="about wrap" id="about">
+  <div class="about-l">
+    <p class="eyebrow mono">// about</p>
+    <h2>From the incident queue to the <em>control plane</em>.</h2>
+    <figure class="portrait"><div class="frame"><img src="assets/aniket-photo.webp" width="261" height="261" alt="Aniket Pawar, smiling, outdoors in Pune" loading="lazy"><b class="c tl"></b><b class="c tr"></b><b class="c bl"></b><b class="c br"></b><span class="scan"></span></div><figcaption class="mono">aniket · pune, maharashtra</figcaption></figure>
+  </div>
+ <div class="about-r">
+    <p>I bring six years of experience in enterprise IT support, handling technical issues, troubleshooting incidents and working with teams to maintain service reliability.</p>
+
+    <p>I'm now building my expertise in cloud and infrastructure engineering through certifications and hands-on projects involving Azure, AWS, Google Cloud, Linux, Docker, Kubernetes and Terraform.</p>
+
+    <p class="hl">My goal is to combine my support experience with cloud technologies to build reliable and scalable infrastructure.</p>
+</div>
+</section>
+
+<!-- CAREER LOG -->
+<section class="log wrap" id="log">
+  <p class="eyebrow mono">// career.log</p>
+  <h2>Every role, one direction.</h2>
+  <ol class="entries">
+    <li class="e next"><span class="ts mono">next</span><span class="tag mono run">deploying</span><div><h3>DevOps &amp; Cloud Infrastructure Engineer</h3><p>Infrastructure as code, deployment pipelines and cloud operations.</p></div></li>
+    <li class="e"><span class="ts mono">07/2022 → now</span><span class="tag mono ok">running</span><div><h3>Kyndryl · Technical Support Representative</h3><p>Enterprise applications in a 24×7 production environment: diagnosing incidents, coordinating fixes across teams, communicating SLA-impacting updates and writing knowledge articles for repeatable fixes.</p></div></li>
+    <li class="e"><span class="ts mono">04/2021 → 03/2022</span><span class="tag mono">exited 0</span><div><h3>Ubisoft · Account Support</h3><p>Technical support for global players: login, service and application issues, at scale and within SLA.</p></div></li>
+    <li class="e"><span class="ts mono">02/2019 → 02/2020</span><span class="tag mono">exited 0</span><div><h3>Saiprasad Enterprises · Design Engineer</h3><p>3D models and engineering drawings in CAD, working with vendors and suppliers on part quality.</p></div></li>
+    <li class="e"><span class="ts mono">07/2018 → 11/2018</span><span class="tag mono">exited 0</span><div><h3>Amazon Development Centre · Customer Service Associate</h3><p>High-volume calls and chat on orders, payments and accounts, with a 98%+ customer satisfaction score.</p></div></li>
+    <li class="e"><span class="ts mono">2018</span><span class="tag mono">init</span><div><h3>Bachelor of Engineering · Zeal College, Pune</h3><p>Where the systems thinking started.</p></div></li>
+  </ol>
+</section>
+
+<!-- WORK -->
+<section class="work wrap" id="work">
+  <p class="eyebrow mono">// Projects</p>
+  <h2>Built, deployed, monitored.</h2>
+
+  <article class="proj">
+    <div class="proj-h">
+      <div>
+        <p class="pstat mono"><span class="ok">●</span> completed · live</p>
+        <h3>Azure Cloud Resume Challenge</h3>
+        <p>Developed and deployed a cloud-hosted portfolio using Azure services. Integrated a Python-based Azure Functions API with Azure Cosmos DB to process and store visitor statistics, connecting the frontend with a serverless backend.</p>
       </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="visitor-counter"><span>Visitors:</span><span id="visitor-count">Loading...</span></div>
-    <div class="country-visitors" aria-label="Visitors by country">
-      <p class="country-visitors-title">Visitors around the world</p>
-      <div id="country-visitor-pills" class="country-visitor-pills">
-        <span class="country-visitors-pending">Country statistics will appear when the API provides them.</span>
+      <div class="plinks">
+        <a class="btn ghost" href="https://github.com/712Aniket/azure-cloud-resume-challenge" target="_blank" rel="noopener">GitHub repository ↗</a>
       </div>
     </div>
-    <p>© 2026 Aniket Pawar. All rights reserved.</p>
-  </footer>
-</body>
-</html>
+    <figure class="arch-live" aria-label="Animated architecture diagram showing the visitor counter request and response flow">
+      <div class="arch-live-head"><span class="mono">REQUEST &amp; DATA FLOW</span><span class="arch-live-status"><i></i> live flow</span></div>
+      <div class="arch-flow">
+        <svg class="arch-wires" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
+          <path class="wire" d="M145 105 H1055" />
+          <path class="wire return" d="M1055 145 V218 H390 V145" />
+          <path class="packet p1" d="M145 105 H1055" />
+          <path class="packet p2" d="M1055 145 V218 H390 V145" />
+        </svg>
+        <div class="arch-node node-browser"><span class="arch-icon">⌘</span><b>Visitor / Browser</b><small>Opens portfolio page</small><em>HTTP request</em></div>
+        <div class="arch-node node-front"><span class="arch-icon">▤</span><b>Portfolio frontend</b><small>Calls visitor-count API</small><em>GET /api/visitor-count</em></div>
+        <div class="arch-node node-function"><span class="arch-icon">ƒ</span><b>Azure Functions</b><small>Python HTTP-triggered API</small><em>Processes visitor count</em></div>
+        <div class="arch-node node-cosmos"><span class="arch-icon">◉</span><b>Azure Cosmos DB</b><small>Stores visitor data</small><em>Read / update</em></div>
+        <div class="arch-response mono">JSON response: { "visitor_count": n, "countries": [...] }</div>
+      </div>
+      <figcaption class="mono">Implemented visitor-counter flow · Azure Functions (Python) · Cosmos DB</figcaption>
+    </figure>
+    <div class="contribution">
+      <p class="mono k">my role &amp; contribution</p>
+      <ul>
+        <li>Built and maintained the portfolio frontend.</li>
+        <li>Implemented the visitor-count API using an HTTP-triggered Python Azure Function.</li>
+        <li>Integrated Azure Cosmos DB to store visitor-count data.</li>
+        <li>Connected the frontend to the API and handled the returned visitor statistics.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="proj two">
+    <div class="proj-h">
+      <div>
+        <p class="pstat mono"><span class="amber">◐</span> in progress</p>
+        <h3>Azure Cloud Operations &amp; Observability Platform</h3>
+        <p>A hands-on operations platform: infrastructure automation, centralised monitoring, log analytics, alerting, incident troubleshooting and operational automation. Six years of incident work, turned into a system.</p>
+      </div>
+    </div>
+    <div class="pipe" id="pipe">
+      <div class="st"><b>Terraform</b><span>provision</span></div>
+      <div class="st"><b>Azure Monitor</b><span>collect</span></div>
+      <div class="st"><b>Log Analytics</b><span>query</span></div>
+      <div class="st"><b>Alerts</b><span>detect</span></div>
+      <div class="st"><b>Python</b><span>auto-remediate</span></div>
+      <div class="st"><b>GitHub Actions</b><span>ship</span></div>
+    </div>
+  </article>
+
+</section>
+
+<!-- STACK -->
+<section class="stack wrap" id="stack">
+  <div class="stack-l">
+    <p class="eyebrow mono">// stack</p>
+    <h2>The layers I work in.</h2>
+    <ul class="layers" id="layers">
+      <li data-l="4"><b>Cloud</b><span>Microsoft Azure · AWS · Google Cloud</span></li>
+      <li data-l="3"><b>Automation</b><span>Terraform · GitHub Actions · GitLab CI/CD · Git</span></li>
+      <li data-l="2"><b>Containers</b><span>Docker · Kubernetes</span></li>
+      <li data-l="1"><b>Operating systems</b><span>Linux · Windows</span></li>
+      <li data-l="0"><b>Operations</b><span>Incident management · SLAs · production support · ITIL 4</span></li>
+    </ul>
+  </div>
+  <div class="iso" id="iso" aria-hidden="true">
+    <div class="plates">
+      <span class="beam"></span><span class="pk"></span>
+      <div class="plate" data-l="0"><span>operations</span></div>
+      <div class="plate" data-l="1"><span>linux · windows</span></div>
+      <div class="plate" data-l="2"><span>docker · k8s</span></div>
+      <div class="plate" data-l="3"><span>terraform · ci/cd</span></div>
+      <div class="plate" data-l="4"><span>azure · aws · gcp</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section class="certs wrap" id="certs">
+  <p class="eyebrow mono">// certifications</p>
+  <h2>Certified on all three clouds.</h2>
+  <div class="cgrid">
+    <button class="cert" data-c="AZ-104" type="button"><img src="assets/badges/az-104.png" alt="" loading="lazy"><b>Azure Administrator Associate</b><span>Microsoft · AZ-104</span><i>View certificate ↗</i></button>
+    <button class="cert" data-c="AZ-900" type="button"><img src="assets/badges/az-900.png" alt="" loading="lazy"><b>Azure Fundamentals</b><span>Microsoft · AZ-900</span><i>View certificate ↗</i></button>
+    <button class="cert" data-c="AI-900" type="button"><img src="assets/badges/ai-900.png" alt="" loading="lazy"><b>Azure AI Fundamentals</b><span>Microsoft · AI-900</span><i>View certificate ↗</i></button>
+    <button class="cert" data-c="AWS-CCP" type="button"><img src="assets/badges/aws-cloud-practitioner.png" alt="" loading="lazy"><b>Cloud Practitioner</b><span>Amazon Web Services</span><i>View certificate ↗</i></button>
+    <button class="cert" data-c="Google-Cloud-Digital-Leader" type="button"><img src="assets/badges/google-cloud-digital-leader.png" alt="" loading="lazy"><b>Cloud Digital Leader</b><span>Google Cloud</span><i>View certificate ↗</i></button>
+    <button class="cert" data-c="ITIL-4" type="button"><img src="assets/badges/itil-4-foundation.png" alt="" loading="lazy"><b>ITIL 4 Foundation</b><span>PeopleCert · IT service management</span><i>View certificate ↗</i></button>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact wrap" id="contact">
+  <div class="term" id="term">
+    <div class="tbar"><i></i><i></i><i></i><span class="mono">aniket@pune: ~</span></div>
+    <div class="tbody mono" id="tbody" aria-label="Terminal showing availability and contact details">
+      <div class="p">$ ping aniket.pawar</div>
+      <div>PING aniket.pawar (pune.in): 56 data bytes</div>
+      <div class="g">64 bytes from pune.in: icmp_seq=0 ttl=64 time=fast</div>
+      <div class="gap" aria-hidden="true"></div>
+      <div class="p">$ cat availability.txt</div>
+      <div>roles     DevOps · Cloud Infrastructure · Cloud Ops</div>
+      <div>location  Pune, IN · hybrid · remote</div>
+      <div>on-call   6+ years of it, happily</div>
+      <div class="gap" aria-hidden="true"></div>
+      <div class="p">$ curl -X POST hire/aniket-pawar</div>
+      <div class="g">HTTP/1.1 200 OK</div>
+      <div>reply-to: 712aniket@gmail.com</div>
+      <div class="p cur">$</div>
+    </div>
+  </div>
+  <div class="contact-r">
+    <h2>Building My Next Chapter in Cloud&nbsp;</h2>
+    <p>Based in Pune, Maharashtra. Open to on-site and hybrid opportunities in Pune, as well as remote opportunities across India.</p>
+    <div class="ctas">
+      <a class="btn" href="mailto:712aniket@gmail.com">712aniket@gmail.com</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost" href="resume/Aniket_Pawar_Resume.pdf" download="">Resume</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- COUNTRY-WISE VISITORS -->
+<section class="country-stats wrap" aria-labelledby="country-title">
+  <div class="country-head">
+    <div><p class="eyebrow mono">// global reach</p><h2 id="country-title">Visitors around the <em>world.</em></h2></div>
+    <p class="country-note mono" id="country-status" aria-live="polite">Loading country statistics…</p>
+  </div>
+  <div class="country-list" id="country-list" aria-live="polite"><p class="country-empty">Fetching visitor locations…</p></div>
+</section>
+
+
+<footer class="foot wrap">
+  <p>© 2026 Aniket Pawar · Pune, Maharashtra</p>
+</footer>
+
+<div class="modal" id="modal" hidden="">
+  <div class="mbox" role="dialog" aria-modal="true" aria-label="Certificate">
+    <button class="mclose" id="mclose" aria-label="Close certificate">✕</button>
+    <img id="mimg" alt="">
+  </div>
+</div>
+
+<script src="land.js"></script>
+<script src="app.js"></script>
+
+
+</body></html>
