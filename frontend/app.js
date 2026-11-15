@@ -258,20 +258,28 @@ updateLocation();
       const base = flow.getBoundingClientRect();
       return services.map(node => { const r = node.getBoundingClientRect(); return {x:r.left-base.left+r.width/2, y:r.top-base.top+r.height/2}; });
     };
+    // Calculate only the visible gap between two service-card edges. Never draw
+    // a guide line through the cards themselves.
+    const getGap = (from,to) => {
+      const base = flow.getBoundingClientRect();
+      const ra = services[from].getBoundingClientRect();
+      const rb = services[to].getBoundingClientRect();
+      const a = {x:ra.left-base.left+ra.width/2, y:ra.top-base.top+ra.height/2};
+      const b = {x:rb.left-base.left+rb.width/2, y:rb.top-base.top+rb.height/2};
+      const dx=b.x-a.x, dy=b.y-a.y, length=Math.hypot(dx,dy) || 1;
+      const ux=dx/length, uy=dy/length;
+      const edgeA=Math.min((ra.width/2)/Math.max(Math.abs(ux),.0001),(ra.height/2)/Math.max(Math.abs(uy),.0001));
+      const edgeB=Math.min((rb.width/2)/Math.max(Math.abs(ux),.0001),(rb.height/2)/Math.max(Math.abs(uy),.0001));
+      return {a:{x:a.x+ux*edgeA,y:a.y+uy*edgeA},b:{x:b.x-ux*edgeB,y:b.y-uy*edgeB}};
+    };
     const drawRoutes = () => {
       const r = flow.getBoundingClientRect();
       routeSvg.setAttribute("viewBox", `0 0 ${r.width} ${r.height}`);
       routeSvg.setAttribute("preserveAspectRatio", "none");
-      const pts = getCenters();
-      const ns = "http://www.w3.org/2000/svg";
+      // Clear legacy route guides; directional arrows between cards are the
+      // permanent connectors, while the packet itself animates through each gap.
       routeSvg.innerHTML = "";
-      for (let i=0;i<3;i++) {
-        const line = document.createElementNS(ns,"line");
-        line.setAttribute("x1",pts[i].x); line.setAttribute("y1",pts[i].y);
-        line.setAttribute("x2",pts[i+1].x); line.setAttribute("y2",pts[i+1].y);
-        line.setAttribute("class","arch-route-line"); routeSvg.appendChild(line);
-      }
-      if (!packet) { packet=document.createElementNS(ns,"circle"); packet.setAttribute("r","7"); packet.setAttribute("class","arch-live-packet"); routeSvg.appendChild(packet); }
+      if (!packet) { packet=document.createElementNS("http://www.w3.org/2000/svg","circle"); packet.setAttribute("r","7"); packet.setAttribute("class","arch-live-packet"); routeSvg.appendChild(packet); }
     };
     const clearVisuals = () => {
       services.forEach((n,i)=>{n.classList.remove("is-current","is-complete","is-returning"); $(".arch-node-state",n).textContent=["Waiting","Ready","Idle","Stored data"][i];});
@@ -280,7 +288,7 @@ updateLocation();
       jsonPanel.classList.remove("is-revealed");
     };
     const placePacket = (from,to,direction,progress) => {
-      const pts=getCenters(), a=pts[from], b=pts[to];
+      const gap=getGap(from,to), a=gap.a, b=gap.b;
       if (!a || !b || !packet) return;
       packet.setAttribute("cx",a.x+(b.x-a.x)*progress);
       packet.setAttribute("cy",a.y+(b.y-a.y)*progress);
