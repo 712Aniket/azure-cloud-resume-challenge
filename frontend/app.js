@@ -227,6 +227,125 @@ updateLocation();
     countryList.innerHTML = rows.map((c) => `<article class="country-card"><span class="country-flag" aria-hidden="true">${c.flag}</span><span class="country-name">${c.name}<small>${c.code}</small></span><b>${c.count.toLocaleString("en-IN")}</b><span class="country-visits">visits</span></article>`).join("");
     if (countryStatus) countryStatus.textContent = `${rows.length} ${rows.length === 1 ? "country" : "countries"} represented`;
   };
+  /* ---------- interactive Azure architecture walkthrough (illustrative only) ---------- */
+  const arch = $(".arch-showcase");
+  if (arch) {
+    const flow = $(".arch-interactive-flow", arch);
+    const services = $$(".arch-service", flow);
+    const stages = $$(".arch-stage", arch);
+    const title = $("#arch-detail-title", arch);
+    const detail = $("#arch-detail-text", arch);
+    const count = $("#arch-detail-count", arch);
+    const playButton = $("#arch-play-toggle", arch);
+    const replayButton = $("#arch-replay", arch);
+    const jsonPanel = $("#arch-json-panel", arch);
+    const routeSvg = $(".arch-route-svg", flow);
+    const reducedMotion = RM;
+    const steps = [
+      {node:0, stage:0, direction:"request", title:"Visitor opens the portfolio", text:"A browser visit begins the request journey.", state:"Request created"},
+      {node:1, stage:0, direction:"request", title:"Frontend sends an HTTPS request", text:"Azure Static Web Apps delivers the portfolio and forwards the API request.", state:"Forwarding request"},
+      {node:2, stage:1, direction:"request", title:"Azure Functions processes the request", text:"The Python HTTP-triggered function runs the visitor-counter logic.", state:"Processing"},
+      {node:3, stage:2, direction:"request", title:"Cosmos DB read / update", text:"Visitor data is illustrated as being read or updated in the database.", state:"Database operation"},
+      {node:2, stage:3, direction:"response", title:"Response returns through Azure Functions", text:"The function prepares the API response for the frontend.", state:"Response prepared"},
+      {node:1, stage:3, direction:"response", title:"Frontend receives the response", text:"The frontend receives the JSON payload from the API.", state:"Response received"},
+      {node:0, stage:3, direction:"response", title:"Visitor receives the result", text:"The response reaches the browser and completes the cycle.", state:"Delivered"}
+    ];
+    let current = 0, paused = false, timer = null, packetFrame = 0, packet = null;
+    const stepDuration = reducedMotion ? 1100 : 1450;
+    const pauseDuration = reducedMotion ? 450 : 850;
+
+    const getCenters = () => {
+      const base = flow.getBoundingClientRect();
+      return services.map(node => { const r = node.getBoundingClientRect(); return {x:r.left-base.left+r.width/2, y:r.top-base.top+r.height/2}; });
+    };
+    const drawRoutes = () => {
+      const r = flow.getBoundingClientRect();
+      routeSvg.setAttribute("viewBox", `0 0 ${r.width} ${r.height}`);
+      routeSvg.setAttribute("preserveAspectRatio", "none");
+      const pts = getCenters();
+      const ns = "http://www.w3.org/2000/svg";
+      routeSvg.innerHTML = "";
+      for (let i=0;i<3;i++) {
+        const line = document.createElementNS(ns,"line");
+        line.setAttribute("x1",pts[i].x); line.setAttribute("y1",pts[i].y);
+        line.setAttribute("x2",pts[i+1].x); line.setAttribute("y2",pts[i+1].y);
+        line.setAttribute("class","arch-route-line"); routeSvg.appendChild(line);
+      }
+      if (!packet) { packet=document.createElementNS(ns,"circle"); packet.setAttribute("r","7"); packet.setAttribute("class","arch-live-packet"); routeSvg.appendChild(packet); }
+    };
+    const clearVisuals = () => {
+      services.forEach((n,i)=>{n.classList.remove("is-current","is-complete","is-returning"); $(".arch-node-state",n).textContent=["Waiting","Ready","Idle","Stored data"][i];});
+      stages.forEach((s,i)=>s.classList.toggle("is-active",i===0));
+      arch.classList.remove("is-response","is-processing","is-database");
+      jsonPanel.classList.remove("is-revealed");
+    };
+    const placePacket = (from,to,direction,progress) => {
+      const pts=getCenters(), a=pts[from], b=pts[to];
+      if (!a || !b || !packet) return;
+      packet.setAttribute("cx",a.x+(b.x-a.x)*progress);
+      packet.setAttribute("cy",a.y+(b.y-a.y)*progress);
+      packet.classList.toggle("is-green",direction==="response");
+    };
+    const movePacket = (from,to,direction,done) => {
+      if (packetFrame) cancelAnimationFrame(packetFrame);
+      const started=performance.now();
+      const animate=(now)=>{
+        if (paused) { packetFrame=requestAnimationFrame(animate); return; }
+        const p=reducedMotion?1:clamp((now-started)/stepDuration);
+        placePacket(from,to,direction,ease(p));
+        if (p<1) packetFrame=requestAnimationFrame(animate); else done();
+      };
+      packetFrame=requestAnimationFrame(animate);
+    };
+    const activateStep = (index) => {
+      const step=steps[index];
+      services.forEach((n,i)=>{n.classList.toggle("is-current",i===step.node);n.classList.toggle("is-complete",step.direction==="request" && i<step.node);n.classList.toggle("is-returning",step.direction==="response" && i===step.node);});
+      stages.forEach((s,i)=>{s.classList.toggle("is-active",i===step.stage);s.classList.toggle("is-done",i<step.stage);});
+      arch.classList.toggle("is-response",step.direction==="response");
+      arch.classList.toggle("is-processing",step.node===2 && step.direction==="request");
+      arch.classList.toggle("is-database",step.node===3);
+      title.textContent=step.title; detail.textContent=step.text; count.textContent=`${String(index+1).padStart(2,"0")} / 07`;
+      $(".arch-node-state",services[step.node]).textContent=step.state;
+      if(index===3) jsonPanel.classList.add("is-revealed");
+    };
+    const runStep = () => {
+      if (paused) return;
+      if (current>=steps.length) {
+        clearVisuals(); current=0;
+        title.textContent="Cycle complete · restarting"; detail.textContent="The next simulated visitor request is about to begin.";
+        timer=setTimeout(runStep,pauseDuration); return;
+      }
+      const step=steps[current]; activateStep(current);
+      const previous=current===0?0:steps[current-1].node;
+      if(current===0){placePacket(0,0,"request",0);timer=setTimeout(()=>{current++;runStep();},pauseDuration);return;}
+      movePacket(previous,step.node,step.direction,()=>{
+        timer=setTimeout(()=>{current++;runStep();},step.node===3?pauseDuration:260);
+      });
+    };
+    const start = (restart=false) => {
+      clearTimeout(timer); if(packetFrame) cancelAnimationFrame(packetFrame);
+      if(restart){current=0;clearVisuals();}
+      paused=false; playButton.textContent="Ⅱ Pause";playButton.setAttribute("aria-pressed","false");
+      drawRoutes();runStep();
+    };
+    playButton.addEventListener("click",()=>{
+      paused=!paused;
+      playButton.textContent=paused?"▶ Resume":"Ⅱ Pause";
+      playButton.setAttribute("aria-pressed",String(paused));
+      if(paused){clearTimeout(timer);if(packetFrame)cancelAnimationFrame(packetFrame);}
+      else runStep();
+    });
+    replayButton.addEventListener("click",()=>start(true));
+    services.forEach((node)=>{
+      const inspect=()=>{const msg=node.dataset.archInfo; if(msg){title.textContent=node.querySelector("b").textContent;detail.textContent=msg;}};
+      node.addEventListener("click",inspect);node.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();inspect();}});
+    });
+    $$(".arch-support-card",arch).forEach(card=>card.addEventListener("click",()=>{title.textContent=card.querySelector("b").textContent;detail.textContent=card.dataset.archInfo;}));
+    new ResizeObserver(()=>{drawRoutes();}).observe(flow);
+    addEventListener("resize",drawRoutes,{passive:true});
+    start(true);
+  }
+
   const loadCountryStats = async () => {
     if (!countryList) return;
     if (local) {
