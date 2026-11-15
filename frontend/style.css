@@ -594,3 +594,78 @@ section.metrics { padding-top: 0; }
   #term #tbody { padding: 16px 18px 20px !important; font-size: 12.5px !important; line-height: 1.75 !important; }
   #term #tbody > .gap { flex-basis: 14px !important; height: 14px !important; min-height: 14px !important; }
 }
+
+/* ---------- mobile responsive fixes: final pass ---------- */
+@media (max-width: 600px) {
+
+
+  /* Country visitor cards */
+  .country-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .country-card {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: 14px;
+    gap: 8px;
+    padding: 12px 10px;
+  }
+
+  .country-card .country-name {
+    min-width: 0;
+    flex: 1 1 auto;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+    font-size: 12px;
+  }
+
+  .country-card .country-name small {
+    display: block;
+    margin: 3px 0 0;
+  }
+
+  .country-card > b {
+    flex: 0 0 auto;
+    font-size: 16px;
+  }
+
+  /* Contact terminal */
+  #term {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+
+  #term #tbody {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 14px 12px !important;
+    font-size: clamp(11px, 3vw, 13px) !important;
+    line-height: 1.7 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere;
+  }
+
+  #term #tbody > div {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100%;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  #term #tbody > .gap {
+    width: 1px !important;
+    min-height: 14px !important;
+    height: 14px !important;
+  }
+}
