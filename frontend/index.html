@@ -165,22 +165,53 @@
         <a class="btn ghost" href="https://github.com/712Aniket/azure-cloud-resume-challenge" target="_blank" rel="noopener">GitHub repository ↗</a>
       </div>
     </div>
-    <figure class="arch-live" aria-label="Animated architecture diagram showing the visitor counter request and response flow">
-      <div class="arch-live-head"><span class="mono">REQUEST &amp; DATA FLOW</span><span class="arch-live-status"><i></i> live flow</span></div>
-      <div class="arch-flow">
-        <svg class="arch-wires" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
-          <path class="wire" d="M145 105 H1055" />
-          <path class="wire return" d="M1055 145 V218 H390 V145" />
-          <path class="packet p1" d="M145 105 H1055" />
-          <path class="packet p2" d="M1055 145 V218 H390 V145" />
-        </svg>
-        <div class="arch-node node-browser"><span class="arch-icon">⌘</span><b>Visitor / Browser</b><small>Opens portfolio page</small><em>HTTP request</em></div>
-        <div class="arch-node node-front"><span class="arch-icon">▤</span><b>Portfolio frontend</b><small>Calls visitor-count API</small><em>GET /api/visitor-count</em></div>
-        <div class="arch-node node-function"><span class="arch-icon">ƒ</span><b>Azure Functions</b><small>Python HTTP-triggered API</small><em>Processes visitor count</em></div>
-        <div class="arch-node node-cosmos"><span class="arch-icon">◉</span><b>Azure Cosmos DB</b><small>Stores visitor data</small><em>Read / update</em></div>
-        <div class="arch-response mono">JSON response: { "visitor_count": n, "countries": [...] }</div>
+    <figure class="arch-live arch-responsive arch-showcase" aria-label="Interactive animated Azure architecture walkthrough">
+      <div class="arch-live-head">
+        <div><span class="mono arch-title">AZURE ARCHITECTURE</span><small class="arch-subtitle">PROJECT 1 · AZURE CLOUD RESUME CHALLENGE</small></div>
+        <span class="arch-live-status"><i></i><span id="arch-mode-label">SIMULATED REQUEST FLOW</span></span>
       </div>
-      <figcaption class="mono">Implemented visitor-counter flow · Azure Functions (Python) · Cosmos DB</figcaption>
+
+      <div class="arch-support-grid">
+        <button class="arch-node arch-monitor arch-support-card" type="button" data-arch-info="Application Insights provides monitoring, logs and telemetry for the application. This illustration shows its role; it is not live telemetry.">
+          <span class="arch-icon">◉</span><b>Application Insights</b><small>Monitoring · Logs · Telemetry</small><em>Observability</em>
+        </button>
+        <button class="arch-node arch-delivery arch-support-card" type="button" data-arch-info="Azure Static Web Apps hosts and delivers the portfolio frontend. The deployment card is contextual and is not a live deployment status check.">
+          <span class="arch-icon">▣</span><b>Azure Static Web Apps</b><small>Hosting · CI/CD · Frontend</small><em>Portfolio delivery</em>
+        </button>
+      </div>
+
+      <div class="arch-stagebar" aria-label="Animation stages">
+        <div class="arch-stage is-active" data-stage="0"><b>1</b><span>Request</span></div>
+        <div class="arch-stage" data-stage="1"><b>2</b><span>Process</span></div>
+        <div class="arch-stage" data-stage="2"><b>3</b><span>Read / Update</span></div>
+        <div class="arch-stage" data-stage="3"><b>4</b><span>Response</span></div>
+      </div>
+
+      <div class="arch-section-label mono">VISITOR COUNTER · REQUEST / RESPONSE LIFECYCLE</div>
+      <div class="arch-flow arch-flow-responsive arch-interactive-flow">
+        <svg class="arch-route-svg" aria-hidden="true"></svg>
+        <div class="arch-node node-browser arch-service" tabindex="0" role="button" data-arch-step="0" data-arch-info="A visitor opens the portfolio in a browser. This starts the illustrated request lifecycle.">
+          <span class="arch-icon">♙</span><b>Visitor</b><small>Browser</small><em>Opens portfolio</em><span class="arch-node-state">Waiting</span>
+        </div>
+        <div class="arch-connector"><span>→</span><small>HTTPS</small></div>
+        <div class="arch-node node-front arch-service" tabindex="0" role="button" data-arch-step="1" data-arch-info="The portfolio frontend sends an HTTPS request to the visitor-counter API hosted by Azure Functions.">
+          <span class="arch-icon">▣</span><b>Azure Static Web Apps</b><small>Portfolio frontend</small><em>HTML · CSS · JavaScript</em><span class="arch-node-state">Ready</span>
+        </div>
+        <div class="arch-connector"><span>→</span><small>API request</small></div>
+        <div class="arch-node node-function arch-service" tabindex="0" role="button" data-arch-step="2" data-arch-info="The Python HTTP-triggered Azure Function receives the request and runs the visitor-counter application logic.">
+          <span class="arch-icon">ƒ</span><b>Azure Functions</b><small>Python HTTP-triggered API</small><em>GET /api/visitor-count</em><span class="arch-node-state">Idle</span>
+        </div>
+        <div class="arch-connector"><span>↔</span><small>Read / update</small></div>
+        <div class="arch-node node-cosmos arch-service" tabindex="0" role="button" data-arch-step="3" data-arch-info="Cosmos DB stores visitor-counter data. The read/write animation is illustrative and does not execute a database operation.">
+          <span class="arch-icon">▤</span><b>Azure Cosmos DB</b><small>Visitor statistics</small><em>SQL API · Visitor data</em><span class="arch-node-state">Stored data</span>
+        </div>
+      </div>
+
+      <div class="arch-live-detail" aria-live="polite"><span class="arch-detail-pulse"></span><div><b id="arch-detail-title">Visitor opens the portfolio</b><p id="arch-detail-text">The request journey is ready to begin.</p></div><span class="arch-detail-count" id="arch-detail-count">01 / 08</span></div>
+      <div class="arch-response arch-response-responsive mono" id="arch-json-panel"><span class="arch-json-label">API RESPONSE</span><code>{ "visitor_count": 155, "countries": [...] }</code></div>
+      <div class="arch-showcase-footer"><div class="arch-legend mono"><span><i class="legend-request"></i> Request · Browser → Azure → Function → Cosmos DB</span><span><i class="legend-response"></i> Response · Cosmos DB → Function → Azure → Browser</span></div><div class="arch-controls"><button type="button" id="arch-play-toggle" aria-pressed="false">Ⅱ Pause</button><button type="button" id="arch-replay">↻ Replay</button></div></div>
+      <p class="arch-disclaimer mono">ILLUSTRATIVE SIMULATION · NOT LIVE AZURE TELEMETRY</p>
+      <figcaption class="mono">Serverless API · Persistent visitor data · Application monitoring</figcaption>
     </figure>
     <div class="contribution">
       <p class="mono k">my role &amp; contribution</p>
