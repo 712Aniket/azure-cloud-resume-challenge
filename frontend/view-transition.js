@@ -7,9 +7,10 @@
   "use strict";
 
   const STORAGE_KEY = "aniket-portfolio-directional-transition";
-  const CLASSIC_EXIT_MS = 300;
-  const EXPLORER_EXIT_MS = 350;
-  const ENTRY_CLEANUP_MS = 550;
+  const CLASSIC_EXIT_MS = 400;
+  const EXPLORER_EXIT_MS = 450;
+  const CLASSIC_ENTRY_CLEANUP_MS = 500;
+  const EXPLORER_ENTRY_CLEANUP_MS = 500;
   const root = document.documentElement;
   const scene = document.querySelector(".portfolio-transition-scene");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -35,7 +36,7 @@
     for (let index = 0; index < count; index += 1) {
       const particle = document.createElement("i");
       const size = 2 + Math.random() * 4.5;
-      const delay = Math.round(Math.random() * 60);
+      const delay = Math.round(Math.random() * 25);
       const angle = Math.random() * Math.PI * 2;
       const distance = (phase === "exit" && direction === "to-classic")
         ? Math.hypot(window.innerWidth, window.innerHeight) * (0.42 + Math.random() * 0.48)
@@ -91,7 +92,9 @@
       root.removeAttribute("data-transition-playing");
       scene.className = "portfolio-transition-scene";
       clearParticles();
-    }, ENTRY_CLEANUP_MS);
+    }, direction === 'to-explorer'
+      ? EXPLORER_ENTRY_CLEANUP_MS
+      : CLASSIC_ENTRY_CLEANUP_MS);
   }
 
   initialiseEntry();

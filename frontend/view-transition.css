@@ -543,3 +543,165 @@ html[data-transition-entry="to-explorer"] .idcard {
   animation-duration: 420ms !important;
   animation-delay: 0ms !important;
 }
+
+
+/* ================================================================
+   CLASSIC -> EXPLORER : AMBER / MIDNIGHT GRADIENT WIPE
+   Explorer -> Classic Digital Deconstruction remains unchanged.
+   ================================================================ */
+
+.portfolio-transition-scene::before {
+  content: "";
+  position: absolute;
+  inset: -2%;
+  z-index: 10;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 78% 48%,
+      rgba(255, 174, 48, .22), transparent 42%),
+    linear-gradient(110deg,
+      #080e1b 0%,
+      #101b35 36%,
+      #172b50 66%,
+      #243b65 88%,
+      #101a30 100%);
+  will-change: transform;
+}
+
+/* Outgoing Classic page: a smooth navy/blue sweep covers it. */
+html[data-transition-exit="to-explorer"] .portfolio-transition-scene {
+  visibility: visible;
+  opacity: 1;
+}
+
+html[data-transition-exit="to-explorer"] .portfolio-transition-scene::before {
+  animation: classic-gradient-cover 760ms cubic-bezier(.65, 0, .25, 1) both;
+}
+
+html[data-transition-exit="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation: classic-soft-exit 700ms ease both;
+}
+
+/* Disable the previous ignition effects in this direction only. */
+html[data-transition-exit="to-explorer"] .fx-backdrop,
+html[data-transition-exit="to-explorer"] .fx-core,
+html[data-transition-exit="to-explorer"] .fx-ring,
+html[data-transition-exit="to-explorer"] .fx-sweep,
+html[data-transition-exit="to-explorer"] .fx-particles,
+html[data-transition-exit="to-explorer"] .career-timeline::before,
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-dot {
+  animation: none !important;
+}
+
+/* Explorer arrives underneath the gradient, which sweeps away. */
+html[data-transition-entry="to-explorer"] .portfolio-transition-scene {
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+html[data-transition-entry="to-explorer"] .portfolio-transition-scene::before {
+  animation: explorer-gradient-reveal 900ms cubic-bezier(.65, 0, .25, 1) both;
+}
+
+html[data-transition-entry="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation: explorer-soft-arrival 700ms ease both;
+}
+
+/* Suppress the previous Universe Ignition elements on Explorer arrival. */
+html[data-transition-entry="to-explorer"] .fx-backdrop,
+html[data-transition-entry="to-explorer"] .fx-core,
+html[data-transition-entry="to-explorer"] .fx-ring,
+html[data-transition-entry="to-explorer"] .fx-sweep,
+html[data-transition-entry="to-explorer"] .fx-particles,
+html[data-transition-entry="to-explorer"] #globe {
+  animation: none !important;
+}
+
+@keyframes classic-gradient-cover {
+  from { transform: translateX(-105%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes explorer-gradient-reveal {
+  from { transform: translateX(0); }
+  to   { transform: translateX(105%); }
+}
+
+@keyframes classic-soft-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: .92; transform: translateY(-5px); }
+}
+
+@keyframes explorer-soft-arrival {
+  from { opacity: .55; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-transition-exit="to-explorer"] .portfolio-transition-scene::before,
+  html[data-transition-entry="to-explorer"] .portfolio-transition-scene::before {
+    animation: none !important;
+  }
+}
+
+
+/* FAST DIRECTIONAL TRANSITION OVERRIDES - under 500ms */
+
+/* Explorer -> Classic: retain Digital Deconstruction, finish within 400ms. */
+html[data-transition-exit="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 380ms !important;
+}
+html[data-transition-exit="to-classic"] #globe,
+html[data-transition-exit="to-classic"] .fx-backdrop,
+html[data-transition-exit="to-classic"] .fx-core,
+html[data-transition-exit="to-classic"] .fx-ring-a,
+html[data-transition-exit="to-classic"] .fx-ring-b {
+  animation-duration: 380ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-classic"] .fx-sweep {
+  animation-duration: 350ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-classic"] .fx-particles i {
+  animation-duration: 350ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+
+/* Classic -> Explorer: amber/midnight Gradient Wipe, finish within 450ms. */
+html[data-transition-exit="to-explorer"] .portfolio-transition-scene::before {
+  animation-duration: 450ms !important;
+}
+html[data-transition-exit="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 400ms !important;
+  animation-delay: 0ms !important;
+}
+
+/* Keep the Explorer arrival wipe short as well. */
+html[data-transition-entry="to-explorer"] .portfolio-transition-scene::before {
+  animation-duration: 450ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 400ms !important;
+  animation-delay: 0ms !important;
+}
+
+/* Keep Classic arrival effects from lingering after navigation. */
+html[data-transition-entry="to-classic"] .portfolio-transition-scene,
+html[data-transition-entry="to-classic"] .portfolio-transition-scene *,
+html[data-transition-entry="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 450ms !important;
+  animation-delay: 0ms !important;
+}
+
+/* Correctly suppress the old ignition effects in the Gradient Wipe direction. */
+html[data-transition-exit="to-explorer"] .fx-ring-a,
+html[data-transition-exit="to-explorer"] .fx-ring-b,
+html[data-transition-exit="to-explorer"] .fx-particles i,
+html[data-transition-entry="to-explorer"] .fx-ring-a,
+html[data-transition-entry="to-explorer"] .fx-ring-b,
+html[data-transition-entry="to-explorer"] .fx-particles i {
+  animation: none !important;
+}
