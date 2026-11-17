@@ -5,9 +5,11 @@ on:
     branches:
       - main
       - resume-develop
+      - 'feature/**'
   pull_request:
     branches:
       - main
+      - resume-develop
   schedule:
     - cron: '30 2 * * 1'
 
