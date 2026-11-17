@@ -879,14 +879,6 @@ section.metrics { padding-top: 0; }
   }
 }
 
-/* Keep the portrait scan visible and moving on devices with reduced-motion
-   enabled; this is a deliberate decorative feature requested for the profile. */
-@media (prefers-reduced-motion: reduce) {
-  .frame .scan {
-    display: block !important;
-    animation: scan 6.5s ease-in-out 1s infinite !important;
-  }
-}
 
 
 /* Optional classic/compact portfolio view entry point */
