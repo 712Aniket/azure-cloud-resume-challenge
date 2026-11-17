@@ -7,10 +7,10 @@
   "use strict";
 
   const STORAGE_KEY = "aniket-portfolio-directional-transition";
-  const CLASSIC_EXIT_MS = 400;
-  const EXPLORER_EXIT_MS = 450;
-  const CLASSIC_ENTRY_CLEANUP_MS = 500;
-  const EXPLORER_ENTRY_CLEANUP_MS = 500;
+  const CLASSIC_EXIT_MS = 250;
+  const EXPLORER_EXIT_MS = 250;
+  const CLASSIC_ENTRY_CLEANUP_MS = 300;
+  const EXPLORER_ENTRY_CLEANUP_MS = 300;
   const root = document.documentElement;
   const scene = document.querySelector(".portfolio-transition-scene");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
