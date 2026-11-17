@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    /* Read the cross-page animation direction before the first paint. */
+    (() => {
+      try {
+        const key = "aniket-portfolio-directional-transition";
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return;
+        const state = JSON.parse(raw);
+        const expected = location.pathname.toLowerCase().endsWith("compact.html") ? "to-classic" : "to-explorer";
+        if (state && state.direction === expected && Date.now() - state.time < 6000) {
+          document.documentElement.dataset.transitionEntry = expected;
+          const x = Number.isFinite(state.nx) ? state.nx * innerWidth : innerWidth / 2;
+          const y = Number.isFinite(state.ny) ? state.ny * innerHeight : innerHeight / 2;
+          document.documentElement.style.setProperty("--fx-x", `${Math.round(x)}px`);
+          document.documentElement.style.setProperty("--fx-y", `${Math.round(y)}px`);
+        }
+        sessionStorage.removeItem(key);
+      } catch (_) { /* Normal navigation remains available if storage is blocked. */ }
+    })();
+  </script>
+  <meta name="theme-color" content="#f7fafc">
+  <title>Aniket Pawar · DevOps &amp; Cloud Infrastructure Engineer</title>
+  <meta name="description" content="Aniket Pawar, Pune. Nearly six years of enterprise IT support and operations experience, DevOps and cloud infrastructure career focus, Azure projects, and certifications across Azure, AWS, Google Cloud and ITIL.">
+  <link rel="canonical" href="index.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fff7ed'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23ea580c'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="view-transition.css">
+  <script src="view-transition.js" defer></script>
+  <script src="js/script.js" defer></script>
+</head>
+<body class="compact-mode timeline-mode">
+<div class="portfolio-transition-scene" aria-hidden="true">
+  <div class="fx-backdrop"></div>
+  <div class="fx-core"></div>
+  <div class="fx-ring fx-ring-a"></div>
+  <div class="fx-ring fx-ring-b"></div>
+  <div class="fx-sweep"></div>
+  <div class="fx-particles"></div>
+</div>
+
+  <header class="timeline-header">
+    <a class="timeline-brand" href="#top" aria-label="Aniket Pawar home">
+      <span class="brand-mark" aria-hidden="true">AP</span>
+      <span>Aniket Pawar</span>
+    </a>
+    <nav class="timeline-nav" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="timeline-actions">
+      <button id="theme-toggle" class="theme-toggle" type="button"
+        aria-label="Switch theme" title="Switch theme">
+        <span id="theme-icon" aria-hidden="true">☀️</span>
+      </button>
+      <a class="timeline-view-switch" href="index.html" aria-label="Switch to Explorer View" title="Return to the animated Explorer View">Explorer View ↗</a>
+    </div>
+  </header>
+
+  <main class="timeline-main" id="top">
+    <section class="timeline-hero" aria-labelledby="portfolio-name">
+      <p class="timeline-eyebrow">CLOUD · INFRASTRUCTURE · OPERATIONS</p>
+      <h1 id="portfolio-name">Aniket Pawar</h1>
+      <h2>DevOps &amp; Cloud Infrastructure Engineer</h2>
+      <p class="timeline-intro">
+        Enterprise IT support and operations professional with nearly 6 years of experience in incident investigation, technical troubleshooting and 24×7 service operations. Building DevOps and cloud infrastructure capabilities through Azure projects and certifications across Microsoft Azure, AWS, Google Cloud and ITIL.
+      </p>
+      <div class="timeline-hero-links">
+        <a class="timeline-primary-link" href="resume/Aniket_Pawar_Resume.pdf" download>Download Resume ↓</a>
+        <a href="https://github.com/712Aniket" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+      <div class="timeline-summary" aria-label="Professional summary">
+        <div><strong>Nearly 6</strong><span>years in enterprise production support</span></div>
+        <div><strong>24×7</strong><span>production support and service operations</span></div>
+        <div><strong>6</strong><span>certifications: Azure, AWS, Google Cloud, ITIL</span></div>
+        <div><strong>3</strong><span>cloud platforms: Azure, AWS &amp; Google Cloud</span></div>
+      </div>
+    </section>
+
+    <section id="about" class="timeline-section">
+      <div class="timeline-section-heading">
+        <span class="timeline-section-index">01</span>
+        <div><p class="timeline-kicker">PROFILE</p><h2>About Me</h2></div>
+      </div>
+      <div class="timeline-section-content">
+        <p>
+          I have nearly 6 years of experience across enterprise IT support and operations,
+          investigating technical issues, managing incidents, coordinating with teams and
+          supporting service reliability in 24×7 environments.
+        </p>
+        <p>
+          Alongside this experience, I’m building my DevOps and cloud infrastructure capabilities
+          through certifications and hands-on projects. My completed Azure Cloud Resume Challenge
+          integrates a Python HTTP-triggered Azure Functions API with Azure Cosmos DB; I’m continuing
+          to develop my skills across Azure, AWS, Google Cloud, Linux, Docker, Kubernetes, Terraform and CI/CD.
+        </p>
+        <p class="timeline-highlight">
+          My goal is to bring an operations-first approach to cloud infrastructure, with a
+          focus on reliability, observability and automation.
+        </p>
+      </div>
+    </section>
+
+    <section id="experience" class="timeline-section">
+      <div class="timeline-section-heading">
+        <span class="timeline-section-index">02</span>
+        <div><p class="timeline-kicker">CAREER HISTORY</p><h2>Experience &amp; Education</h2></div>
+      </div>
+      <div class="timeline-section-content">
+        <div class="project-timeline career-timeline">
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot progress-dot" aria-hidden="true"></span>
+            <div class="project-timeline-topline"><span class="timeline-status progress-status">Career direction</span><span class="project-type">Next step</span></div>
+            <h3>DevOps &amp; Cloud Infrastructure Engineer</h3>
+            <p>Target role focused on infrastructure as code, deployment pipelines and cloud operations.</p>
+          </article>
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot" aria-hidden="true"></span>
+            <div class="project-timeline-topline"><span class="timeline-status completed-status">Current role</span><span class="project-type">07/2022 → Present</span></div>
+            <h3>Kyndryl · Technical Support Executive (Cloud Support)</h3>
+            <p>Support enterprise applications by investigating reported issues, troubleshooting application availability, user access, authentication and connectivity problems, assessing service impact, coordinating with application, infrastructure and L2/L3 teams, communicating incident updates, and identifying recurring issues for follow-up.</p>
+          </article>
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot" aria-hidden="true"></span>
+            <div class="project-timeline-topline"><span class="project-type">04/2021 → 03/2022</span></div>
+            <h3>Ubisoft · Account Support</h3>
+            <p>Technical support for global players: login, service and application issues, at scale and within SLA.</p>
+          </article>
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot" aria-hidden="true"></span>
+            <div class="project-timeline-topline"><span class="project-type">02/2019 → 02/2020</span></div>
+            <h3>Saiprasad Enterprises · Design Engineer</h3>
+            <p>3D models and engineering drawings in CAD, working with vendors and suppliers on part quality.</p>
+          </article>
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot" aria-hidden="true"></span>
+            <div class="project-timeline-topline"><span class="project-type">07/2018 → 11/2018</span></div>
+            <h3>Amazon Development Centre · Customer Service Associate</h3>
+            <p>High-volume customer service across orders, payments and account-related queries.</p>
+          </article>
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot" aria-hidden="true"></span>
+            <div class="project-timeline-topline"><span class="project-type">Education · 2018</span></div>
+            <h3>Bachelor of Engineering · Zeal College of Engineering and Research, Pune</h3>
+            <p>Where the systems thinking started.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="timeline-section">
+      <div class="timeline-section-heading">
+        <span class="timeline-section-index">03</span>
+        <div><p class="timeline-kicker">TECHNICAL TOOLKIT</p><h2>Core Skills</h2></div>
+      </div>
+      <div class="timeline-section-content">
+        <div class="timeline-skill-groups">
+          <div class="timeline-skill-group">
+            <h3>Cloud Platforms</h3>
+            <p>Microsoft Azure · AWS · Google Cloud</p>
+          </div>
+          <div class="timeline-skill-group">
+            <h3>Infrastructure &amp; Automation</h3>
+            <p>Terraform (learning) · Linux · Windows · Infrastructure Operations</p>
+          </div>
+          <div class="timeline-skill-group">
+            <h3>Containers &amp; Orchestration</h3>
+            <p>Docker · Kubernetes</p>
+          </div>
+          <div class="timeline-skill-group">
+            <h3>DevOps &amp; Delivery</h3>
+            <p>Git · GitHub · GitLab · GitLab CI/CD · CI/CD · SDLC</p>
+          </div>
+          <div class="timeline-skill-group">
+            <h3>Monitoring &amp; Support</h3>
+            <p>Incident management · troubleshooting · SLA coordination · 24×7 production support · ITIL 4</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="timeline-section">
+      <div class="timeline-section-heading">
+        <span class="timeline-section-index">04</span>
+        <div><p class="timeline-kicker">SELECTED WORK</p><h2>Project Timeline</h2></div>
+      </div>
+      <div class="timeline-section-content">
+        <div class="project-timeline">
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot completed" aria-hidden="true"></span>
+            <div class="project-timeline-topline">
+              <span class="timeline-status completed-status">Completed · Live</span>
+              <span class="project-type">Cloud portfolio · Azure</span>
+            </div>
+            <h3>Azure Cloud Resume Challenge</h3>
+            <p>
+              Built a personal portfolio website and integrated a Python-based, HTTP-triggered Azure Functions API with Azure Cosmos DB to store visitor-counter data. The frontend calls the API and displays country-wise statistics when data is available; the aggregate visit count is not displayed on the website.
+            </p>
+            <p class="timeline-tech">HTML · CSS · JavaScript · Python · Azure Functions · Azure Cosmos DB</p>
+            <ul class="project-contributions">
+              <li>Built and maintained the portfolio frontend.</li>
+              <li>Implemented the visitor-counter API using an HTTP-triggered Python Azure Function.</li>
+              <li>Integrated Azure Cosmos DB to store visitor-counter data.</li>
+              <li>Connected the frontend to the API and displayed country-wise statistics when available; the aggregate total is not displayed.</li>
+            </ul>
+            <a class="timeline-project-link" href="https://github.com/712Aniket/azure-cloud-resume-challenge"
+              target="_blank" rel="noopener noreferrer">View GitHub repository ↗</a>
+          </article>
+
+          <article class="project-timeline-item">
+            <span class="project-timeline-dot progress-dot" aria-hidden="true"></span>
+            <div class="project-timeline-topline">
+              <span class="timeline-status progress-status">In Progress</span>
+              <span class="project-type">Cloud operations · Azure</span>
+            </div>
+            <h3>Azure Cloud Operations &amp; Observability Platform</h3>
+            <p>
+              An Azure-focused cloud operations and observability project in progress. The current stage is architecture and implementation planning; the target scope covers infrastructure automation, centralised monitoring, log analytics, alerting and operational troubleshooting. No deployed project components are being presented as complete.
+            </p>
+            <p class="timeline-tech">Planned focus: Terraform · Azure Monitor · Log Analytics · alerting · Python · CI/CD pipeline</p>
+            <p class="project-note">Current stage: architecture and implementation planning. The listed components are planned, not completed.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="certifications" class="timeline-section">
+      <div class="timeline-section-heading">
+        <span class="timeline-section-index">05</span>
+        <div><p class="timeline-kicker">CREDENTIALS</p><h2>Certifications</h2></div>
+      </div>
+      <div class="timeline-section-content">
+        <div class="timeline-cert-list">
+          <button class="timeline-cert-item certification-card" type="button" data-certificate="images/certificates/final/AZ-104.png" aria-label="View Azure Administrator Associate certificate">
+            <img src="images/az-104.png" alt="" class="certification-badge">
+            <span><strong>Azure Administrator Associate</strong><small>Microsoft · AZ-104 · Valid through 8 Oct 2027</small></span><span class="cert-open">View ↗</span>
+          </button>
+          <button class="timeline-cert-item certification-card" type="button" data-certificate="images/certificates/final/AZ-900.png" aria-label="View Azure Fundamentals certificate">
+            <img src="images/az-900.png" alt="" class="certification-badge">
+            <span><strong>Azure Fundamentals</strong><small>Microsoft · AZ-900</small></span><span class="cert-open">View ↗</span>
+          </button>
+          <button class="timeline-cert-item certification-card" type="button" data-certificate="images/certificates/final/AI-900.png" aria-label="View Azure AI Fundamentals certificate">
+            <img src="images/ai-900.png" alt="" class="certification-badge">
+            <span><strong>Azure AI Fundamentals</strong><small>Microsoft · AI-900</small></span><span class="cert-open">View ↗</span>
+          </button>
+          <button class="timeline-cert-item certification-card" type="button" data-certificate="images/certificates/final/AWS-CCP.png" aria-label="View AWS Cloud Practitioner certificate">
+            <img src="images/aws-cloud-practitioner.png" alt="" class="certification-badge">
+            <span><strong>AWS Certified Cloud Practitioner</strong><small>Amazon Web Services · Valid through 25 Feb 2029</small></span><span class="cert-open">View ↗</span>
+          </button>
+          <button class="timeline-cert-item certification-card" type="button" data-certificate="images/certificates/final/Google-Cloud-Digital-Leader.png" aria-label="View Google Cloud Digital Leader certificate">
+            <img src="images/google-cloud-digital-leader.png" alt="" class="certification-badge">
+            <span><strong>Cloud Digital Leader</strong><small>Google Cloud · Valid through 21 Apr 2028</small></span><span class="cert-open">View ↗</span>
+          </button>
+          <button class="timeline-cert-item certification-card" type="button" data-certificate="images/certificates/final/ITIL-4.png" aria-label="View ITIL 4 Foundation certificate">
+            <img src="images/itil-4-foundation.png" alt="" class="certification-badge">
+            <span><strong>ITIL 4 Foundation</strong><small>PeopleCert · Renew by 6 Mar 2027</small></span><span class="cert-open">View ↗</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="certificate-modal" id="certificate-modal" aria-hidden="true">
+      <div class="certificate-viewer" role="dialog" aria-modal="true" aria-label="Certificate viewer">
+        <div class="certificate-toolbar">
+          <div class="zoom-controls">
+            <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+            <button type="button" id="zoom-reset">Fit</button>
+            <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+          </div>
+          <button type="button" id="certificate-close" aria-label="Close certificate">✕</button>
+        </div>
+        <div class="certificate-image-container"><img id="certificate-image" src="" alt="Certificate"></div>
+      </div>
+    </div>
+
+    <section id="contact" class="timeline-section timeline-contact">
+      <div class="timeline-section-heading">
+        <span class="timeline-section-index">06</span>
+        <div><p class="timeline-kicker">GET IN TOUCH</p><h2>Contact</h2></div>
+      </div>
+      <div class="timeline-section-content">
+        <p>Based in Pune, Maharashtra, India. Open to on-site and hybrid opportunities in Pune, and remote opportunities across India.</p>
+        <div class="timeline-contact-links">
+          <a class="timeline-primary-link" href="mailto:712aniket@gmail.com">Email Aniket ↗</a>
+          <a href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          <a href="https://github.com/712Aniket" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        </div>
+        <p class="timeline-location">Pune, Maharashtra, India</p>
+      </div>
+    </section>
+  </main>
+
+  <p class="timeline-privacy-note">Privacy: Visitor location is estimated from the request IP using <a href="https://ipwho.is/" target="_blank" rel="noopener noreferrer">ipwho.is</a>. The IP address is sent to that lookup service; this portfolio stores aggregate visit and country counts in Azure Cosmos DB, not raw IP addresses.</p>
+  <footer class="timeline-footer">
+<div class="country-visitors" aria-label="Visitors by country" hidden>
+      <p class="country-visitors-title">Visitors around the world</p>
+      <div id="country-visitor-pills" class="country-visitor-pills">
+        <span class="country-visitors-pending">Country statistics will appear when the API provides them.</span>
+      </div>
+    </div>
+    <p>© 2026 Aniket Pawar · Pune, Maharashtra, India</p>
+    <a class="back-to-top" href="#top">Back to top ↑</a>
+  </footer>
+</body>
+</html>

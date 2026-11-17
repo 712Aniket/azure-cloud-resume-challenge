@@ -1,43 +1,73 @@
-// Visitor counter — preserves the existing total-count endpoint and supports country totals when returned by the API.
-const visitorCountElement = document.getElementById("visitor-count");
+// Country-wise visitor statistics only.
+// The API still records analytics in Azure, but the aggregate total is never displayed.
 const countryPillsElement = document.getElementById("country-visitor-pills");
 const API_URL = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
 
-async function updateVisitorCount() {
-  if (!visitorCountElement) return;
-  try {
-    visitorCountElement.textContent = "Connecting...";
-    const response = await fetch(API_URL);
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
-    const data = await response.json();
-    visitorCountElement.textContent = data.visitor_count ?? data.totalVisitors ?? "Unavailable";
+async function loadCountryVisitorStats() {
+  if (!countryPillsElement) return;
+  const countrySection = countryPillsElement.closest(".country-visitors");
+  if (countrySection) countrySection.hidden = true;
 
-    // Country pills are populated only from real API data; no sample counts are displayed.
+  try {
+    const response = await fetch(API_URL, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error(`API returned HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
     const countries = data.countries ?? data.country_visitors ?? [];
-    if (countryPillsElement && Array.isArray(countries) && countries.length) {
-      countryPillsElement.replaceChildren();
-      countries.forEach(country => {
+
+    if (!Array.isArray(countries) || countries.length === 0) {
+      return;
+    }
+
+    countryPillsElement.replaceChildren();
+
+    countries
+      .map((country) => ({
+        flag: String(country.flag || country.emoji || "🌐"),
+        name: String(country.name || country.country || country.code || "Unknown"),
+        count: Number(country.count ?? country.visitor_count ?? 0)
+      }))
+      .filter((country) => Number.isFinite(country.count) && country.count > 0)
+      .sort((a, b) => b.count - a.count)
+      .forEach((country) => {
         const pill = document.createElement("span");
         pill.className = "country-visitor-pill";
+
         const flag = document.createElement("span");
         flag.className = "country-flag";
-        flag.textContent = country.flag || country.emoji || "🌐";
+        flag.textContent = country.flag;
+
         const name = document.createElement("span");
         name.className = "country-name";
-        name.textContent = country.name || country.country || country.code || "Unknown";
+        name.textContent = country.name;
+
         const count = document.createElement("strong");
         count.className = "country-count";
-        count.textContent = Number(country.count ?? country.visitor_count ?? 0).toLocaleString();
+        count.textContent = country.count.toLocaleString("en-IN");
+
         pill.append(flag, name, count);
         countryPillsElement.appendChild(pill);
       });
+
+    if (countryPillsElement.childElementCount > 0 && countrySection) {
+      countrySection.hidden = false;
     }
   } catch (error) {
-    console.error("Visitor counter error:", error);
-    visitorCountElement.textContent = "Unavailable";
+    // A failed local/CORS request should not create a large empty panel in the portfolio.
+    console.warn("Country visitor statistics unavailable:", error);
+    if (countrySection) countrySection.hidden = true;
   }
 }
-updateVisitorCount();
+
+loadCountryVisitorStats();
 
 // Theme: saved preference wins; otherwise use the operating-system preference.
 const themeToggle = document.getElementById("theme-toggle");
@@ -100,7 +130,7 @@ if (document.readyState === "loading") {
 
 // Lightweight, one-time scroll reveal. No library; elements stay visible after first reveal.
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (!reduceMotion && "IntersectionObserver" in window) {
+if (!document.body.classList.contains("compact-mode") && !reduceMotion && "IntersectionObserver" in window) {
   const revealTargets = document.querySelectorAll(
     "main section, .skill-category, .project-card, .certification-card, .contact-section"
   );

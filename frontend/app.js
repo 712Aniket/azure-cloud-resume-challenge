@@ -208,7 +208,9 @@ updateLocation();
 
   /* ---------- country-wise visitor statistics (Azure Function + Cosmos DB) ---------- */
   const countryList = $("#country-list"), countryStatus = $("#country-status");
+  const countrySection = document.querySelector(".country-stats");
   const local = new URLSearchParams(location.search).has("nocount");
+  if (countrySection) countrySection.hidden = true;
   const safeText = (v) => String(v ?? "").replace(/[<>]/g, "");
   const renderCountries = (countries) => {
     if (!countryList) return;
@@ -220,18 +222,147 @@ updateLocation();
       count: Number(c.count ?? c.visitor_count ?? 0)
     })).filter((c) => Number.isFinite(c.count) && c.count > 0).sort((a, b) => b.count - a.count);
     if (!rows.length) {
-      countryList.innerHTML = '<p class="country-empty">No country visits have been recorded yet. Country totals will appear here as visitor locations are identified.</p>';
-      if (countryStatus) countryStatus.textContent = "Awaiting country data";
+      if (countrySection) countrySection.hidden = true;
       return;
     }
     countryList.innerHTML = rows.map((c) => `<article class="country-card"><span class="country-flag" aria-hidden="true">${c.flag}</span><span class="country-name">${c.name}<small>${c.code}</small></span><b>${c.count.toLocaleString("en-IN")}</b><span class="country-visits">visits</span></article>`).join("");
     if (countryStatus) countryStatus.textContent = `${rows.length} ${rows.length === 1 ? "country" : "countries"} represented`;
+    if (countrySection) countrySection.hidden = false;
   };
+  /* ---------- interactive Azure architecture walkthrough (illustrative only) ---------- */
+  const arch = $(".arch-showcase");
+  if (arch) {
+    const flow = $(".arch-interactive-flow", arch);
+    const services = $$(".arch-service", flow);
+    const stages = $$(".arch-stage", arch);
+    const title = $("#arch-detail-title", arch);
+    const detail = $("#arch-detail-text", arch);
+    const count = $("#arch-detail-count", arch);
+    const playButton = $("#arch-play-toggle", arch);
+    const replayButton = $("#arch-replay", arch);
+    const jsonPanel = $("#arch-json-panel", arch);
+    const routeSvg = $(".arch-route-svg", flow);
+    // On phones, keep the walkthrough readable even if the OS requests reduced
+    // motion; the user explicitly expects this visual simulation to animate.
+    const isMobileViewport = matchMedia("(max-width: 680px)").matches;
+    const reducedMotion = RM && !isMobileViewport;
+    const steps = [
+      {node:0, stage:0, direction:"request", title:"Visitor opens the portfolio", text:"A browser visit begins the request journey.", state:"Request created"},
+      {node:1, stage:0, direction:"request", title:"Frontend sends an HTTPS request", text:"Azure Static Web Apps delivers the portfolio and forwards the API request.", state:"Forwarding request"},
+      {node:2, stage:1, direction:"request", title:"Azure Functions processes the request", text:"The Python HTTP-triggered function runs the visitor-counter logic.", state:"Processing"},
+      {node:3, stage:2, direction:"request", title:"Cosmos DB read / update", text:"Visitor data is illustrated as being read or updated in the database.", state:"Database operation"},
+      {node:2, stage:3, direction:"response", title:"Response returns through Azure Functions", text:"The function prepares the API response for the frontend.", state:"Response prepared"},
+      {node:1, stage:3, direction:"response", title:"Frontend receives the response", text:"The frontend receives the JSON payload from the API.", state:"Response received"},
+      {node:0, stage:3, direction:"response", title:"Visitor receives the result", text:"The response reaches the browser and completes the cycle.", state:"Delivered"}
+    ];
+    let current = 0, paused = false, timer = null, packetFrame = 0, packet = null;
+    const stepDuration = isMobileViewport ? 2600 : (reducedMotion ? 1100 : 1450);
+    const pauseDuration = isMobileViewport ? 1300 : (reducedMotion ? 450 : 850);
+
+    const getCenters = () => {
+      const base = flow.getBoundingClientRect();
+      return services.map(node => { const r = node.getBoundingClientRect(); return {x:r.left-base.left+r.width/2, y:r.top-base.top+r.height/2}; });
+    };
+    // Calculate only the visible gap between two service-card edges. Never draw
+    // a guide line through the cards themselves.
+    const getGap = (from,to) => {
+      const base = flow.getBoundingClientRect();
+      const ra = services[from].getBoundingClientRect();
+      const rb = services[to].getBoundingClientRect();
+      const a = {x:ra.left-base.left+ra.width/2, y:ra.top-base.top+ra.height/2};
+      const b = {x:rb.left-base.left+rb.width/2, y:rb.top-base.top+rb.height/2};
+      const dx=b.x-a.x, dy=b.y-a.y, length=Math.hypot(dx,dy) || 1;
+      const ux=dx/length, uy=dy/length;
+      const edgeA=Math.min((ra.width/2)/Math.max(Math.abs(ux),.0001),(ra.height/2)/Math.max(Math.abs(uy),.0001));
+      const edgeB=Math.min((rb.width/2)/Math.max(Math.abs(ux),.0001),(rb.height/2)/Math.max(Math.abs(uy),.0001));
+      return {a:{x:a.x+ux*edgeA,y:a.y+uy*edgeA},b:{x:b.x-ux*edgeB,y:b.y-uy*edgeB}};
+    };
+    const drawRoutes = () => {
+      const r = flow.getBoundingClientRect();
+      routeSvg.setAttribute("viewBox", `0 0 ${r.width} ${r.height}`);
+      routeSvg.setAttribute("preserveAspectRatio", "none");
+      // Clear legacy route guides; directional arrows between cards are the
+      // permanent connectors, while the packet itself animates through each gap.
+      routeSvg.innerHTML = "";
+      if (!packet) { packet=document.createElementNS("http://www.w3.org/2000/svg","circle"); packet.setAttribute("r","7"); packet.setAttribute("class","arch-live-packet"); routeSvg.appendChild(packet); }
+    };
+    const clearVisuals = () => {
+      services.forEach((n,i)=>{n.classList.remove("is-current","is-complete","is-returning"); $(".arch-node-state",n).textContent=["Waiting","Ready","Idle","Stored data"][i];});
+      stages.forEach((s,i)=>s.classList.toggle("is-active",i===0));
+      arch.classList.remove("is-response","is-processing","is-database");
+      jsonPanel.classList.remove("is-revealed");
+    };
+    const placePacket = (from,to,direction,progress) => {
+      const gap=getGap(from,to), a=gap.a, b=gap.b;
+      if (!a || !b || !packet) return;
+      packet.setAttribute("cx",a.x+(b.x-a.x)*progress);
+      packet.setAttribute("cy",a.y+(b.y-a.y)*progress);
+      packet.classList.toggle("is-green",direction==="response");
+    };
+    const movePacket = (from,to,direction,done) => {
+      if (packetFrame) cancelAnimationFrame(packetFrame);
+      const started=performance.now();
+      const animate=(now)=>{
+        if (paused) { packetFrame=requestAnimationFrame(animate); return; }
+        const p=reducedMotion?1:clamp((now-started)/stepDuration);
+        placePacket(from,to,direction,ease(p));
+        if (p<1) packetFrame=requestAnimationFrame(animate); else done();
+      };
+      packetFrame=requestAnimationFrame(animate);
+    };
+    const activateStep = (index) => {
+      const step=steps[index];
+      services.forEach((n,i)=>{n.classList.toggle("is-current",i===step.node);n.classList.toggle("is-complete",step.direction==="request" && i<step.node);n.classList.toggle("is-returning",step.direction==="response" && i===step.node);});
+      stages.forEach((s,i)=>{s.classList.toggle("is-active",i===step.stage);s.classList.toggle("is-done",i<step.stage);});
+      arch.classList.toggle("is-response",step.direction==="response");
+      arch.classList.toggle("is-processing",step.node===2 && step.direction==="request");
+      arch.classList.toggle("is-database",step.node===3);
+      title.textContent=step.title; detail.textContent=step.text; count.textContent=`${String(index+1).padStart(2,"0")} / 07`;
+      $(".arch-node-state",services[step.node]).textContent=step.state;
+      if(index===3) jsonPanel.classList.add("is-revealed");
+    };
+    const runStep = () => {
+      if (paused) return;
+      if (current>=steps.length) {
+        clearVisuals(); current=0;
+        title.textContent="Cycle complete · restarting"; detail.textContent="The next simulated visitor request is about to begin.";
+        timer=setTimeout(runStep,pauseDuration); return;
+      }
+      const step=steps[current]; activateStep(current);
+      const previous=current===0?0:steps[current-1].node;
+      if(current===0){placePacket(0,0,"request",0);timer=setTimeout(()=>{current++;runStep();},pauseDuration);return;}
+      movePacket(previous,step.node,step.direction,()=>{
+        timer=setTimeout(()=>{current++;runStep();},step.node===3?pauseDuration:260);
+      });
+    };
+    const start = (restart=false) => {
+      clearTimeout(timer); if(packetFrame) cancelAnimationFrame(packetFrame);
+      if(restart){current=0;clearVisuals();}
+      paused=false; playButton.textContent="Ⅱ Pause";playButton.setAttribute("aria-pressed","false");
+      drawRoutes();runStep();
+    };
+    playButton.addEventListener("click",()=>{
+      paused=!paused;
+      playButton.textContent=paused?"▶ Resume":"Ⅱ Pause";
+      playButton.setAttribute("aria-pressed",String(paused));
+      if(paused){clearTimeout(timer);if(packetFrame)cancelAnimationFrame(packetFrame);}
+      else runStep();
+    });
+    replayButton.addEventListener("click",()=>start(true));
+    services.forEach((node)=>{
+      const inspect=()=>{const msg=node.dataset.archInfo; if(msg){title.textContent=node.querySelector("b").textContent;detail.textContent=msg;}};
+      node.addEventListener("click",inspect);node.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();inspect();}});
+    });
+    $$(".arch-support-card",arch).forEach(card=>card.addEventListener("click",()=>{title.textContent=card.querySelector("b").textContent;detail.textContent=card.dataset.archInfo;}));
+    new ResizeObserver(()=>{drawRoutes();}).observe(flow);
+    addEventListener("resize",drawRoutes,{passive:true});
+    start(true);
+  }
+
   const loadCountryStats = async () => {
     if (!countryList) return;
     if (local) {
-      countryList.innerHTML = '<p class="country-empty">Local preview · live country statistics load when this portfolio is deployed.</p>';
-      if (countryStatus) countryStatus.textContent = "Live data on deployed site";
+      if (countrySection) countrySection.hidden = true;
       return;
     }
     const endpoint = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
@@ -249,17 +380,14 @@ updateLocation();
         if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 700 * (attempt + 1)));
       }
     }
-    countryList.innerHTML = '<p class="country-empty">Country statistics could not be reached. Please check the Azure Function response and its CORS allow-list for this website.</p>';
-    if (countryStatus) countryStatus.textContent = "API connection unavailable";
+    if (countrySection) countrySection.hidden = true;
     console.warn("Country visitor statistics unavailable:", lastError);
   };
   loadCountryStats();
 
-  /* ---------- observability pipeline: built stages ---------- */
-  const st = $$("#pipe .st"); const BUILT = 3;
-  new IntersectionObserver(([e], o) => { if (!e.isIntersecting) return; o.disconnect();
-    st.forEach((s, i) => setTimeout(() => { if (i < BUILT) s.classList.add("done"); else if (i === BUILT) s.classList.add("cur"); }, RM ? 0 : 250 + i * 260));
-  }, { threshold: 0.5 }).observe($("#pipe"));
+  /* ---------- planned observability workflow (no stages marked as implemented) ---------- */
+  const plannedStages = $$("#pipe .st");
+  plannedStages.forEach((stage) => stage.classList.remove("done", "cur"));
 
   /* ---------- isometric stack ---------- */
   const plates = $$(".plate"), items = $$("#layers li"), iso = $("#iso");
