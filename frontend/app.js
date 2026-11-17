@@ -242,10 +242,7 @@ updateLocation();
     const replayButton = $("#arch-replay", arch);
     const jsonPanel = $("#arch-json-panel", arch);
     const routeSvg = $(".arch-route-svg", flow);
-    // On phones, keep the walkthrough readable even if the OS requests reduced
-    // motion; the user explicitly expects this visual simulation to animate.
-    const isMobileViewport = matchMedia("(max-width: 680px)").matches;
-    const reducedMotion = RM && !isMobileViewport;
+    const reducedMotion = RM;
     const steps = [
       {node:0, stage:0, direction:"request", title:"Visitor opens the portfolio", text:"A browser visit begins the request journey.", state:"Request created"},
       {node:1, stage:0, direction:"request", title:"Frontend sends an HTTPS request", text:"Azure Static Web Apps delivers the portfolio and forwards the API request.", state:"Forwarding request"},
@@ -256,8 +253,8 @@ updateLocation();
       {node:0, stage:3, direction:"response", title:"Visitor receives the result", text:"The response reaches the browser and completes the cycle.", state:"Delivered"}
     ];
     let current = 0, paused = false, timer = null, packetFrame = 0, packet = null;
-    const stepDuration = isMobileViewport ? 2600 : (reducedMotion ? 1100 : 1450);
-    const pauseDuration = isMobileViewport ? 1300 : (reducedMotion ? 450 : 850);
+    const stepDuration = reducedMotion ? 1100 : 1450;
+    const pauseDuration = reducedMotion ? 450 : 850;
 
     const getCenters = () => {
       const base = flow.getBoundingClientRect();

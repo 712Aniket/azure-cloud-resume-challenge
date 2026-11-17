@@ -386,15 +386,160 @@ html[data-transition-entry="to-explorer"] .idcard {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .portfolio-transition-scene { display: none !important; }
+  .portfolio-transition-scene {
+    display: none !important;
+  }
+
   html[data-transition-exit] body > :not(.portfolio-transition-scene),
   html[data-transition-entry] body > :not(.portfolio-transition-scene),
   html[data-transition-exit] #globe,
   html[data-transition-entry] #globe,
   html[data-transition-exit] .career-timeline::before,
-  html[data-transition-exit] .career-timeline .project-timeline-dot {
+  html[data-transition-exit] .career-timeline .project-timeline-dot,
+  html[data-transition-exit] .portfolio-transition-scene *,
+  html[data-transition-entry] .portfolio-transition-scene *,
+  html[data-transition-entry] .hero .name,
+  html[data-transition-entry] .hero .role,
+  html[data-transition-entry] .hero .pitch,
+  html[data-transition-entry] .hero .ctas,
+  html[data-transition-entry] .idcard {
     animation: none !important;
+    transition: none !important;
     filter: none !important;
     transform: none !important;
   }
+}
+
+
+/* FAST DIRECTIONAL TRANSITION TIMINGS
+   Explorer -> Classic: 300ms exit + 400ms entry.
+   Classic -> Explorer: 350ms exit + 450ms entry.
+   Original animation choreography and direction-specific keyframes retained.
+*/
+
+/* Explorer -> Classic: Digital Deconstruction */
+html[data-transition-exit="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 280ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-classic"] #globe,
+html[data-transition-exit="to-classic"] .fx-backdrop,
+html[data-transition-exit="to-classic"] .fx-core,
+html[data-transition-exit="to-classic"] .fx-ring-a,
+html[data-transition-exit="to-classic"] .fx-ring-b {
+  animation-duration: 280ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-classic"] .fx-sweep {
+  animation-duration: 220ms !important;
+  animation-delay: 80ms !important;
+}
+html[data-transition-exit="to-classic"] .fx-particles i {
+  animation-duration: 220ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+
+/* Classic entry reveal */
+html[data-transition-entry="to-classic"] .portfolio-transition-scene {
+  animation-duration: 380ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 360ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-backdrop,
+html[data-transition-entry="to-classic"] .fx-ring-b {
+  animation-duration: 390ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-core,
+html[data-transition-entry="to-classic"] .fx-ring-a {
+  animation-duration: 380ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-sweep {
+  animation-duration: 260ms !important;
+  animation-delay: 30ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-particles i {
+  animation-duration: 260ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+
+/* Classic -> Explorer: Universe Ignition */
+html[data-transition-exit="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 330ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .career-timeline::before {
+  animation-duration: 300ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-dot {
+  animation-duration: 210ms !important;
+}
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(1) .project-timeline-dot { animation-delay: 20ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(2) .project-timeline-dot { animation-delay: 40ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(3) .project-timeline-dot { animation-delay: 60ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(4) .project-timeline-dot { animation-delay: 80ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(5) .project-timeline-dot { animation-delay: 100ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(6) .project-timeline-dot { animation-delay: 120ms !important; }
+html[data-transition-exit="to-explorer"] .fx-backdrop,
+html[data-transition-exit="to-explorer"] .fx-ring-a {
+  animation-duration: 330ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-core {
+  animation-duration: 320ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-ring-b {
+  animation-duration: 310ms !important;
+  animation-delay: 30ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-sweep {
+  animation-duration: 200ms !important;
+  animation-delay: 70ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-particles i {
+  animation-duration: 220ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+
+/* Explorer entry: globe and command-centre reveal */
+html[data-transition-entry="to-explorer"] .portfolio-transition-scene {
+  animation-duration: 430ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 420ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-backdrop,
+html[data-transition-entry="to-explorer"] .fx-ring-b,
+html[data-transition-entry="to-explorer"] #globe {
+  animation-duration: 440ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-core,
+html[data-transition-entry="to-explorer"] .fx-ring-a {
+  animation-duration: 430ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-sweep {
+  animation-duration: 360ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-particles i {
+  animation-duration: 300ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+html[data-transition-entry="to-explorer"] .hero .name,
+html[data-transition-entry="to-explorer"] .hero .role,
+html[data-transition-entry="to-explorer"] .hero .pitch,
+html[data-transition-entry="to-explorer"] .hero .ctas,
+html[data-transition-entry="to-explorer"] .idcard {
+  animation-duration: 420ms !important;
+  animation-delay: 0ms !important;
 }
