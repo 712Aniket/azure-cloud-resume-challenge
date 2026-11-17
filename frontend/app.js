@@ -208,7 +208,9 @@ updateLocation();
 
   /* ---------- country-wise visitor statistics (Azure Function + Cosmos DB) ---------- */
   const countryList = $("#country-list"), countryStatus = $("#country-status");
+  const countrySection = document.querySelector(".country-stats");
   const local = new URLSearchParams(location.search).has("nocount");
+  if (countrySection) countrySection.hidden = true;
   const safeText = (v) => String(v ?? "").replace(/[<>]/g, "");
   const renderCountries = (countries) => {
     if (!countryList) return;
@@ -220,12 +222,12 @@ updateLocation();
       count: Number(c.count ?? c.visitor_count ?? 0)
     })).filter((c) => Number.isFinite(c.count) && c.count > 0).sort((a, b) => b.count - a.count);
     if (!rows.length) {
-      countryList.innerHTML = '<p class="country-empty">No country visits have been recorded yet. Country totals will appear here as visitor locations are identified.</p>';
-      if (countryStatus) countryStatus.textContent = "Awaiting country data";
+      if (countrySection) countrySection.hidden = true;
       return;
     }
     countryList.innerHTML = rows.map((c) => `<article class="country-card"><span class="country-flag" aria-hidden="true">${c.flag}</span><span class="country-name">${c.name}<small>${c.code}</small></span><b>${c.count.toLocaleString("en-IN")}</b><span class="country-visits">visits</span></article>`).join("");
     if (countryStatus) countryStatus.textContent = `${rows.length} ${rows.length === 1 ? "country" : "countries"} represented`;
+    if (countrySection) countrySection.hidden = false;
   };
   /* ---------- interactive Azure architecture walkthrough (illustrative only) ---------- */
   const arch = $(".arch-showcase");
@@ -357,8 +359,7 @@ updateLocation();
   const loadCountryStats = async () => {
     if (!countryList) return;
     if (local) {
-      countryList.innerHTML = '<p class="country-empty">Local preview · live country statistics load when this portfolio is deployed.</p>';
-      if (countryStatus) countryStatus.textContent = "Live data on deployed site";
+      if (countrySection) countrySection.hidden = true;
       return;
     }
     const endpoint = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
@@ -376,17 +377,14 @@ updateLocation();
         if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 700 * (attempt + 1)));
       }
     }
-    countryList.innerHTML = '<p class="country-empty">Country statistics could not be reached. Please check the Azure Function response and its CORS allow-list for this website.</p>';
-    if (countryStatus) countryStatus.textContent = "API connection unavailable";
+    if (countrySection) countrySection.hidden = true;
     console.warn("Country visitor statistics unavailable:", lastError);
   };
   loadCountryStats();
 
-  /* ---------- observability pipeline: built stages ---------- */
-  const st = $$("#pipe .st"); const BUILT = 3;
-  new IntersectionObserver(([e], o) => { if (!e.isIntersecting) return; o.disconnect();
-    st.forEach((s, i) => setTimeout(() => { if (i < BUILT) s.classList.add("done"); else if (i === BUILT) s.classList.add("cur"); }, RM ? 0 : 250 + i * 260));
-  }, { threshold: 0.5 }).observe($("#pipe"));
+  /* ---------- planned observability workflow (no stages marked as implemented) ---------- */
+  const plannedStages = $$("#pipe .st");
+  plannedStages.forEach((stage) => stage.classList.remove("done", "cur"));
 
   /* ---------- isometric stack ---------- */
   const plates = $$(".plate"), items = $$("#layers li"), iso = $("#iso");

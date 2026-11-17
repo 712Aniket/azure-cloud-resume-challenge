@@ -392,7 +392,7 @@ body.ptr .spot { opacity: 1; }
   .foot { flex-direction: column; gap: 8px; font-size: 13px; }
 }
 @media (hover: none) { .spot { display: none; } }
-@media (prefers-reduced-motion: reduce) { .aurora i, .pk, .frame .scan, .metrics .beat path, .idcard::before { animation: none !important; } .pk, .frame .scan { display: none; } }
+@media (prefers-reduced-motion: reduce) { .aurora i, .pk, .metrics .beat path, .idcard::before { animation: none !important; } .pk { display: none; } }
 section.metrics { padding-top: 0; }
 @media (max-width: 900px) { .metrics .beat { top: 50%; height: 90px; transform: translateY(-50%); } }
 
@@ -868,3 +868,131 @@ section.metrics { padding-top: 0; }
   .arch-showcase .arch-service,.arch-showcase .arch-stage,.arch-showcase .arch-response-responsive { transition:none !important; }
   .arch-showcase .arch-icon,.arch-showcase .arch-detail-pulse { animation:none !important; }
 }
+
+
+/* Mobile animation tuning: give each architecture stage time to be understood. */
+@media (max-width: 680px) {
+  .arch-showcase .arch-service,
+  .arch-showcase .arch-stage,
+  .arch-showcase .arch-response-responsive {
+    transition-duration: .45s;
+  }
+}
+
+
+
+/* Optional classic/compact portfolio view entry point */
+.compact-view-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line2);
+  border-radius: 999px;
+  background: rgba(232, 238, 246, .045);
+  color: var(--ink);
+  font: 600 13px var(--sans);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s, background .2s, transform .2s;
+}
+.compact-view-switch:hover,
+.compact-view-switch:focus-visible {
+  color: var(--amber2);
+  border-color: rgba(255, 178, 36, .65);
+  background: rgba(255, 178, 36, .08);
+  transform: translateY(-1px);
+  outline: none;
+}
+@media (max-width: 900px) {
+  .nav .compact-view-switch {
+    min-height: 36px;
+    padding: 0 11px;
+    font-size: 12px;
+    margin-left: 0;
+  }
+}
+@media (max-width: 360px) {
+  .nav .compact-view-switch { padding: 0 8px; font-size: 11px; }
+  .navcv { padding: 0 10px; }
+}
+
+/* Explorer View: prevent the mobile header controls from colliding.
+   The hero already has a prominent resume download button, so the duplicate
+   compact CV pill is hidden on narrow screens. Desktop/tablet styling is unchanged. */
+@media (max-width: 600px) {
+  .nav {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+  }
+
+  .nav .burger {
+    grid-column: 1;
+    width: 42px;
+    height: 42px;
+  }
+
+  .nav .logo {
+    grid-column: 2;
+    position: static;
+    left: auto;
+    transform: none;
+    justify-self: center;
+    min-width: 0;
+    gap: 7px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  /* Avoid duplicating the resume action already available in the hero. */
+  .navcv {
+    display: none;
+  }
+
+  .nav .compact-view-switch {
+    grid-column: 3;
+    justify-self: end;
+    min-height: 34px;
+    margin: 0;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav {
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 0 12px;
+  }
+
+  .nav .burger {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav .logo {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .nav .compact-view-switch {
+    min-height: 32px;
+    padding: 0 8px;
+    font-size: 10.5px;
+  }
+}
+
+/* Clarify implemented project stack versus in-progress target workflow. */
+.project-techline { margin: 8px 0 14px; color: var(--mute); font: 12px/1.6 var(--mono); }
+.project-diagram-note { margin: 14px 0 8px; color: var(--mute); font: 11px/1.5 var(--mono); letter-spacing: .04em; }
+
+
+/* Short visitor-data privacy disclosure. */
+.privacy-note { max-width: 1240px; margin: 12px auto 18px; padding: 0 24px; color: var(--dim); font-size: 11px; line-height: 1.6; }
+.privacy-note a { color: var(--mute); text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 600px) { .privacy-note { padding: 0 18px; font-size: 10px; } }

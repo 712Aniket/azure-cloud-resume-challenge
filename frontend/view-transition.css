@@ -1,0 +1,545 @@
+/* ================================================================
+   ANIKET PAWAR PORTFOLIO | TWO DISTINCT CINEMATIC TRANSITIONS
+
+   Explorer -> Classic : DIGITAL DECONSTRUCTION
+   Classic  -> Explorer: UNIVERSE IGNITION
+
+   The animation is intentionally different in each direction. It is
+   decorative only and never blocks ordinary link navigation when
+   JavaScript is unavailable or reduced motion is requested.
+   ================================================================ */
+
+:root {
+  --fx-x: 50vw;
+  --fx-y: 50vh;
+}
+
+.portfolio-transition-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  contain: strict;
+  isolation: isolate;
+}
+
+.fx-backdrop,
+.fx-core,
+.fx-ring,
+.fx-sweep,
+.fx-particles {
+  position: absolute;
+  pointer-events: none;
+}
+
+.fx-backdrop { inset: 0; opacity: 0; }
+.fx-core {
+  left: var(--fx-x);
+  top: var(--fx-y);
+  width: clamp(150px, 32vmin, 360px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(.08);
+  opacity: 0;
+  background: radial-gradient(circle, rgba(255,255,235,.98) 0%, rgba(255,185,65,.88) 8%, rgba(255,120,20,.34) 28%, rgba(255,120,20,0) 70%);
+  filter: blur(3px);
+}
+.fx-ring {
+  left: var(--fx-x);
+  top: var(--fx-y);
+  width: clamp(120px, 24vmin, 300px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 174, 62, .86);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(255, 147, 32, .5), inset 0 0 18px rgba(255, 147, 32, .17);
+  transform: translate(-50%, -50%) scale(.18) rotate(0deg);
+  opacity: 0;
+}
+.fx-ring-b {
+  width: clamp(190px, 42vmin, 520px);
+  border-style: dashed;
+  border-color: rgba(255, 198, 112, .62);
+  box-shadow: 0 0 26px rgba(255, 147, 32, .28);
+}
+.fx-sweep {
+  top: -35%;
+  bottom: -35%;
+  left: -65%;
+  width: 34vw;
+  min-width: 170px;
+  opacity: 0;
+  transform: translateX(-160%) rotate(17deg);
+  filter: blur(13px);
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 145, 28, .12) 25%, rgba(255, 231, 173, .96) 50%, rgba(255, 145, 28, .22) 72%, transparent 100%);
+}
+.fx-particles { inset: 0; }
+.fx-particles i {
+  position: absolute;
+  display: block;
+  left: 50%;
+  top: 50%;
+  width: var(--size, 3px);
+  height: var(--size, 3px);
+  border-radius: 50%;
+  opacity: 0;
+  background: #ffd27b;
+  box-shadow: 0 0 9px 2px rgba(255, 160, 45, .8), 0 0 22px rgba(255, 150, 25, .34);
+  will-change: transform, opacity;
+}
+
+/* ---------- EXPLORER -> CLASSIC : DIGITAL DECONSTRUCTION ---------- */
+html[data-transition-exit="to-classic"] .portfolio-transition-scene {
+  visibility: visible;
+  opacity: 1;
+}
+html[data-transition-exit="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation: explorer-digital-dissolve 980ms cubic-bezier(.58, .02, .82, .38) both;
+  transform-origin: var(--fx-x) var(--fx-y);
+}
+html[data-transition-exit="to-classic"] #globe {
+  animation: explorer-globe-collapse 880ms cubic-bezier(.62, .02, .86, .34) both;
+}
+html[data-transition-exit="to-classic"] .aurora i { animation-play-state: paused; }
+html[data-transition-exit="to-classic"] .fx-backdrop {
+  animation: deconstruction-darken 950ms ease both;
+}
+html[data-transition-exit="to-classic"] .fx-core {
+  animation: core-collapse 900ms cubic-bezier(.5, 0, .75, .25) both;
+}
+html[data-transition-exit="to-classic"] .fx-ring-a {
+  animation: ring-contract 920ms cubic-bezier(.6, 0, .85, .3) both;
+}
+html[data-transition-exit="to-classic"] .fx-ring-b {
+  animation: ring-contract-reverse 900ms cubic-bezier(.6, 0, .85, .3) both;
+}
+html[data-transition-exit="to-classic"] .fx-sweep {
+  animation: amber-sweep 590ms cubic-bezier(.2, .7, .25, 1) 430ms both;
+}
+html[data-transition-exit="to-classic"] .fx-particles i {
+  animation: particles-collapse 760ms cubic-bezier(.18, .72, .22, 1) var(--delay, 0ms) both;
+}
+
+@keyframes explorer-digital-dissolve {
+  0% { opacity: 1; filter: blur(0) saturate(1); transform: scale(1); }
+  42% { opacity: .88; filter: blur(1px) saturate(1.45); transform: scale(.992); }
+  100% { opacity: .12; filter: blur(10px) saturate(1.8); transform: scale(.965); }
+}
+@keyframes explorer-globe-collapse {
+  0% { opacity: 1; filter: blur(0) brightness(1); clip-path: circle(72% at 55% 50%); transform: translateY(-50%) rotate(0deg) scale(1); }
+  55% { opacity: .95; filter: blur(3px) brightness(1.75); clip-path: circle(48% at 55% 50%); transform: translateY(-50%) rotate(115deg) scale(.76); }
+  100% { opacity: 0; filter: blur(15px) brightness(2.4); clip-path: circle(0 at 55% 50%); transform: translateY(-50%) rotate(250deg) scale(.08); }
+}
+@keyframes deconstruction-darken {
+  0% { opacity: 0; background: rgba(4, 9, 19, 0); }
+  58% { opacity: .5; background: rgba(4, 9, 19, .55); }
+  100% { opacity: .9; background: rgba(4, 9, 19, .9); }
+}
+@keyframes core-collapse {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
+  28% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: .72; transform: translate(-50%, -50%) scale(.08); }
+}
+@keyframes ring-contract {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(2.1) rotate(0deg); }
+  22% { opacity: 1; }
+  100% { opacity: .08; transform: translate(-50%, -50%) scale(.12) rotate(210deg); }
+}
+@keyframes ring-contract-reverse {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(1.65) rotate(70deg); }
+  30% { opacity: .88; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(.06) rotate(-180deg); }
+}
+@keyframes amber-sweep {
+  0% { opacity: 0; transform: translateX(-160%) rotate(17deg); }
+  22% { opacity: 1; }
+  100% { opacity: .08; transform: translateX(520%) rotate(17deg); }
+}
+@keyframes particles-collapse {
+  0% { opacity: 0; transform: translate3d(0,0,0) scale(.45); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--dx),var(--dy),0) scale(.04); }
+}
+
+/* ---------- CLASSIC ARRIVAL : THE LIGHT-TO-LIGHT REVEAL ---------- */
+html[data-transition-entry="to-classic"] .portfolio-transition-scene {
+  visibility: visible;
+  opacity: 1;
+  animation: scene-fade-away 1220ms ease 100ms both;
+}
+html[data-transition-entry="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation: classic-from-light 1050ms cubic-bezier(.18, .75, .2, 1) both;
+}
+html[data-transition-entry="to-classic"] .fx-backdrop {
+  animation: classic-warm-clear 1150ms ease both;
+}
+html[data-transition-entry="to-classic"] .fx-core {
+  animation: classic-light-open 1020ms cubic-bezier(.16, 1, .3, 1) both;
+}
+html[data-transition-entry="to-classic"] .fx-ring-a {
+  animation: ring-open 1080ms cubic-bezier(.16, 1, .3, 1) 40ms both;
+}
+html[data-transition-entry="to-classic"] .fx-ring-b {
+  animation: ring-open-reverse 1160ms cubic-bezier(.16, 1, .3, 1) both;
+}
+html[data-transition-entry="to-classic"] .fx-sweep {
+  animation: amber-sweep 830ms cubic-bezier(.16, .9, .25, 1) 110ms both;
+}
+html[data-transition-entry="to-classic"] .fx-particles i {
+  animation: particles-drift 700ms cubic-bezier(.18, .7, .22, 1) var(--delay, 0ms) both;
+}
+
+@keyframes classic-from-light {
+  0% { opacity: .12; filter: blur(9px); transform: translateY(24px) scale(.982); }
+  54% { opacity: .82; filter: blur(2px); transform: translateY(5px) scale(.995); }
+  100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+}
+@keyframes classic-warm-clear {
+  0% { opacity: .82; background: radial-gradient(circle at var(--fx-x) var(--fx-y), rgba(255,183,77,.45), rgba(250,251,253,.9) 52%, rgba(255,255,255,.45)); }
+  100% { opacity: 0; background: transparent; }
+}
+@keyframes classic-light-open {
+  0% { opacity: .95; transform: translate(-50%, -50%) scale(.1); filter: blur(2px); }
+  55% { opacity: .66; transform: translate(-50%, -50%) scale(3.5); filter: blur(18px); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(8.5); filter: blur(34px); }
+}
+@keyframes ring-open {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(.12) rotate(-35deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(10) rotate(100deg); }
+}
+@keyframes ring-open-reverse {
+  0% { opacity: .85; transform: translate(-50%, -50%) scale(.08) rotate(80deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(8) rotate(-120deg); }
+}
+@keyframes particles-drift {
+  0% { opacity: 0; transform: translate3d(0,0,0) scale(.25); }
+  24% { opacity: .95; }
+  100% { opacity: 0; transform: translate3d(var(--dx),var(--dy),0) scale(.08); }
+}
+@keyframes scene-fade-away { 0% { opacity: 1; } 72% { opacity: .94; } 100% { opacity: 0; visibility: hidden; } }
+
+/* ---------- CLASSIC -> EXPLORER : UNIVERSE IGNITION ---------- */
+html[data-transition-exit="to-explorer"] .portfolio-transition-scene {
+  visibility: visible;
+  opacity: 1;
+}
+html[data-transition-exit="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation: classic-ignite-away 1030ms cubic-bezier(.55, .04, .9, .38) both;
+  transform-origin: var(--fx-x) var(--fx-y);
+}
+html[data-transition-exit="to-explorer"] .career-timeline::before {
+  transform-origin: top center;
+  animation: timeline-energy-line 970ms ease both;
+}
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-dot {
+  animation: timeline-node-charge 660ms ease both;
+}
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(1) .project-timeline-dot { animation-delay: 40ms; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(2) .project-timeline-dot { animation-delay: 130ms; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(3) .project-timeline-dot { animation-delay: 220ms; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(4) .project-timeline-dot { animation-delay: 310ms; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(5) .project-timeline-dot { animation-delay: 400ms; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(6) .project-timeline-dot { animation-delay: 490ms; }
+html[data-transition-exit="to-explorer"] .fx-backdrop {
+  animation: universe-dark-pulse 1050ms ease both;
+}
+html[data-transition-exit="to-explorer"] .fx-core {
+  animation: ignition-core 1030ms cubic-bezier(.15, .85, .18, 1) both;
+}
+html[data-transition-exit="to-explorer"] .fx-ring-a {
+  animation: ignition-ring 1050ms cubic-bezier(.16, .9, .2, 1) both;
+}
+html[data-transition-exit="to-explorer"] .fx-ring-b {
+  animation: ignition-ring-outer 1100ms cubic-bezier(.16, .9, .2, 1) 80ms both;
+}
+html[data-transition-exit="to-explorer"] .fx-sweep {
+  animation: ignition-flare 750ms cubic-bezier(.2, .8, .2, 1) 230ms both;
+}
+html[data-transition-exit="to-explorer"] .fx-particles i {
+  animation: particles-burst 820ms cubic-bezier(.15, .82, .18, 1) var(--delay, 0ms) both;
+}
+
+@keyframes classic-ignite-away {
+  0% { opacity: 1; filter: blur(0) brightness(1); transform: scale(1); }
+  45% { opacity: .9; filter: blur(1px) brightness(1.12); transform: scale(1.015); }
+  100% { opacity: .08; filter: blur(12px) brightness(.65); transform: scale(1.055); }
+}
+@keyframes timeline-energy-line {
+  0% { transform: scaleY(.15); filter: drop-shadow(0 0 0 rgba(255,144,28,0)); }
+  42% { transform: scaleY(1.04); filter: drop-shadow(0 0 5px rgba(255,144,28,.85)); }
+  100% { transform: scaleY(1.28); filter: drop-shadow(0 0 12px rgba(255,144,28,.55)); }
+}
+@keyframes timeline-node-charge {
+  0% { box-shadow: 0 0 0 1px #D18A24; filter: brightness(1); }
+  50% { box-shadow: 0 0 0 5px rgba(255,151,32,.28), 0 0 18px rgba(255,151,32,.95); filter: brightness(1.8); }
+  100% { box-shadow: 0 0 0 1px #D18A24, 0 0 10px rgba(255,151,32,.45); filter: brightness(1.25); }
+}
+@keyframes universe-dark-pulse {
+  0% { opacity: 0; background: rgba(8,16,31,0); }
+  46% { opacity: .75; background: rgba(8,16,31,.74); }
+  100% { opacity: .96; background: rgba(8,16,31,.96); }
+}
+@keyframes ignition-core {
+  0% { opacity: .18; transform: translate(-50%, -50%) scale(.08); }
+  34% { opacity: 1; transform: translate(-50%, -50%) scale(.85); }
+  100% { opacity: .48; transform: translate(-50%, -50%) scale(7.8); }
+}
+@keyframes ignition-ring {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.12) rotate(-65deg); }
+  24% { opacity: 1; }
+  100% { opacity: .06; transform: translate(-50%, -50%) scale(9.5) rotate(175deg); }
+}
+@keyframes ignition-ring-outer {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.08) rotate(35deg); }
+  30% { opacity: .86; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(8.7) rotate(-145deg); }
+}
+@keyframes ignition-flare {
+  0% { opacity: 0; transform: translateX(-160%) rotate(17deg); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(520%) rotate(17deg); }
+}
+@keyframes particles-burst {
+  0% { opacity: 0; transform: translate3d(0,0,0) scale(.25); }
+  22% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--dx),var(--dy),0) scale(.05); }
+}
+
+/* ---------- EXPLORER ARRIVAL : COMMAND-CENTRE BOOT ---------- */
+html[data-transition-entry="to-explorer"] .portfolio-transition-scene {
+  visibility: visible;
+  opacity: 1;
+  animation: scene-fade-away 1370ms ease 120ms both;
+}
+html[data-transition-entry="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation: explorer-command-boot 1190ms cubic-bezier(.15, .82, .18, 1) both;
+}
+html[data-transition-entry="to-explorer"] .fx-backdrop {
+  animation: explorer-entry-backdrop 1280ms ease both;
+}
+html[data-transition-entry="to-explorer"] .fx-core {
+  animation: explorer-entry-core 1160ms cubic-bezier(.15, .85, .18, 1) both;
+}
+html[data-transition-entry="to-explorer"] .fx-ring-a {
+  animation: ring-open 1240ms cubic-bezier(.16, .9, .2, 1) both;
+}
+html[data-transition-entry="to-explorer"] .fx-ring-b {
+  animation: ring-open-reverse 1300ms cubic-bezier(.16, .9, .2, 1) both;
+}
+html[data-transition-entry="to-explorer"] .fx-sweep {
+  animation: ignition-flare 860ms cubic-bezier(.2, .8, .2, 1) both;
+}
+html[data-transition-entry="to-explorer"] .fx-particles i {
+  animation: particles-burst 820ms cubic-bezier(.15, .82, .18, 1) var(--delay, 0ms) both;
+}
+html[data-transition-entry="to-explorer"] #globe {
+  animation: globe-materialise 1280ms cubic-bezier(.16, .9, .2, 1) both;
+}
+html[data-transition-entry="to-explorer"] .hero .name,
+html[data-transition-entry="to-explorer"] .hero .role,
+html[data-transition-entry="to-explorer"] .hero .pitch,
+html[data-transition-entry="to-explorer"] .hero .ctas,
+html[data-transition-entry="to-explorer"] .idcard {
+  animation-duration: 1.15s;
+  animation-timing-function: cubic-bezier(.16, .9, .2, 1);
+}
+
+@keyframes explorer-entry-backdrop {
+  0% { opacity: .96; background: rgba(8,16,31,.96); }
+  58% { opacity: .55; background: rgba(8,16,31,.55); }
+  100% { opacity: 0; background: rgba(8,16,31,0); }
+}
+@keyframes explorer-entry-core {
+  0% { opacity: .88; transform: translate(-50%, -50%) scale(.08); }
+  38% { opacity: .95; transform: translate(-50%, -50%) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(7.2); }
+}
+@keyframes explorer-command-boot {
+  0% { opacity: .08; filter: blur(12px) contrast(1.5); transform: scale(1.028); }
+  48% { opacity: .86; filter: blur(2px) contrast(1.14); transform: scale(1.006); }
+  100% { opacity: 1; filter: blur(0) contrast(1); transform: scale(1); }
+}
+@keyframes globe-materialise {
+  0% { opacity: 0; filter: blur(16px) brightness(2.2); clip-path: circle(0 at 50% 50%); }
+  52% { opacity: .9; filter: blur(4px) brightness(1.5); clip-path: circle(42% at 50% 50%); }
+  100% { opacity: 1; filter: blur(0) brightness(1); clip-path: circle(76% at 50% 50%); }
+}
+
+/* ---------- SMALL SCREEN + ACCESSIBILITY SAFEGUARDS ---------- */
+@media (max-width: 760px) {
+  html[data-transition-exit="to-classic"] #globe {
+    animation-name: explorer-globe-collapse-mobile;
+  }
+  @keyframes explorer-globe-collapse-mobile {
+    0% { opacity: 1; filter: blur(0) brightness(1); clip-path: circle(72% at 55% 50%); transform: rotate(0deg) scale(1); }
+    55% { opacity: .95; filter: blur(3px) brightness(1.75); clip-path: circle(48% at 55% 50%); transform: rotate(115deg) scale(.76); }
+    100% { opacity: 0; filter: blur(15px) brightness(2.4); clip-path: circle(0 at 55% 50%); transform: rotate(250deg) scale(.08); }
+  }
+}
+
+@media (max-width: 600px) {
+  .fx-sweep { width: 58vw; min-width: 130px; }
+  .fx-ring { border-width: 1px; }
+  .fx-ring-b { border-style: dotted; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-transition-scene {
+    display: none !important;
+  }
+
+  html[data-transition-exit] body > :not(.portfolio-transition-scene),
+  html[data-transition-entry] body > :not(.portfolio-transition-scene),
+  html[data-transition-exit] #globe,
+  html[data-transition-entry] #globe,
+  html[data-transition-exit] .career-timeline::before,
+  html[data-transition-exit] .career-timeline .project-timeline-dot,
+  html[data-transition-exit] .portfolio-transition-scene *,
+  html[data-transition-entry] .portfolio-transition-scene *,
+  html[data-transition-entry] .hero .name,
+  html[data-transition-entry] .hero .role,
+  html[data-transition-entry] .hero .pitch,
+  html[data-transition-entry] .hero .ctas,
+  html[data-transition-entry] .idcard {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
+
+
+/* FAST DIRECTIONAL TRANSITION TIMINGS
+   Explorer -> Classic: 300ms exit + 400ms entry.
+   Classic -> Explorer: 350ms exit + 450ms entry.
+   Original animation choreography and direction-specific keyframes retained.
+*/
+
+/* Explorer -> Classic: Digital Deconstruction */
+html[data-transition-exit="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 280ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-classic"] #globe,
+html[data-transition-exit="to-classic"] .fx-backdrop,
+html[data-transition-exit="to-classic"] .fx-core,
+html[data-transition-exit="to-classic"] .fx-ring-a,
+html[data-transition-exit="to-classic"] .fx-ring-b {
+  animation-duration: 280ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-classic"] .fx-sweep {
+  animation-duration: 220ms !important;
+  animation-delay: 80ms !important;
+}
+html[data-transition-exit="to-classic"] .fx-particles i {
+  animation-duration: 220ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+
+/* Classic entry reveal */
+html[data-transition-entry="to-classic"] .portfolio-transition-scene {
+  animation-duration: 380ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 360ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-backdrop,
+html[data-transition-entry="to-classic"] .fx-ring-b {
+  animation-duration: 390ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-core,
+html[data-transition-entry="to-classic"] .fx-ring-a {
+  animation-duration: 380ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-sweep {
+  animation-duration: 260ms !important;
+  animation-delay: 30ms !important;
+}
+html[data-transition-entry="to-classic"] .fx-particles i {
+  animation-duration: 260ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+
+/* Classic -> Explorer: Universe Ignition */
+html[data-transition-exit="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 330ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .career-timeline::before {
+  animation-duration: 300ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-dot {
+  animation-duration: 210ms !important;
+}
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(1) .project-timeline-dot { animation-delay: 20ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(2) .project-timeline-dot { animation-delay: 40ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(3) .project-timeline-dot { animation-delay: 60ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(4) .project-timeline-dot { animation-delay: 80ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(5) .project-timeline-dot { animation-delay: 100ms !important; }
+html[data-transition-exit="to-explorer"] .career-timeline .project-timeline-item:nth-child(6) .project-timeline-dot { animation-delay: 120ms !important; }
+html[data-transition-exit="to-explorer"] .fx-backdrop,
+html[data-transition-exit="to-explorer"] .fx-ring-a {
+  animation-duration: 330ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-core {
+  animation-duration: 320ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-ring-b {
+  animation-duration: 310ms !important;
+  animation-delay: 30ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-sweep {
+  animation-duration: 200ms !important;
+  animation-delay: 70ms !important;
+}
+html[data-transition-exit="to-explorer"] .fx-particles i {
+  animation-duration: 220ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+
+/* Explorer entry: globe and command-centre reveal */
+html[data-transition-entry="to-explorer"] .portfolio-transition-scene {
+  animation-duration: 430ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation-duration: 420ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-backdrop,
+html[data-transition-entry="to-explorer"] .fx-ring-b,
+html[data-transition-entry="to-explorer"] #globe {
+  animation-duration: 440ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-core,
+html[data-transition-entry="to-explorer"] .fx-ring-a {
+  animation-duration: 430ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-sweep {
+  animation-duration: 360ms !important;
+  animation-delay: 0ms !important;
+}
+html[data-transition-entry="to-explorer"] .fx-particles i {
+  animation-duration: 300ms !important;
+  animation-delay: var(--delay, 0ms) !important;
+}
+html[data-transition-entry="to-explorer"] .hero .name,
+html[data-transition-entry="to-explorer"] .hero .role,
+html[data-transition-entry="to-explorer"] .hero .pitch,
+html[data-transition-entry="to-explorer"] .hero .ctas,
+html[data-transition-entry="to-explorer"] .idcard {
+  animation-duration: 420ms !important;
+  animation-delay: 0ms !important;
+}
