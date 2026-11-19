@@ -4,6 +4,37 @@
   const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
   const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
 
+  /* ---------- portfolio interaction analytics ---------- */
+  const trackPortfolioEvent = (itemType, itemId, eventType) => {
+    const endpoint = "https://aniket-portfolio-api.azurewebsites.net/api/portfolio-event";
+
+    const payload = JSON.stringify({
+      item_type: itemType,
+      item_id: itemId,
+      event_type: eventType
+    });
+
+    const blob = new Blob([payload], { type: "application/json" });
+
+    fetch(endpoint, {
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
+      headers: { "Content-Type": "application/json" },
+      body: payload,
+      keepalive: true
+    }).catch((error) => {
+      console.warn("Portfolio analytics event could not be sent:", error);
+    });
+  };
+
+  /* ---------- resume view tracking ---------- */
+  $$('a[data-analytics-item="resume"]').forEach((link) => {
+    link.addEventListener("click", () => {
+      trackPortfolioEvent("resume", "resume", "view");
+    });
+  });
+
   /* ---------- nav ---------- */
   const nav = $("#nav"), burger = $("#burger"), dw = $("#dw"), panel = $("#menu");
   const onScroll = () => nav.classList.toggle("solid", scrollY > 20);
@@ -399,12 +430,77 @@ updateLocation();
   };
   addEventListener("scroll", spread, { passive: true }); spread();
 
+
+    /* ---------- certificate viewer ---------- */
   /* ---------- certificate viewer ---------- */
-  const modal = $("#modal"), mimg = $("#mimg"); let last;
-  $$(".cert").forEach((b) => b.addEventListener("click", () => { last = b; mimg.src = `assets/certificates/${b.dataset.c}.png`; mimg.alt = $("b", b).textContent + " certificate"; modal.hidden = false; $("#mclose").focus(); document.body.style.overflow = "hidden"; }));
-  const close = () => { modal.hidden = true; document.body.style.overflow = ""; last?.focus(); };
-  $("#mclose").addEventListener("click", close); modal.addEventListener("click", (e) => e.target === modal && close());
-  addEventListener("keydown", (e) => e.key === "Escape" && !modal.hidden && close());
+const modal = $("#modal");
+const mimg = $("#mimg");
+const mdownload = $("#mdownload");
+
+let last;
+let certificateZoom = 1;
+const certificateStage = $(".document-image-stage");
+const setCertificateZoom = (value) => {
+  certificateZoom = Math.max(0.6, Math.min(3, value));
+  mimg.style.transform = `scale(${certificateZoom})`;
+  if (certificateStage) certificateStage.style.overflow = certificateZoom > 1 ? "auto" : "hidden";
+};
+$("#cert-zoom-out")?.addEventListener("click", () => setCertificateZoom(certificateZoom - 0.2));
+$("#cert-zoom-in")?.addEventListener("click", () => setCertificateZoom(certificateZoom + 0.2));
+$("#cert-zoom-fit")?.addEventListener("click", () => setCertificateZoom(1));
+
+$$(".cert").forEach((b) => {
+  b.addEventListener("click", () => {
+    last = b;
+
+    const certificateId = b.dataset.c;
+    const certificatePath = `assets/certificates/${certificateId}.png`;
+
+    // Record certificate view
+    trackPortfolioEvent("certificate", certificateId, "view");
+
+    // Display certificate
+    mimg.src = certificatePath;
+    mimg.alt = $("b", b).textContent + " certificate";
+    setCertificateZoom(1);
+
+    // Configure certificate download
+    mdownload.href = certificatePath;
+    mdownload.download = `${certificateId}-certificate.png`;
+
+    // Open modal
+    modal.hidden = false;
+
+    $("#mclose").focus();
+    document.body.style.overflow = "hidden";
+  });
+});
+
+// Track certificate downloads
+mdownload.addEventListener("click", () => {
+  const certificateId = last?.dataset.c;
+
+  if (certificateId) {
+    trackPortfolioEvent("certificate", certificateId, "download");
+  }
+});
+
+// Close modal
+const close = () => {
+  modal.hidden = true;
+  document.body.style.overflow = "";
+  last?.focus();
+};
+
+$("#mclose").addEventListener("click", close);
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) close();
+});
+
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !modal.hidden) close();
+});
 
   /* ---------- pointer spotlight, card glow, magnetic buttons ---------- */
   const spot = $(".spot"), FINE = matchMedia("(hover: hover) and (pointer: fine)").matches;

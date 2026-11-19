@@ -705,3 +705,55 @@ html[data-transition-entry="to-explorer"] .fx-ring-b,
 html[data-transition-entry="to-explorer"] .fx-particles i {
   animation: none !important;
 }
+
+
+/* FINAL SIMPLE FADE TRANSITION */
+
+/* Remove decorative transition overlays and effects. */
+html[data-transition-exit] .portfolio-transition-scene,
+html[data-transition-entry] .portfolio-transition-scene {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html[data-transition-exit] .portfolio-transition-scene *,
+html[data-transition-entry] .portfolio-transition-scene * {
+  animation: none !important;
+}
+
+html[data-transition-exit] .portfolio-transition-scene::before,
+html[data-transition-entry] .portfolio-transition-scene::before {
+  animation: none !important;
+  background: transparent !important;
+}
+
+/* Explorer -> Classic and Classic -> Explorer: simple fade. */
+html[data-transition-exit="to-classic"] body > :not(.portfolio-transition-scene),
+html[data-transition-exit="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation: portfolio-simple-fade-out 220ms ease-out both !important;
+  animation-delay: 0ms !important;
+}
+
+html[data-transition-entry="to-classic"] body > :not(.portfolio-transition-scene),
+html[data-transition-entry="to-explorer"] body > :not(.portfolio-transition-scene) {
+  animation: portfolio-simple-fade-in 250ms ease-in both !important;
+  animation-delay: 0ms !important;
+}
+
+@keyframes portfolio-simple-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes portfolio-simple-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-transition-exit] body > :not(.portfolio-transition-scene),
+  html[data-transition-entry] body > :not(.portfolio-transition-scene) {
+    animation: none !important;
+  }
+}
