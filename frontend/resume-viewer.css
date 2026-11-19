@@ -1,0 +1,289 @@
+/* Resume viewer - isolated styling */
+#resume-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(3, 10, 22, .88);
+  backdrop-filter: blur(12px);
+  box-sizing: border-box;
+}
+
+#resume-modal.active {
+  display: flex;
+}
+
+#resume-modal .resume-dialog {
+  width: min(1100px, 100%);
+  height: min(92vh, 900px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 16px;
+  background: #101c2e;
+  box-shadow: 0 24px 90px rgba(0,0,0,.5);
+}
+
+#resume-modal .resume-toolbar {
+  flex: 0 0 76px;
+  min-height: 76px;
+  height: 76px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #fff;
+  background: #101c2e;
+}
+
+#resume-modal .resume-toolbar-title {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+#resume-modal .resume-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+#resume-modal .resume-toolbar-actions a,
+#resume-modal .resume-toolbar-actions button {
+  min-height: 48px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease,
+              background .2s ease, border-color .2s ease;
+}
+
+#resume-modal .resume-toolbar-actions a:hover,
+#resume-modal .resume-toolbar-actions button:hover {
+  transform: translateY(-2px);
+}
+
+#resume-modal .resume-toolbar-actions button {
+  width: 48px;
+  padding: 0;
+  color: #fff;
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.22);
+  font-size: 20px;
+}
+
+/* Explorer: match the existing amber View Resume button */
+#resume-modal.resume-explorer .resume-download {
+  color: #101010;
+  background: #ffb323;
+  border-color: #ffb323;
+  border-radius: 18px;
+  box-shadow: 0 5px 18px rgba(255,179,35,.18);
+}
+
+#resume-modal.resume-explorer .resume-download:hover {
+  background: #ffc04a;
+  box-shadow: 0 8px 24px rgba(255,179,35,.3);
+}
+
+/* Classic: match the outlined Explorer View button */
+#resume-modal.resume-classic .resume-download {
+  color: #e66a3c;
+  background: #fff;
+  border-color: #f0ad91;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+#resume-modal.resume-classic .resume-download:hover {
+  color: #c94f27;
+  background: #fff7f2;
+  border-color: #e98963;
+}
+
+#resume-modal .resume-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #fff;
+}
+
+@media (max-width: 600px) {
+  #resume-modal {
+    padding: 0;
+  }
+
+  #resume-modal .resume-dialog {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  #resume-modal .resume-toolbar {
+    flex-basis: 68px;
+    min-height: 68px;
+    height: 68px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  #resume-modal .resume-toolbar-title {
+    font-size: 14px;
+  }
+
+  #resume-modal .resume-toolbar-actions {
+    gap: 7px;
+  }
+
+  #resume-modal .resume-toolbar-actions a,
+  #resume-modal .resume-toolbar-actions button {
+    min-height: 42px;
+    padding: 0 11px;
+    font-size: 12px;
+    border-radius: 11px;
+  }
+
+  #resume-modal .resume-toolbar-actions button {
+    width: 42px;
+    padding: 0;
+    font-size: 18px;
+  }
+}
+
+/* Final compact toolbar overrides */
+#resume-modal .resume-toolbar {
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  flex: 0 0 72px !important;
+  padding: 10px 24px !important;
+  box-sizing: border-box !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+#resume-modal .resume-toolbar-title {
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+}
+
+#resume-modal .resume-toolbar-actions {
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+}
+
+#resume-modal .resume-toolbar-actions .resume-download {
+  width: auto !important;
+  min-width: 144px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 0 20px !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+#resume-modal .resume-toolbar-actions #resume-close {
+  width: 46px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  flex: 0 0 46px !important;
+  padding: 0 !important;
+}
+
+@media (max-width: 600px) {
+  #resume-modal .resume-toolbar {
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    flex-basis: 64px !important;
+    padding: 8px 10px !important;
+  }
+
+  #resume-modal .resume-toolbar-title {
+    font-size: 13px !important;
+  }
+
+  #resume-modal .resume-toolbar-actions .resume-download {
+    min-width: 125px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 12px !important;
+    font-size: 12px !important;
+  }
+
+  #resume-modal .resume-toolbar-actions #resume-close {
+    width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    flex-basis: 40px !important;
+  }
+}
+
+/* Explorer and Classic: prevent vertical toolbar displacement */
+#resume-modal .resume-dialog {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  padding: 0 !important;
+  gap: 0 !important;
+}
+
+#resume-modal .resume-toolbar {
+  margin: 0 !important;
+  position: relative !important;
+  inset: auto !important;
+  flex: 0 0 72px !important;
+}
+
+#resume-modal .resume-frame {
+  display: block !important;
+  flex: 1 1 auto !important;
+  margin: 0 !important;
+}
+
+
+/* Shared centered resume download toolbar */
+#resume-modal .resume-toolbar{
+  position:relative!important;display:grid!important;grid-template-columns:1fr auto 1fr!important;
+  justify-content:stretch!important;align-items:center!important;height:64px!important;min-height:64px!important;
+  max-height:64px!important;flex:0 0 64px!important;padding:8px 18px!important
+}
+#resume-modal .resume-toolbar-title{grid-column:1;justify-self:start;font-size:15px!important}
+#resume-modal .resume-toolbar-actions{display:contents!important}
+#resume-modal .resume-toolbar-actions .resume-download{
+  grid-column:2;justify-self:center;min-width:0!important;width:auto!important;height:46px!important;
+  min-height:46px!important;padding:0 24px!important;white-space:nowrap!important;border-radius:12px!important
+}
+#resume-modal .resume-toolbar-actions #resume-close{
+  grid-column:3;justify-self:end;width:44px!important;height:44px!important;min-height:44px!important;
+  flex:none!important;border-radius:50%!important;background:#ffb323!important;color:#1a1205!important;border:0!important
+}
+#resume-modal .resume-dialog{width:min(1180px,100%)!important;height:min(94vh,980px)!important;border-radius:16px!important}
+@media(max-width:600px){
+  #resume-modal .resume-toolbar{height:58px!important;min-height:58px!important;max-height:58px!important;flex-basis:58px!important;padding:6px 8px!important}
+  #resume-modal .resume-toolbar-title{font-size:12px!important}
+  #resume-modal .resume-toolbar-actions .resume-download{height:38px!important;min-height:38px!important;padding:0 12px!important;font-size:12px!important}
+  #resume-modal .resume-toolbar-actions #resume-close{width:36px!important;height:36px!important;min-height:36px!important}
+}

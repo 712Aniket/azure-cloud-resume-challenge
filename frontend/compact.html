@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="view-transition.css">
   <script src="view-transition.js" defer></script>
   <script src="js/script.js" defer></script>
+  <link rel="stylesheet" href="resume-viewer.css">
 </head>
 <body class="compact-mode timeline-mode">
 <div class="portfolio-transition-scene" aria-hidden="true">
@@ -276,6 +277,9 @@
             <button type="button" id="zoom-reset">Fit</button>
             <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
           </div>
+          <a id="certificate-download" class="certificate-download" href="#" download>
+            Download Certificate
+          </a>
           <button type="button" id="certificate-close" aria-label="Close certificate">✕</button>
         </div>
         <div class="certificate-image-container"><img id="certificate-image" src="" alt="Certificate"></div>
@@ -292,7 +296,7 @@
         <div class="timeline-contact-links">
           <a class="timeline-primary-link" href="mailto:712aniket@gmail.com">Email Aniket ↗</a>
           <a href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-          <a href="https://github.com/712Aniket" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href="resume/Aniket_Pawar_Resume.pdf">View Resume ↗</a>
         </div>
         <p class="timeline-location">Pune, Maharashtra, India</p>
       </div>
@@ -310,5 +314,6 @@
     <p>© 2026 Aniket Pawar · Pune, Maharashtra, India</p>
     <a class="back-to-top" href="#top">Back to top ↑</a>
   </footer>
+  <script src="resume-viewer.js" defer></script>
 </body>
 </html>

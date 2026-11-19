@@ -3,6 +3,37 @@
 const countryPillsElement = document.getElementById("country-visitor-pills");
 const API_URL = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
 
+const ANALYTICS_API_URL =
+  "https://aniket-portfolio-api.azurewebsites.net/api/portfolio-event";
+
+function trackPortfolioEvent(itemType, itemId, eventType) {
+  const payload = {
+    item_type: itemType,
+    item_id: itemId,
+    event_type: eventType
+  };
+
+  const body = new Blob(
+    [JSON.stringify(payload)],
+    { type: "application/json" }
+  );
+
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(ANALYTICS_API_URL, body);
+  } else {
+    fetch(ANALYTICS_API_URL, {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(error => {
+      console.warn("Portfolio analytics unavailable:", error);
+    });
+  }
+}
+
+
 async function loadCountryVisitorStats() {
   if (!countryPillsElement) return;
   const countrySection = countryPillsElement.closest(".country-visitors");
@@ -151,53 +182,119 @@ if (!document.body.classList.contains("compact-mode") && !reduceMotion && "Inter
   revealTargets.forEach(element => revealObserver.observe(element));
 }
 
-// Certificate viewer and zoom controls
+// Certificate viewer, download and analytics
 const certificateModal = document.getElementById("certificate-modal");
 const certificateImage = document.getElementById("certificate-image");
 const certificateContainer = document.querySelector(".certificate-image-container");
 const certificateClose = document.getElementById("certificate-close");
+const certificateDownload = document.getElementById("certificate-download");
+
 let certificateZoom = 1;
+let activeCertificateCard = null;
 
 function updateCertificateZoom() {
   if (!certificateImage || !certificateContainer) return;
+
   certificateImage.style.transform = `scale(${certificateZoom})`;
   certificateContainer.style.overflow = "auto";
 }
+
 function openCertificate(card) {
   if (!certificateModal || !certificateImage || !certificateClose) return;
+
   const certificatePath = card.dataset.certificate;
+  if (!certificatePath) return;
+
+  activeCertificateCard = card;
+
+  const certificateId = certificatePath.split("/").pop().replace(/\.png$/i, "");
+
+  trackPortfolioEvent("certificate", certificateId, "view");
+
   card.classList.add("is-flipping");
+
   window.setTimeout(() => {
     card.classList.remove("is-flipping");
+
     certificateImage.src = certificatePath;
     certificateZoom = 1;
     updateCertificateZoom();
+
+    if (certificateDownload) {
+      certificateDownload.href = certificatePath;
+      certificateDownload.download = `${certificateId}-certificate.png`;
+    }
+
     certificateModal.classList.add("active");
     certificateModal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     certificateClose.focus();
   }, 320);
 }
+
 function closeCertificate() {
   if (!certificateModal || !certificateImage) return;
+
   certificateModal.classList.remove("active");
   certificateModal.setAttribute("aria-hidden", "true");
   certificateImage.src = "";
   document.body.style.overflow = "";
+
+  activeCertificateCard?.focus();
+  activeCertificateCard = null;
 }
+
+if (certificateDownload) {
+  certificateDownload.addEventListener("click", () => {
+    const certificatePath = activeCertificateCard?.dataset.certificate;
+    if (!certificatePath) return;
+
+    const certificateId = certificatePath.split("/").pop().replace(/\.png$/i, "");
+    trackPortfolioEvent("certificate", certificateId, "download");
+  });
+}
+
 document.querySelectorAll(".certification-card").forEach(card => {
   card.addEventListener("click", () => openCertificate(card));
 });
-if (certificateClose) certificateClose.addEventListener("click", closeCertificate);
-if (certificateModal) certificateModal.addEventListener("click", event => {
-  if (event.target === certificateModal) closeCertificate();
-});
+
+if (certificateClose) {
+  certificateClose.addEventListener("click", closeCertificate);
+}
+
+if (certificateModal) {
+  certificateModal.addEventListener("click", event => {
+    if (event.target === certificateModal) closeCertificate();
+  });
+}
+
 const zoomIn = document.getElementById("zoom-in");
 const zoomOut = document.getElementById("zoom-out");
 const zoomReset = document.getElementById("zoom-reset");
-if (zoomIn) zoomIn.addEventListener("click", () => { certificateZoom = Math.min(certificateZoom + 0.2, 3); updateCertificateZoom(); });
-if (zoomOut) zoomOut.addEventListener("click", () => { certificateZoom = Math.max(certificateZoom - 0.2, 0.6); updateCertificateZoom(); });
-if (zoomReset) zoomReset.addEventListener("click", () => { certificateZoom = 1; updateCertificateZoom(); });
+
+if (zoomIn) {
+  zoomIn.addEventListener("click", () => {
+    certificateZoom = Math.min(certificateZoom + 0.2, 3);
+    updateCertificateZoom();
+  });
+}
+
+if (zoomOut) {
+  zoomOut.addEventListener("click", () => {
+    certificateZoom = Math.max(certificateZoom - 0.2, 0.6);
+    updateCertificateZoom();
+  });
+}
+
+if (zoomReset) {
+  zoomReset.addEventListener("click", () => {
+    certificateZoom = 1;
+    updateCertificateZoom();
+  });
+}
+
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape" && certificateModal?.classList.contains("active")) closeCertificate();
+  if (event.key === "Escape" && certificateModal?.classList.contains("active")) {
+    closeCertificate();
+  }
 });

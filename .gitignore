@@ -54,3 +54,13 @@ terraform/*.tfstate
 terraform/*.tfstate.*
 terraform/.terraform/
 frontend-backup-before-redesign/
+
+# Local backups and temporary files
+frontend-backup-*/
+*.before-*
+*.backup
+*.bak
+frontend/function_app.py
+.pointer-backup
+frontend/*.backup-*.html
+.git.pointer-backup
