@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import azure.functions as func
 import logging
 import json
@@ -14,6 +15,31 @@ from azure.identity import DefaultAzureCredential
 
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+
+# ============================================================
+# HTTP API - Application Health Check
+# ============================================================
+
+@app.route(
+    route="health",
+    methods=["GET"],
+    auth_level=func.AuthLevel.ANONYMOUS
+)
+def health_check(req: func.HttpRequest) -> func.HttpResponse:
+    """Return application health status for Azure monitoring."""
+
+    logging.info("Application health check requested.")
+
+    response = {
+        "status": "Healthy",
+        "application": "Azure Cloud Resume Challenge API"
+    }
+
+    return func.HttpResponse(
+        json.dumps(response),
+        status_code=200,
+        mimetype="application/json"
+    )
 
 
 # ============================================================
@@ -306,6 +332,156 @@ def visitor_count(req: func.HttpRequest) -> func.HttpResponse:
             body=json.dumps({
                 "error": "Unable to retrieve visitor statistics."
             }),
+            status_code=500,
+            mimetype="application/json"
+        )
+
+# ============================================================
+# HTTP API - Portfolio Analytics
+# ============================================================
+
+CERTIFICATE_IDS = {
+    "AZ-104",
+    "AZ-900",
+    "AI-900",
+    "AWS-CCP",
+    "Google-Cloud-Digital-Leader",
+    "ITIL-4"
+}
+
+
+def increment_analytics_counter(document_id, document):
+    """Atomically increment a daily portfolio analytics counter."""
+
+    try:
+        return container.patch_item(
+            item=document_id,
+            partition_key=document_id,
+            patch_operations=[
+                {
+                    "op": "incr",
+                    "path": "/event_count",
+                    "value": 1
+                }
+            ]
+        )
+
+    except CosmosResourceNotFoundError:
+        try:
+            return container.create_item(body=document)
+
+        except CosmosResourceExistsError:
+            return container.patch_item(
+                item=document_id,
+                partition_key=document_id,
+                patch_operations=[
+                    {
+                        "op": "incr",
+                        "path": "/event_count",
+                        "value": 1
+                    }
+                ]
+            )
+
+
+@app.route(
+    route="portfolio-event",
+    methods=["POST"],
+    auth_level=func.AuthLevel.ANONYMOUS
+)
+def portfolio_event(req: func.HttpRequest) -> func.HttpResponse:
+    """Record daily resume and certificate interactions."""
+
+    try:
+        data = req.get_json()
+
+        if not isinstance(data, dict):
+            return func.HttpResponse(
+                json.dumps({"error": "Request body must be a JSON object."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        item_type = data.get("item_type")
+        item_id = data.get("item_id")
+        event_type = data.get("event_type")
+
+        if not all(isinstance(value, str) for value in (item_type, item_id, event_type)):
+            return func.HttpResponse(
+                json.dumps({"error": "Event fields must be strings."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        if item_type not in {"resume", "certificate"}:
+            return func.HttpResponse(
+                json.dumps({"error": "Invalid item_type."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        if event_type not in {"view", "download"}:
+            return func.HttpResponse(
+                json.dumps({"error": "Invalid event_type."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        if item_type == "resume" and item_id != "resume":
+            return func.HttpResponse(
+                json.dumps({"error": "Invalid resume ID."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        if item_type == "certificate" and item_id not in CERTIFICATE_IDS:
+            return func.HttpResponse(
+                json.dumps({"error": "Invalid certificate ID."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        event_date = datetime.now(timezone.utc).strftime("%Y%m%d")
+
+        document_id = (
+            f"analytics-{item_type}-{event_type}-{item_id}-{event_date}"
+        )
+
+        document = {
+            "id": document_id,
+            "item_type": item_type,
+            "item_id": item_id,
+            "event_type": event_type,
+            "event_date": event_date,
+            "event_count": 1
+        }
+
+        result = increment_analytics_counter(
+            document_id,
+            document
+        )
+
+        return func.HttpResponse(
+            json.dumps({
+                "message": "Portfolio event recorded.",
+                "event_count": result.get("event_count", 1)
+            }),
+            status_code=200,
+            mimetype="application/json"
+        )
+
+    except ValueError:
+        return func.HttpResponse(
+            json.dumps({"error": "Invalid JSON request."}),
+            status_code=400,
+            mimetype="application/json"
+        )
+
+    except Exception:
+        logging.exception("Failed to record portfolio analytics event.")
+
+        return func.HttpResponse(
+            json.dumps({"error": "Unable to record portfolio event."}),
             status_code=500,
             mimetype="application/json"
         )

@@ -1959,3 +1959,127 @@ body.compact-mode.timeline-mode .career-timeline .project-timeline-item { paddin
 .timeline-privacy-note { max-width: 1120px; margin: 0 auto 16px; padding: 0 24px; color: var(--muted); font-size: 11px; line-height: 1.65; }
 .timeline-privacy-note a { color: var(--blue); text-underline-offset: 2px; }
 @media (max-width: 620px) { .timeline-privacy-note { padding: 0 18px; font-size: 10px; } }
+
+/* Certificate modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.92);
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.mbox {
+  position: relative;
+  width: min(100%, 1000px);
+  max-height: 92vh;
+  padding: 20px;
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  background: var(--surface);
+  overflow: auto;
+}
+
+#mimg {
+  display: block;
+  max-width: 100%;
+  max-height: 78vh;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+#mclose {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--surface-border);
+  border-radius: 50%;
+  color: var(--text);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+@media (max-width: 600px) {
+  .mbox {
+    padding: 12px;
+  }
+
+  #mimg {
+    max-height: 75vh;
+  }
+}
+
+/* Certificate download button */
+.certificate-download {
+  display: block;
+  width: fit-content;
+  margin: 16px auto 4px;
+  padding: 11px 22px;
+  border: 1px solid var(--surface-border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.certificate-download:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+/* Unified Classic certificate viewer */
+.certificate-modal{padding:20px;background:rgba(5,10,24,.94);backdrop-filter:blur(12px)}
+.certificate-viewer{
+  width:min(1180px,100%);height:min(94vh,980px);margin:auto;padding:0;border:1px solid rgba(255,255,255,.2);
+  border-radius:16px;background:radial-gradient(circle at 15% 15%,rgba(65,126,204,.22),transparent 32%),
+  repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 22px),#10213b;
+  box-shadow:0 28px 90px rgba(0,0,0,.5)
+}
+.certificate-toolbar{
+  position:relative;flex:0 0 64px;min-height:64px;display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:8px;padding:8px 18px
+}
+.certificate-toolbar .zoom-controls{grid-column:1;justify-self:start;gap:8px}
+.certificate-toolbar .zoom-controls button{
+  min-width:42px;min-height:42px;padding:0 12px;border:1px solid rgba(255,255,255,.24);
+  border-radius:10px;background:#fff;color:#172033
+}
+.certificate-toolbar #certificate-download{
+  grid-column:2;justify-self:center;display:inline-flex;align-items:center;justify-content:center;
+  width:auto;min-height:46px;margin:0;padding:0 24px;white-space:nowrap;border:1px solid #f0ad91;
+  border-radius:12px;background:#fff;color:#e66a3c;font-weight:650;text-decoration:none
+}
+.certificate-toolbar #certificate-close{
+  grid-column:3;justify-self:end;min-width:44px;width:44px;height:44px;min-height:44px;padding:0;
+  border:0;border-radius:50%;background:#ffb323;color:#1a1205;font-size:20px
+}
+.certificate-image-container{
+  margin:0 18px 18px;padding:14px;border:1px solid rgba(255,255,255,.16);
+  border-radius:12px;background:rgba(5,10,20,.18)
+}
+.certificate-image-container img{border-radius:8px;box-shadow:0 20px 55px rgba(0,0,0,.32)}
+@media(max-width:600px){
+  .certificate-modal{padding:8px}.certificate-viewer{height:96vh;border-radius:12px}
+  .certificate-toolbar{flex-basis:58px;min-height:58px;padding:6px 8px;gap:4px}
+  .certificate-toolbar .zoom-controls{gap:4px}
+  .certificate-toolbar .zoom-controls button{min-width:34px;min-height:36px;padding:0 8px}
+  .certificate-toolbar #certificate-download{min-height:38px;padding:0 12px;font-size:12px}
+  .certificate-toolbar #certificate-close{min-width:36px;width:36px;height:36px;min-height:36px;font-size:17px}
+  .certificate-image-container{margin:0 8px 8px;padding:6px}
+}
