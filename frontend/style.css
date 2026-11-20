@@ -1047,3 +1047,31 @@ section.metrics { padding-top: 0; }
   #modal .mclose{width:36px;height:36px;min-width:36px;font-size:17px}
   #modal .document-image-stage{margin:0 8px 8px;padding:6px}
 }
+
+
+/* Project 1: compact, text-first architecture pipeline to match the other project cards. */
+.arch-showcase .arch-support-grid { gap:10px; margin-bottom:16px; }
+.arch-showcase .arch-support-grid .arch-node {
+  min-height:0;
+  padding:12px 14px;
+  justify-content:center;
+  gap:4px;
+}
+.arch-showcase .arch-support-grid .arch-node small { margin-top:2px; }
+.arch-showcase .arch-support-grid .arch-node em { margin-top:2px; padding-top:2px; }
+.arch-showcase .arch-flow-responsive .arch-node {
+  min-height:0;
+  padding:12px 10px;
+  justify-content:center;
+  gap:5px;
+}
+.arch-showcase .arch-flow-responsive .arch-node small { margin-top:0; }
+.arch-showcase .arch-flow-responsive .arch-node em { margin-top:0; padding-top:0; }
+.arch-showcase .arch-node:hover { transform:translateY(-2px); }
+@media (max-width:900px) {
+  .arch-showcase .arch-flow-responsive.arch-interactive-flow .arch-node { min-height:0; padding:11px 13px; }
+}
+@media (max-width:600px) {
+  .arch-showcase .arch-support-grid .arch-node { min-height:0; padding:10px 9px; }
+  .arch-showcase .arch-flow-responsive.arch-interactive-flow .arch-node { min-height:0; padding:10px 12px; }
+}
