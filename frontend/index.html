@@ -207,10 +207,10 @@
 
       <div class="arch-support-grid">
         <button class="arch-node arch-monitor arch-support-card" type="button" data-arch-info="Application Insights provides monitoring, logs and telemetry for the application. This illustration shows its role; it is not live telemetry.">
-          <span class="arch-icon">◉</span><b>Application Insights</b><small>Monitoring · Logs · Telemetry</small><em>Observability</em>
+          <b>Application Insights</b><small>Monitoring · Logs · Telemetry</small><em>Observability</em>
         </button>
         <button class="arch-node arch-delivery arch-support-card" type="button" data-arch-info="Azure Static Web Apps hosts and delivers the portfolio frontend. The deployment card is contextual and is not a live deployment status check.">
-          <span class="arch-icon">▣</span><b>Azure Static Web Apps</b><small>Hosting · CI/CD · Frontend</small><em>Portfolio delivery</em>
+          <b>Azure Static Web Apps</b><small>Hosting · CI/CD · Frontend</small><em>Portfolio delivery</em>
         </button>
       </div>
 
@@ -225,19 +225,19 @@
       <div class="arch-flow arch-flow-responsive arch-interactive-flow">
         <svg class="arch-route-svg" aria-hidden="true"></svg>
         <div class="arch-node node-browser arch-service" tabindex="0" role="button" data-arch-step="0" data-arch-info="A visitor opens the portfolio in a browser. This starts the illustrated request lifecycle.">
-          <span class="arch-icon">♙</span><b>Visitor</b><small>Browser</small><em>Opens portfolio</em><span class="arch-node-state">Waiting</span>
+          <b>Visitor</b><small>Browser</small><em>Opens portfolio</em><span class="arch-node-state">Waiting</span>
         </div>
         <div class="arch-connector"><span>→</span><small>HTTPS</small></div>
         <div class="arch-node node-front arch-service" tabindex="0" role="button" data-arch-step="1" data-arch-info="The portfolio frontend sends an HTTPS request to the visitor-counter API hosted by Azure Functions.">
-          <span class="arch-icon">▣</span><b>Azure Static Web Apps</b><small>Portfolio frontend</small><em>HTML · CSS · JavaScript</em><span class="arch-node-state">Ready</span>
+          <b>Azure Static Web Apps</b><small>Portfolio frontend</small><em>HTML · CSS · JavaScript</em><span class="arch-node-state">Ready</span>
         </div>
         <div class="arch-connector"><span>→</span><small>API request</small></div>
         <div class="arch-node node-function arch-service" tabindex="0" role="button" data-arch-step="2" data-arch-info="The Python HTTP-triggered Azure Function receives the request and runs the visitor-counter application logic.">
-          <span class="arch-icon">ƒ</span><b>Azure Functions</b><small>Python HTTP-triggered API</small><em>GET /api/visitor-count</em><span class="arch-node-state">Idle</span>
+          <b>Azure Functions</b><small>Python HTTP-triggered API</small><em>GET /api/visitor-count</em><span class="arch-node-state">Idle</span>
         </div>
         <div class="arch-connector"><span>↔</span><small>Read / update</small></div>
         <div class="arch-node node-cosmos arch-service" tabindex="0" role="button" data-arch-step="3" data-arch-info="Cosmos DB stores visitor-counter data. The read/write animation is illustrative and does not execute a database operation.">
-          <span class="arch-icon">▤</span><b>Azure Cosmos DB</b><small>Visitor statistics</small><em>SQL API · Visitor data</em><span class="arch-node-state">Stored data</span>
+          <b>Azure Cosmos DB</b><small>Visitor statistics</small><em>SQL API · Visitor data</em><span class="arch-node-state">Stored data</span>
         </div>
       </div>
 
