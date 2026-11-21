@@ -51,7 +51,6 @@
         captured_at: new Date().toISOString()
       });
 
-      console.info("[Local analytics mock]", payload);
       return Promise.resolve();
     }
 

@@ -132,24 +132,12 @@
     }, 1500);
   }
 
+
   async function submitLike(visitorId) {
     const payload = {
       event_type: "like",
       visitor_id: visitorId
     };
-
-    if (["localhost", "127.0.0.1", "::1"].includes(location.hostname)) {
-      window.__portfolioLikeEvents =
-        window.__portfolioLikeEvents || [];
-
-      window.__portfolioLikeEvents.push({
-        ...payload,
-        captured_at: new Date().toISOString()
-      });
-
-      console.info("[Local appreciation mock]", payload);
-      return { duplicate: false, local: true };
-    }
 
     const response = await fetch(API, {
       method: "POST",
