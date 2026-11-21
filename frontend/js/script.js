@@ -7,37 +7,53 @@ const ANALYTICS_API_URL =
   "https://aniket-portfolio-api.azurewebsites.net/api/portfolio-event";
 
 function trackPortfolioEvent(itemType, itemId, eventType) {
-  const payload = {
+  const payload = JSON.stringify({
     item_type: itemType,
     item_id: itemId,
     event_type: eventType
-  };
+  });
 
-  const body = new Blob(
-    [JSON.stringify(payload)],
-    { type: "application/json" }
-  );
-
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon(ANALYTICS_API_URL, body);
-  } else {
-    fetch(ANALYTICS_API_URL, {
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      keepalive: true
-    }).catch(error => {
+  fetch(ANALYTICS_API_URL, {
+    method: "POST",
+    mode: "cors",
+    credentials: "omit",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: payload,
+    keepalive: true
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.warn("Portfolio analytics failed:", response.status);
+      }
+    })
+    .catch(error => {
       console.warn("Portfolio analytics unavailable:", error);
     });
-  }
 }
 
 
+function showClassicCountryMessage(message) {
+  const section = countryPillsElement?.closest(".country-visitors");
+
+  if (section) section.hidden = false;
+
+  if (countryPillsElement) {
+    const note = document.createElement("span");
+    note.className = "country-visitors-pending";
+    note.textContent = message;
+    countryPillsElement.replaceChildren(note);
+  }
+}
+
 async function loadCountryVisitorStats() {
   if (!countryPillsElement) return;
+
   const countrySection = countryPillsElement.closest(".country-visitors");
-  if (countrySection) countrySection.hidden = true;
+  if (countrySection) countrySection.hidden = false;
+
+  showClassicCountryMessage("Loading country statistics...");
 
   try {
     const response = await fetch(API_URL, {
@@ -52,49 +68,63 @@ async function loadCountryVisitorStats() {
     }
 
     const data = await response.json();
-    const countries = data.countries ?? data.country_visitors ?? [];
+    const raw = data.countries ?? data.country_visitors ?? [];
 
-    if (!Array.isArray(countries) || countries.length === 0) {
+    const source = Array.isArray(raw)
+      ? raw
+      : raw && typeof raw === "object"
+        ? Object.entries(raw).map(([code, value]) =>
+            value && typeof value === "object"
+              ? { ...value, code: value.code || code }
+              : { code, count: value }
+          )
+        : [];
+
+    const countries = source
+      .map(country => ({
+        flag: String(country.flag || country.emoji || "🌐"),
+        name: String(country.name || country.country_name || country.country || country.code || "Unknown"),
+        count: Number(country.count ?? country.visitor_count ?? 0)
+      }))
+      .filter(country => Number.isFinite(country.count) && country.count > 0)
+      .sort((a, b) => b.count - a.count);
+
+    if (!countries.length) {
+      showClassicCountryMessage(
+        "Country statistics will appear when the API returns country data."
+      );
       return;
     }
 
     countryPillsElement.replaceChildren();
 
-    countries
-      .map((country) => ({
-        flag: String(country.flag || country.emoji || "🌐"),
-        name: String(country.name || country.country || country.code || "Unknown"),
-        count: Number(country.count ?? country.visitor_count ?? 0)
-      }))
-      .filter((country) => Number.isFinite(country.count) && country.count > 0)
-      .sort((a, b) => b.count - a.count)
-      .forEach((country) => {
-        const pill = document.createElement("span");
-        pill.className = "country-visitor-pill";
+    countries.forEach(country => {
+      const pill = document.createElement("span");
+      pill.className = "country-visitor-pill";
 
-        const flag = document.createElement("span");
-        flag.className = "country-flag";
-        flag.textContent = country.flag;
+      const flag = document.createElement("span");
+      flag.className = "country-flag";
+      flag.textContent = country.flag;
 
-        const name = document.createElement("span");
-        name.className = "country-name";
-        name.textContent = country.name;
+      const name = document.createElement("span");
+      name.className = "country-name";
+      name.textContent = country.name;
 
-        const count = document.createElement("strong");
-        count.className = "country-count";
-        count.textContent = country.count.toLocaleString("en-IN");
+      const count = document.createElement("strong");
+      count.className = "country-count";
+      count.textContent = country.count.toLocaleString("en-IN");
 
-        pill.append(flag, name, count);
-        countryPillsElement.appendChild(pill);
-      });
+      pill.append(flag, name, count);
+      countryPillsElement.appendChild(pill);
+    });
 
-    if (countryPillsElement.childElementCount > 0 && countrySection) {
-      countrySection.hidden = false;
-    }
+    if (countrySection) countrySection.hidden = false;
+
   } catch (error) {
-    // A failed local/CORS request should not create a large empty panel in the portfolio.
     console.warn("Country visitor statistics unavailable:", error);
-    if (countrySection) countrySection.hidden = true;
+    showClassicCountryMessage(
+      "Country statistics are temporarily unavailable. Please check the API connection."
+    );
   }
 }
 
