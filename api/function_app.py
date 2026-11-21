@@ -1,4 +1,6 @@
 from datetime import datetime, timezone
+import hashlib
+import uuid
 import azure.functions as func
 import logging
 import json
@@ -554,7 +556,8 @@ def portfolio_engagement(req: func.HttpRequest) -> func.HttpResponse:
         allowed_events = {
             "session",
             "section_view",
-            "section_time"
+            "section_time",
+            "like"
         }
 
         if not isinstance(event_type, str) or event_type not in allowed_events:
@@ -566,7 +569,62 @@ def portfolio_engagement(req: func.HttpRequest) -> func.HttpResponse:
 
         event_date = datetime.now(timezone.utc).strftime("%Y%m%d")
 
-        if event_type == "session":
+        if event_type == "like":
+            visitor_id = data.get("visitor_id")
+
+            if not isinstance(visitor_id, str) or len(visitor_id) > 36:
+                return func.HttpResponse(
+                    json.dumps({"error": "Invalid visitor_id."}),
+                    status_code=400,
+                    mimetype="application/json"
+                )
+
+            try:
+                parsed_id = uuid.UUID(visitor_id)
+            except (ValueError, AttributeError, TypeError):
+                return func.HttpResponse(
+                    json.dumps({"error": "Invalid visitor_id."}),
+                    status_code=400,
+                    mimetype="application/json"
+                )
+
+            if parsed_id.version != 4:
+                return func.HttpResponse(
+                    json.dumps({"error": "A UUID v4 visitor_id is required."}),
+                    status_code=400,
+                    mimetype="application/json"
+                )
+
+            visitor_hash = hashlib.sha256(
+                f"{event_date}:{parsed_id}".encode("utf-8")
+            ).hexdigest()
+
+            document_id = f"engagement-like-{event_date}-{visitor_hash}"
+
+            document = {
+                "id": document_id,
+                "metric_type": "like",
+                "event_type": "like",
+                "event_date": event_date,
+                "visitor_hash": visitor_hash
+            }
+
+            try:
+                result = container.create_item(body=document)
+
+            except CosmosResourceExistsError:
+                return func.HttpResponse(
+                    json.dumps({
+                        "message": "Appreciation already recorded today.",
+                        "event_type": "like",
+                        "event_date": event_date,
+                        "duplicate": True
+                    }),
+                    status_code=200,
+                    mimetype="application/json"
+                )
+
+        elif event_type == "session":
             active_seconds = data.get("active_seconds")
 
             if (
@@ -647,11 +705,12 @@ def portfolio_engagement(req: func.HttpRequest) -> func.HttpResponse:
             }
 
 
-        result = increment_engagement_counter(
-            document_id,
-            document,
-            increments
-        )
+        if event_type != "like":
+            result = increment_engagement_counter(
+                document_id,
+                document,
+                increments
+            )
 
         return func.HttpResponse(
             json.dumps({

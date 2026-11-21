@@ -45,10 +45,24 @@
 </div>
 
   <header class="timeline-header">
-    <a class="timeline-brand" href="#top" aria-label="Aniket Pawar home">
+    <div class="timeline-brand-group">
+<a class="timeline-brand" href="#top" aria-label="Aniket Pawar home">
       <span class="brand-mark" aria-hidden="true">AP</span>
       <span>Aniket Pawar</span>
     </a>
+<div class="portfolio-like-control portfolio-like-control--classic"
+                 data-portfolio-like>
+              <button class="portfolio-like-button" type="button" aria-label="Like this portfolio" title="Like this portfolio"
+                      data-like-button aria-pressed="false">
+                <span class="portfolio-like-orb" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M16 27s-11-6.8-11-14.1A6.2 6.2 0 0 1 16 9.1a6.2 6.2 0 0 1 11 3.8C27 20.2 16 27 16 27Z"/>
+                  </svg>
+                </span>
+                <span class="portfolio-like-pill">Like this portfolio</span>
+              </button>
+            </div>
+    </div>
     <nav class="timeline-nav" aria-label="Main navigation">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
@@ -70,6 +84,14 @@
     <section class="timeline-hero" aria-labelledby="portfolio-name">
       <p class="timeline-eyebrow">CLOUD · INFRASTRUCTURE · OPERATIONS</p>
       <h1 id="portfolio-name">Aniket Pawar</h1>
+
+      <div class="portfolio-like-toast portfolio-like-toast--classic"
+           data-like-toast role="status" aria-live="polite" hidden>
+        <span class="portfolio-like-toast-heart" aria-hidden="true">♥</span>
+        <span><strong>Thank You! ❤️</strong>
+          <small>Your appreciation means a lot.</small></span>
+        <button type="button" data-like-toast-close aria-label="Dismiss">×</button>
+      </div>
       <h2>DevOps &amp; Cloud Infrastructure Engineer</h2>
       <p class="timeline-intro">
         Enterprise IT support and operations professional with nearly 6 years of experience in incident investigation, technical troubleshooting and 24×7 service operations. Building DevOps and cloud infrastructure capabilities through Azure projects and certifications across Microsoft Azure, AWS, Google Cloud and ITIL.
@@ -336,5 +358,6 @@
   </footer>
   <script src="resume-viewer.js" defer></script>
   <script src="engagement-analytics.js" defer></script>
+  <script src="portfolio-like.js" defer></script>
 </body>
 </html>

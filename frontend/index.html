@@ -54,6 +54,18 @@
 <header class="nav" id="nav">
   <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   <a class="logo" href="#top" aria-label="Aniket Pawar, home"><span class="dot" aria-hidden="true"></span><span>aniket<span class="m">.pawar</span></span></a>
+  <div class="portfolio-like-control portfolio-like-control--explorer"
+         data-portfolio-like>
+      <button class="portfolio-like-button" type="button"
+              data-like-button aria-pressed="false">
+        <span class="portfolio-like-orb" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <path d="M16 27s-11-6.8-11-14.1A6.2 6.2 0 0 1 16 9.1a6.2 6.2 0 0 1 11 3.8C27 20.2 16 27 16 27Z"/>
+          </svg>
+        </span>
+        <span class="portfolio-like-pill">Like this portfolio</span>
+      </button>
+    </div>
   <nav aria-label="Main">
     <a href="#log">Career</a><a href="#work">Projects</a><a href="#stack">Stack</a><a href="#certs">Certifications</a><a href="#contact">Contact</a>
   </nav>
@@ -129,6 +141,14 @@
       <a class="btn ghost" href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
+  <div class="portfolio-like-toast portfolio-like-toast--explorer"
+       data-like-toast role="status" aria-live="polite" hidden>
+    <span class="portfolio-like-toast-heart" aria-hidden="true">♥</span>
+    <span><strong>Thank You! ❤️</strong>
+      <small>Your appreciation means a lot.</small></span>
+    <button type="button" data-like-toast-close aria-label="Dismiss">×</button>
+  </div>
+
   <aside class="idcard" aria-label="Profile">
     <div class="ph frame"><img src="assets/aniket-photo.webp" width="261" height="261" alt="Aniket Pawar"><b class="c tl"></b><b class="c tr"></b><b class="c bl"></b><b class="c br"></b><span class="scan"></span><span class="ring"></span></div>
     <div class="idt">
@@ -446,4 +466,5 @@
 
   <script src="resume-viewer.js" defer></script>
   <script src="engagement-analytics.js" defer></script>
+  <script src="portfolio-like.js" defer></script>
 </body></html>

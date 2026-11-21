@@ -1142,3 +1142,689 @@ section.metrics { padding-top: 0; }
 @media(max-width:760px) { .project-one-pipeline,.project-two-pipeline,.project-three-pipeline { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; } .project-pipeline .st,.project-pipeline .st:first-child,.project-pipeline .st:last-child { height:auto; min-height:68px; margin:0; clip-path:none; border-radius:9px; padding:10px 12px; } .project-one-contribution ul,.project-two-contribution ul { grid-template-columns:1fr; } .arch-showcase .arch-flow-responsive .arch-node { min-height:0; } }
 @media(max-width:420px) { .project-one-pipeline,.project-two-pipeline,.project-three-pipeline { grid-template-columns:1fr; } }
 @media(prefers-reduced-motion:reduce) { .project-pipeline .st.done,.project-pipeline .st.cur { animation:none!important; } }
+
+/* ===== Portfolio appreciation: EXPLORER / GOLDEN AMBER ===== */
+.portfolio-like-control--explorer {
+  --like-accent: #ffb224;
+  --like-glow: rgba(255,178,36,.38);
+  position: absolute;
+  z-index: 5;
+  right: clamp(24px, 8vw, 125px);
+  top: 39%;
+  transform: translateY(-50%);
+}
+
+.portfolio-like-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.portfolio-like-orb {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: 0 0 66px;
+  width: 66px;
+  height: 66px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--like-accent);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,178,36,.19), rgba(10,18,32,.94) 72%);
+  box-shadow: 0 0 18px var(--like-glow), inset 0 0 18px var(--like-glow);
+}
+
+.portfolio-like-orb::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border: 1px solid var(--like-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--like-glow), 0 0 25px var(--like-glow);
+  animation: explorerMagicPulse 2.8s ease-in-out infinite;
+}
+
+.portfolio-like-orb::after {
+  content: "";
+  position: absolute;
+  inset: -11px;
+  border: 2px dotted var(--like-accent);
+  border-radius: 50%;
+  opacity: .85;
+  filter: drop-shadow(0 0 4px var(--like-accent));
+  animation: explorerMagicOrbit 9s linear infinite;
+}
+
+.portfolio-like-orb svg {
+  width: 29px;
+  height: 29px;
+  overflow: visible;
+  fill: #ff668e;
+  stroke: #ffd5df;
+  stroke-width: .7;
+  filter: drop-shadow(0 0 7px rgba(255,80,130,.8));
+  transform-origin: center;
+  animation: appreciationHeartbeat 1.15s ease-in-out infinite;
+}
+
+.portfolio-like-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 43px;
+  padding: 0 19px;
+  border: 1px solid var(--like-accent);
+  border-radius: 99px;
+  background: rgba(14,25,43,.88);
+  color: var(--like-accent);
+  box-shadow: 0 0 14px var(--like-glow), inset 0 0 12px rgba(255,178,36,.08);
+  font: 600 13px var(--mono);
+  white-space: nowrap;
+  transition: background .2s, box-shadow .2s;
+}
+
+.portfolio-like-button:hover .portfolio-like-pill {
+  background: rgba(255,178,36,.13);
+  box-shadow: 0 0 24px var(--like-glow);
+}
+
+.portfolio-like-button:focus-visible {
+  outline: 2px solid var(--like-accent);
+  outline-offset: 8px;
+  border-radius: 99px;
+}
+
+@keyframes appreciationHeartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.2); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.14); }
+  56% { transform: scale(1); }
+}
+
+@keyframes explorerMagicPulse {
+  0%, 100% { opacity: .45; transform: scale(.96); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes explorerMagicOrbit {
+  to { transform: rotate(360deg); }
+}
+
+.portfolio-like-toast {
+  position: fixed;
+  z-index: 120;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 14px 16px;
+  border: 1px solid var(--toast-accent);
+  border-radius: 14px;
+  background: rgba(10,18,32,.96);
+  color: #e8eef6;
+  box-shadow: 0 0 24px var(--toast-glow), 0 16px 45px rgba(0,0,0,.4);
+  animation: appreciationToastIn .35s ease-out both;
+}
+
+.portfolio-like-toast[hidden] {
+  display: none !important;
+}
+
+.portfolio-like-toast--explorer {
+  --toast-accent: #ffb224;
+  --toast-glow: rgba(255,178,36,.28);
+}
+
+.portfolio-like-toast-heart {
+  color: #ff668e;
+  font-size: 25px;
+  animation: appreciationHeartbeat 1.15s ease-in-out infinite;
+}
+
+.portfolio-like-toast strong,
+.portfolio-like-toast small {
+  display: block;
+}
+
+.portfolio-like-toast strong {
+  font-size: 14px;
+}
+
+.portfolio-like-toast small {
+  margin-top: 2px;
+  color: #b8c5d6;
+  font-size: 12px;
+}
+
+.portfolio-like-toast [data-like-toast-close] {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: #b8c5d6;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+@keyframes appreciationToastIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1100px) {
+  .portfolio-like-control--explorer {
+    position: relative;
+    top: auto;
+    right: auto;
+    align-self: center;
+    margin: 24px auto 0;
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .portfolio-like-orb {
+    flex-basis: 58px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .portfolio-like-pill {
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+
+  .portfolio-like-toast {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-like-orb::before,
+  .portfolio-like-orb::after,
+  .portfolio-like-orb svg,
+  .portfolio-like-toast-heart {
+    animation: none !important;
+  }
+}
+
+
+/* Appreciation control placement: beside Explorer hero name */
+.hero-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.hero-name-row .name {
+  width: max-content;
+  max-width: 100%;
+  flex: 0 1 auto;
+}
+
+.portfolio-like-control--explorer {
+  position: relative;
+  top: auto;
+  right: auto;
+  margin: 0;
+  transform: none;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .hero-name-row {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .portfolio-like-control--explorer {
+    margin-top: 4px;
+  }
+}
+
+
+/* Hide the complete appreciation label during thank-you feedback */
+.portfolio-like-button.is-thanking .portfolio-like-pill {
+    display: none !important;
+}
+
+/* Explorer: clean heart — no rings, lightning or halo */
+.portfolio-like-control--explorer .portfolio-like-orb {
+    border: 0 !important;
+    outline: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-orb::before,
+.portfolio-like-control--explorer .portfolio-like-orb::after {
+    content: none !important;
+    display: none !important;
+}
+
+
+/* Explorer appreciation button: match the Classic View switch */
+.portfolio-like-control--explorer .portfolio-like-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    min-height: 44px !important;
+    padding: 0 15px !important;
+    border: 1px solid rgba(148, 163, 184, 0.38) !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    color: #e5eaf2 !important;
+    box-shadow: none !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-pill {
+    border: 0 !important;
+    background: transparent !important;
+    color: #e5eaf2 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-button.is-thanking {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+
+/* Explorer: compact appreciation control, matching the view-switch button */
+.portfolio-like-control--explorer .portfolio-like-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    min-height: 36px !important;
+    padding: 0 10px !important;
+    border: 1px solid rgba(148, 163, 184, 0.38) !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    color: #e5eaf2 !important;
+    box-shadow: none !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #e5eaf2 !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+}
+
+/* Explorer: appreciation button matches the Classic View switch */
+.portfolio-like-control--explorer .portfolio-like-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    min-height: 44px !important;
+    padding: 0 15px !important;
+    border: 1px solid rgba(148, 163, 184, 0.35) !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    color: #e5eaf2 !important;
+    box-shadow: none !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-orb {
+    width: 25px !important;
+    height: 25px !important;
+    flex: 0 0 25px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-orb::before,
+.portfolio-like-control--explorer .portfolio-like-orb::after {
+    display: none !important;
+    content: none !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-orb svg {
+    width: 22px !important;
+    height: 22px !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-pill {
+    border: 0 !important;
+    background: transparent !important;
+    color: #e5eaf2 !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Preserve blank button text during thank-you feedback */
+.portfolio-like-control--explorer .portfolio-like-button.is-thanking {
+    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================
+   EXPLORER: NETWORK SIGNAL HEART EFFECT
+   ========================================== */
+
+/* Clean heart with a gentle pink heartbeat */
+.portfolio-like-control--explorer .portfolio-like-orb {
+    position: relative !important;
+    overflow: visible !important;
+    border: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.portfolio-like-control--explorer .portfolio-like-orb svg {
+    position: relative;
+    z-index: 1;
+    transform-origin: center;
+    animation: explorerHeartBeat 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(255, 91, 145, 0.45));
+    transition: filter 250ms ease;
+}
+
+@keyframes explorerHeartBeat {
+    0%, 42%, 100% { transform: scale(1); }
+    8% { transform: scale(1.14); }
+    16% { transform: scale(1.02); }
+    26% { transform: scale(1.10); }
+    34% { transform: scale(1); }
+}
+
+/* Hover: subtle amber illumination */
+.portfolio-like-control--explorer .portfolio-like-button:hover .portfolio-like-orb svg {
+    filter:
+        drop-shadow(0 0 5px rgba(255, 178, 36, 0.8))
+        drop-shadow(0 0 11px rgba(255, 178, 36, 0.3));
+}
+
+/* Hover: three tiny network data points */
+.portfolio-like-control--explorer
+.portfolio-like-button:hover
+.portfolio-like-orb::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    box-shadow:
+        -19px -10px 0 1.5px rgba(255, 190, 72, 0.9),
+         19px -12px 0 1.5px rgba(255, 190, 72, 0.9),
+          8px  18px 0 1.5px rgba(255, 190, 72, 0.9);
+    filter: drop-shadow(0 0 3px #ffb224);
+    animation: explorerDataPoints 1.4s ease-in-out infinite;
+}
+
+@keyframes explorerDataPoints {
+    0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.65);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* Click: a short amber signal travels outward from the heart */
+.portfolio-like-control--explorer
+.portfolio-like-button.is-thanking
+.portfolio-like-orb::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    z-index: 2;
+    width: 22px;
+    height: 2px;
+    top: 50%;
+    left: 50%;
+    border-radius: 2px;
+    pointer-events: none;
+    background: linear-gradient(90deg, #fff0b0, #ffb224, transparent);
+    filter: drop-shadow(0 0 4px #ffb224);
+    transform-origin: left center;
+    animation: explorerNetworkSignal 750ms ease-out forwards;
+}
+
+@keyframes explorerNetworkSignal {
+    0% {
+        opacity: 0;
+        transform: translate(0, -2px) rotate(-35deg) scaleX(0.1);
+    }
+    18% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(24px, -19px) rotate(-35deg) scaleX(1.3);
+    }
+}
+
+/* Brief amber activation glow on click */
+.portfolio-like-control--explorer
+.portfolio-like-button.is-thanking
+.portfolio-like-orb svg {
+    animation: explorerHeartActivate 650ms ease-out 1;
+}
+
+@keyframes explorerHeartActivate {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 3px rgba(255, 91, 145, 0.5));
+    }
+    35% {
+        transform: scale(1.2);
+        filter:
+            drop-shadow(0 0 7px rgba(255, 178, 36, 1))
+            drop-shadow(0 0 13px rgba(255, 178, 36, 0.55));
+    }
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px rgba(255, 91, 145, 0.45));
+    }
+}
+
+/* Explorer: separate fixed heart and text pill */
+.portfolio-like-control--explorer .portfolio-like-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 9px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Keep the heart anchored and independent */
+.portfolio-like-control--explorer .portfolio-like-orb {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    flex: 0 0 30px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Apply the navigation-button styling to the text only */
+.portfolio-like-control--explorer .portfolio-like-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 36px !important;
+    padding: 0 13px !important;
+    border: 1px solid rgba(148, 163, 184, 0.35) !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    color: #e5eaf2 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+}
+
+/* Explorer: subtle infrastructure connection from heart to Pune */
+#portfolio-heart-pune-link {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    overflow: visible;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 250ms ease;
+}
+
+#portfolio-heart-pune-link .portfolio-network-path {
+    fill: none;
+    stroke: rgba(255, 178, 36, 0.25);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-dasharray: 2 8;
+    transition: stroke 200ms ease, stroke-width 200ms ease;
+}
+
+#portfolio-heart-pune-link.is-active .portfolio-network-path {
+    stroke: rgba(255, 190, 72, 0.65);
+    stroke-width: 1.7;
+}
+
+#portfolio-heart-pune-link .portfolio-network-packet {
+    fill: #fff0bd;
+    filter: drop-shadow(0 0 5px #ffb224)
+            drop-shadow(0 0 9px rgba(255, 178, 36, 0.7));
+}
+
+#portfolio-heart-pune-link .portfolio-network-tail {
+    fill: #ffb224;
+    filter: drop-shadow(0 0 4px #ffb224);
+}
+
+/* Direct Explorer heart-to-Pune connector layer */
+#portfolio-heart-pune-link {
+    z-index: 49;
+}
+
+/* Explorer: heart-to-Pune connector, styled like the global network */
+#portfolio-heart-pune-link {
+    z-index: 1 !important;
+}
+
+#portfolio-heart-pune-link .portfolio-network-path {
+    fill: none !important;
+    stroke: rgba(255, 178, 36, 0.30) !important;
+    stroke-width: 1.25px !important;
+    stroke-linecap: round !important;
+    stroke-dasharray: none !important;
+    filter: drop-shadow(0 0 2px rgba(255, 178, 36, 0.25));
+}
+
+#portfolio-heart-pune-link.is-active .portfolio-network-path {
+    stroke: rgba(255, 190, 72, 0.72) !important;
+    stroke-width: 1.6px !important;
+    filter: drop-shadow(0 0 3px rgba(255, 178, 36, 0.45));
+}
+
+#portfolio-heart-pune-link .portfolio-network-packet {
+    fill: #fff0bd;
+    filter:
+        drop-shadow(0 0 4px #ffcf6e)
+        drop-shadow(0 0 9px rgba(255, 178, 36, 0.8));
+}
+
+#portfolio-heart-pune-link .portfolio-network-tail {
+    fill: #ffb224;
+    filter: drop-shadow(0 0 4px rgba(255, 178, 36, 0.8));
+}
+
+/* Explorer: match existing continuous amber network routes */
+#portfolio-heart-pune-link .portfolio-network-path {
+    stroke: rgba(255, 178, 36, 0.38) !important;
+    stroke-width: 1.3px !important;
+    stroke-dasharray: none !important;
+    stroke-linecap: round !important;
+}
+
+#portfolio-heart-pune-link.is-active .portfolio-network-path {
+    stroke: rgba(255, 190, 72, 0.82) !important;
+    stroke-width: 1.6px !important;
+    filter: drop-shadow(0 0 3px rgba(255, 178, 36, 0.5));
+}
+
+/* Explorer: data packets match the existing global network nodes */
+#portfolio-heart-pune-link .portfolio-network-dot {
+    filter: drop-shadow(0 0 2px rgba(255, 178, 36, 0.35));
+}
+
+#portfolio-heart-pune-link .portfolio-network-packet,
+#portfolio-heart-pune-link .portfolio-network-tail {
+    display: none !important;
+}
+
+/* Explorer: match heart-to-Pune packets to existing globe traffic */
+#portfolio-heart-pune-link .portfolio-network-dot {
+    filter: none !important;
+    opacity: 1;
+    mix-blend-mode: normal;
+}
+
+/* Match existing global route brightness */
+#portfolio-heart-pune-link .portfolio-network-path {
+    stroke: rgba(255, 178, 36, 0.28) !important;
+    stroke-width: 1.2px !important;
+    stroke-dasharray: none !important;
+    filter: none !important;
+}
+
+#portfolio-heart-pune-link.is-active .portfolio-network-path {
+    stroke: rgba(255, 178, 36, 0.42) !important;
+    stroke-width: 1.2px !important;
+    filter: none !important;
+}
