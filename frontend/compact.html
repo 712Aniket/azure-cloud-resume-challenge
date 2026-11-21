@@ -45,24 +45,10 @@
 </div>
 
   <header class="timeline-header">
-    <div class="timeline-brand-group">
-<a class="timeline-brand" href="#top" aria-label="Aniket Pawar home">
+    <a class="timeline-brand" href="#top" aria-label="Aniket Pawar home">
       <span class="brand-mark" aria-hidden="true">AP</span>
       <span>Aniket Pawar</span>
     </a>
-<div class="portfolio-like-control portfolio-like-control--classic"
-                 data-portfolio-like>
-              <button class="portfolio-like-button" type="button" aria-label="Like this portfolio" title="Like this portfolio"
-                      data-like-button aria-pressed="false">
-                <span class="portfolio-like-orb" aria-hidden="true">
-                  <svg viewBox="0 0 32 32">
-                    <path d="M16 27s-11-6.8-11-14.1A6.2 6.2 0 0 1 16 9.1a6.2 6.2 0 0 1 11 3.8C27 20.2 16 27 16 27Z"/>
-                  </svg>
-                </span>
-                <span class="portfolio-like-pill">Like this portfolio</span>
-              </button>
-            </div>
-    </div>
     <nav class="timeline-nav" aria-label="Main navigation">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
@@ -84,14 +70,6 @@
     <section class="timeline-hero" aria-labelledby="portfolio-name">
       <p class="timeline-eyebrow">CLOUD · INFRASTRUCTURE · OPERATIONS</p>
       <h1 id="portfolio-name">Aniket Pawar</h1>
-
-      <div class="portfolio-like-toast portfolio-like-toast--classic"
-           data-like-toast role="status" aria-live="polite" hidden>
-        <span class="portfolio-like-toast-heart" aria-hidden="true">♥</span>
-        <span><strong>Thank You! ❤️</strong>
-          <small>Your appreciation means a lot.</small></span>
-        <button type="button" data-like-toast-close aria-label="Dismiss">×</button>
-      </div>
       <h2>DevOps &amp; Cloud Infrastructure Engineer</h2>
       <p class="timeline-intro">
         Enterprise IT support and operations professional with nearly 6 years of experience in incident investigation, technical troubleshooting and 24×7 service operations. Building DevOps and cloud infrastructure capabilities through Azure projects and certifications across Microsoft Azure, AWS, Google Cloud and ITIL.
@@ -225,52 +203,32 @@
               <span class="project-type">Cloud portfolio · Azure</span>
             </div>
             <h3>Azure Cloud Resume Challenge</h3>
-            <a class="timeline-project-link" href="https://github.com/712Aniket/azure-cloud-resume-challenge"
-              target="_blank" rel="noopener noreferrer">View GitHub repository ↗</a>
             <p>
               Built a personal portfolio website and integrated a Python-based, HTTP-triggered Azure Functions API with Azure Cosmos DB to store visitor-counter data. The frontend calls the API and displays country-wise statistics when data is available; the aggregate visit count is not displayed on the website.
             </p>
             <p class="timeline-tech">HTML · CSS · JavaScript · Python · Azure Functions · Azure Cosmos DB</p>
-            <p><strong>My role &amp; contribution</strong></p>
             <ul class="project-contributions">
               <li>Built and maintained the portfolio frontend.</li>
               <li>Implemented the visitor-counter API using an HTTP-triggered Python Azure Function.</li>
               <li>Integrated Azure Cosmos DB to store visitor-counter data.</li>
               <li>Connected the frontend to the API and displayed country-wise statistics when available; the aggregate total is not displayed.</li>
             </ul>
-
+            <a class="timeline-project-link" href="https://github.com/712Aniket/azure-cloud-resume-challenge"
+              target="_blank" rel="noopener noreferrer">View GitHub repository ↗</a>
           </article>
 
           <article class="project-timeline-item">
-            <span class="project-timeline-dot completed" aria-hidden="true"></span>
-            <div class="project-timeline-topline"><span class="timeline-status completed-status">Completed</span><span class="project-type">Cloud operations · Azure</span></div>
-            <h3>Azure Cloud Operations &amp; Observability Platform</h3>
-            <a class="timeline-project-link" href="https://github.com/712Aniket/azure-cloud-operations-observability" target="_blank" rel="noopener noreferrer">View GitHub repository ↗</a>
-            <p>Implemented Azure monitoring and observability with Terraform-managed infrastructure, Application Insights, Log Analytics, KQL, Workbooks, API failure and availability alerts, email notifications, and GitHub Actions CI/CD using Entra ID OIDC and protected deployment approval.</p>
-            <p class="timeline-tech">Terraform · Azure Monitor · Application Insights · Log Analytics · KQL · GitHub Actions · OIDC</p>
-            <p class="project-note">Next enhancement within this project: Resume &amp; Certificate Analytics. This is an extension, not a separate project, and is not yet implemented.</p>
-
-
-            <div class="project-two-contribution">
-              <p><strong>My role &amp; contribution</strong></p>
-              <ul class="project-contributions">
-                <li>Provisioned Azure infrastructure using Terraform.</li>
-                <li>Configured Azure Monitor, Application Insights and Log Analytics.</li>
-                <li>Built KQL queries and Workbooks for operational investigation.</li>
-                <li>Configured API failure and availability alerts with email notifications.</li>
-                <li>Automated validation and approved deployment through GitHub Actions with Entra ID OIDC.</li>
-              </ul>
-            </div>
-</article>
-
-          <article class="project-timeline-item project-three-timeline">
             <span class="project-timeline-dot progress-dot" aria-hidden="true"></span>
-            <div class="project-timeline-topline"><span class="timeline-status progress-status">In Progress</span><span class="project-type">Container platform · Kubernetes</span></div>
-            <h3>Production-Style Kubernetes Platform</h3>
-            <a class="timeline-project-link" href="https://github.com/712Aniket/production-style-kubernetes-platform" target="_blank" rel="noopener noreferrer">View GitHub repository ↗</a>
-            <p>Developing a production-oriented container platform with Terraform, Docker, Kubernetes on AKS, Helm-based releases and Prometheus/Grafana observability. The architecture represents the planned implementation workflow; components will be marked complete only after they are built and verified.</p>
-            <p class="timeline-tech">Terraform · Docker · Kubernetes · AKS · Helm · Prometheus · Grafana · CI/CD</p>
-
+            <div class="project-timeline-topline">
+              <span class="timeline-status progress-status">In Progress</span>
+              <span class="project-type">Cloud operations · Azure</span>
+            </div>
+            <h3>Azure Cloud Operations &amp; Observability Platform</h3>
+            <p>
+              An Azure-focused cloud operations and observability project in progress. The current stage is architecture and implementation planning; the target scope covers infrastructure automation, centralised monitoring, log analytics, alerting and operational troubleshooting. No deployed project components are being presented as complete.
+            </p>
+            <p class="timeline-tech">Planned focus: Terraform · Azure Monitor · Log Analytics · alerting · Python · CI/CD pipeline</p>
+            <p class="project-note">Current stage: architecture and implementation planning. The listed components are planned, not completed.</p>
           </article>
         </div>
       </div>
@@ -345,19 +303,17 @@
     </section>
   </main>
 
+  <p class="timeline-privacy-note">Privacy: Visitor location is estimated from the request IP using <a href="https://ipwho.is/" target="_blank" rel="noopener noreferrer">ipwho.is</a>. The IP address is sent to that lookup service; this portfolio stores aggregate visit and country counts in Azure Cosmos DB, not raw IP addresses.</p>
   <footer class="timeline-footer">
-<div class="country-visitors" aria-label="Visitors by country">
+<div class="country-visitors" aria-label="Visitors by country" hidden>
       <p class="country-visitors-title">Visitors around the world</p>
       <div id="country-visitor-pills" class="country-visitor-pills">
-        <span class="country-visitors-pending">Loading country statistics...</span>
+        <span class="country-visitors-pending">Country statistics will appear when the API provides them.</span>
       </div>
-      <p class="timeline-privacy-note">Privacy: Visitor location is estimated from the request IP using <a href="https://ipwho.is/" target="_blank" rel="noopener noreferrer">ipwho.is</a>. The IP address is sent to that lookup service; this portfolio stores aggregate visit and country counts in Azure Cosmos DB, not raw IP addresses.</p>
     </div>
     <p>© 2026 Aniket Pawar · Pune, Maharashtra, India</p>
     <a class="back-to-top" href="#top">Back to top ↑</a>
   </footer>
   <script src="resume-viewer.js" defer></script>
-  <script src="engagement-analytics.js" defer></script>
-  <script src="portfolio-like.js" defer></script>
 </body>
 </html>
