@@ -10,11 +10,11 @@ A personal cloud engineering project demonstrating how to build, deploy, secure 
 
 ## 1. Project Overview
 
-This project implements a cloud-hosted personal portfolio website with a serverless visitor counter.
+This project implements a cloud-hosted personal portfolio website with a serverless visitor counter and resume/certificate interaction analytics.
 
-The frontend is hosted on Azure Static Web Apps. A Python-based Azure Function handles visitor counter requests and stores the counter in Azure Cosmos DB.
+The frontend is hosted on Azure Static Web Apps. Python-based Azure Functions handle visitor counter requests and portfolio interaction events, with aggregate data stored in Azure Cosmos DB.
 
-Terraform is used to manage Azure infrastructure, while GitHub Actions automates frontend deployment.
+The portfolio tracks resume and certificate views and downloads. Terraform is used to manage Azure infrastructure, while GitHub Actions automates frontend deployment.
 
 The project demonstrates practical experience with cloud infrastructure, serverless computing, Infrastructure as Code (IaC), CI/CD, identity management and application monitoring.
 
@@ -96,6 +96,30 @@ The counter uses an atomic increment operation in Cosmos DB to update the stored
 
 If the counter document does not exist, the function creates it. It also handles a concurrent document-creation scenario.
 
+### Resume and Certificate Interaction Analytics
+
+A separate HTTP-triggered Azure Function records interactions with the resume and certificate viewer.
+
+**API endpoint:**
+
+```http
+POST /api/portfolio-event
+```
+
+**Example request:**
+
+```json
+{
+  "item_type": "certificate",
+  "item_id": "AZ-104",
+  "event_type": "view"
+}
+```
+
+The endpoint validates the item type, item identifier and event type before recording an event. Supported item types are `resume` and `certificate`; supported events are `view` and `download`. Resume events use the `resume` identifier, while certificate identifiers are checked against the configured certificate list.
+
+The frontend records resume opens/downloads and certificate views/downloads. Events are aggregated in Cosmos DB by item, action and UTC date, so the data provides daily interaction counts without requiring portfolio visitors to sign in.
+
 ## 6. Identity and Security
 
 Security is implemented using Azure-native identity and access management capabilities.
@@ -121,7 +145,7 @@ Azure role assignments provide the Function App identity with the required permi
 - Dependabot for dependency monitoring and updates.
 - GitHub push protection to help prevent accidental secret exposure.
 
-**Note:** The visitor counter HTTP endpoint uses anonymous authorization. Visitors do not need to authenticate to access the counter API. Managed Identity protects the Function App's access to Azure resources; it does not authenticate website visitors. CORS is a browser security mechanism, not an API authentication mechanism.
+**Note:** The visitor counter and portfolio-event HTTP endpoints use anonymous authorization. Visitors do not need to authenticate to use these public portfolio features. The portfolio-event endpoint validates supported item and event values before recording aggregate counts. Managed Identity protects the Function App's access to Azure resources; it does not authenticate website visitors. CORS is a browser security mechanism, not an API authentication mechanism.
 
 ## 7. Infrastructure as Code – Terraform
 
@@ -246,6 +270,7 @@ During development, the following areas were explored:
 - Developing a serverless backend using Python and Azure Functions.
 - Connecting Azure Functions to Cosmos DB.
 - Implementing atomic counter updates.
+- Recording resume and certificate views/downloads using validated, date-based aggregate analytics.
 - Configuring Managed Identity and Azure RBAC.
 - Managing Azure resources using Terraform.
 - Automating frontend deployment using GitHub Actions.
@@ -257,6 +282,7 @@ During development, the following areas were explored:
 
 Potential enhancements include:
 
+- Completing the portfolio appreciation interaction being developed locally: a heart control in the portfolio navigation, with a curved network signal travelling to the Pune node on the rotating globe and a distinct arrival highlight. This enhancement is not included in the current GitHub source revision or live deployment.
 - Automating Python Azure Functions deployment.
 - Adding automated backend tests.
 - Improving application monitoring and alerting.
@@ -266,8 +292,8 @@ Potential enhancements include:
 
 ## 13. Project Status
 
-**Status: Completed – Core Implementation and Documentation**
+**Status: Core Implementation and Resume/Certificate Analytics Completed**
 
-The portfolio website, serverless visitor counter, Azure infrastructure configuration, frontend CI/CD workflow, security configuration and architecture documentation are in place.
+The current GitHub source includes the portfolio website, serverless visitor counter, resume and certificate view/download analytics, Azure infrastructure configuration, frontend CI/CD workflow, security configuration and architecture documentation.
 
-Further enhancements can be implemented as separate iterations.
+**In progress:** The portfolio appreciation interaction and its heart-to-Pune globe animation are being developed locally. They are not yet part of this GitHub source revision or the live deployment.
