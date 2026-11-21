@@ -28,13 +28,6 @@
     });
   };
 
-  /* ---------- resume view tracking ---------- */
-  $$('a[data-analytics-item="resume"]').forEach((link) => {
-    link.addEventListener("click", () => {
-      trackPortfolioEvent("resume", "resume", "view");
-    });
-  });
-
   /* ---------- nav ---------- */
   const nav = $("#nav"), burger = $("#burger"), dw = $("#dw"), panel = $("#menu");
   const onScroll = () => nav.classList.toggle("solid", scrollY > 20);
@@ -238,28 +231,143 @@ updateLocation();
   $$("[data-count]").forEach((b) => cio.observe(b));
 
   /* ---------- country-wise visitor statistics (Azure Function + Cosmos DB) ---------- */
-  const countryList = $("#country-list"), countryStatus = $("#country-status");
+  const countryList = $("#country-list");
+  const countryStatus = $("#country-status");
   const countrySection = document.querySelector(".country-stats");
   const local = new URLSearchParams(location.search).has("nocount");
-  if (countrySection) countrySection.hidden = true;
-  const safeText = (v) => String(v ?? "").replace(/[<>]/g, "");
-  const renderCountries = (countries) => {
+
+  const showCountryMessage = (message, status) => {
+    if (countrySection) countrySection.hidden = false;
+    if (countryStatus) countryStatus.textContent = status;
+
+    if (countryList) {
+      const note = document.createElement("p");
+      note.className = "country-empty";
+      note.textContent = message;
+      countryList.replaceChildren(note);
+    }
+  };
+
+  const countryArray = (input) => {
+    if (Array.isArray(input)) return input;
+
+    if (input && typeof input === "object") {
+      return Object.entries(input).map(([code, value]) =>
+        value && typeof value === "object"
+          ? { ...value, code: value.code || code }
+          : { code, count: value }
+      );
+    }
+
+    return [];
+  };
+
+  const renderCountries = (input) => {
     if (!countryList) return;
-    const source = Array.isArray(countries) ? countries : (countries && typeof countries === "object" ? Object.entries(countries).map(([code, value]) => ({ code, ...(typeof value === "object" ? value : { count: value }) })) : []);
-    const rows = source.map((c) => ({
-      code: safeText(c.code || c.country_code || "").toUpperCase(),
-      name: safeText(c.name || c.country_name || c.code || "Unknown"),
-      flag: safeText(c.flag || "🌐"),
+
+    const rows = countryArray(input).map((c) => ({
+      name: String(c.name || c.country_name || c.country || c.code || "Unknown"),
+      code: String(c.code || c.country_code || "").toUpperCase(),
+      flag: String(c.flag || c.emoji || "🌐"),
       count: Number(c.count ?? c.visitor_count ?? 0)
-    })).filter((c) => Number.isFinite(c.count) && c.count > 0).sort((a, b) => b.count - a.count);
+    }))
+    .filter(c => Number.isFinite(c.count) && c.count > 0)
+    .sort((a, b) => b.count - a.count);
+
     if (!rows.length) {
-      if (countrySection) countrySection.hidden = true;
+      showCountryMessage(
+        "Country statistics will appear when the visitor API returns country data.",
+        "No country data available"
+      );
       return;
     }
-    countryList.innerHTML = rows.map((c) => `<article class="country-card"><span class="country-flag" aria-hidden="true">${c.flag}</span><span class="country-name">${c.name}<small>${c.code}</small></span><b>${c.count.toLocaleString("en-IN")}</b><span class="country-visits">visits</span></article>`).join("");
-    if (countryStatus) countryStatus.textContent = `${rows.length} ${rows.length === 1 ? "country" : "countries"} represented`;
+
+    countryList.replaceChildren();
+
+    rows.forEach(c => {
+      const card = document.createElement("article");
+      card.className = "country-card";
+
+      const flag = document.createElement("span");
+      flag.className = "country-flag";
+      flag.setAttribute("aria-hidden", "true");
+      flag.textContent = c.flag;
+
+      const name = document.createElement("span");
+      name.className = "country-name";
+      name.append(document.createTextNode(c.name));
+
+      const code = document.createElement("small");
+      code.textContent = c.code;
+      name.appendChild(code);
+
+      const count = document.createElement("b");
+      count.textContent = c.count.toLocaleString("en-IN");
+
+      const visits = document.createElement("span");
+      visits.className = "country-visits";
+      visits.textContent = "visits";
+
+      card.append(flag, name, count, visits);
+      countryList.appendChild(card);
+    });
+
     if (countrySection) countrySection.hidden = false;
+    if (countryStatus) {
+      countryStatus.textContent =
+        `${rows.length} ${rows.length === 1 ? "country" : "countries"} represented`;
+    }
   };
+
+  const loadCountryStats = async () => {
+    if (!countryList) return;
+
+    if (local) {
+      showCountryMessage(
+        "Country statistics are not loaded in this local preview.",
+        "Local preview"
+      );
+      return;
+    }
+
+    const endpoint = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
+    let lastError;
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const response = await fetch(endpoint, {
+          method: "GET",
+          mode: "cors",
+          cache: "no-store",
+          headers: { "Accept": "application/json" }
+        });
+
+        if (!response.ok) {
+          throw new Error(`API returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderCountries(data.countries ?? data.country_visitors ?? []);
+        return;
+
+      } catch (error) {
+        lastError = error;
+        if (attempt < 2) {
+          await new Promise(resolve => setTimeout(resolve, 700 * (attempt + 1)));
+        }
+      }
+    }
+
+    showCountryMessage(
+      "Country statistics are temporarily unavailable. Please check the API connection.",
+      "API unavailable"
+    );
+
+    console.warn("Country visitor statistics unavailable:", lastError);
+  };
+
+  loadCountryStats();
+
   /* ---------- interactive Azure architecture walkthrough (illustrative only) ---------- */
   const arch = $(".arch-showcase");
   if (arch) {
@@ -387,32 +495,6 @@ updateLocation();
     start(true);
   }
 
-  const loadCountryStats = async () => {
-    if (!countryList) return;
-    if (local) {
-      if (countrySection) countrySection.hidden = true;
-      return;
-    }
-    const endpoint = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
-    let lastError;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const response = await fetch(endpoint, { method: "GET", mode: "cors", cache: "no-store", headers: { "Accept": "application/json" } });
-        if (!response.ok) throw new Error(`API returned HTTP ${response.status}`);
-        const data = await response.json();
-        renderCountries(data.countries);
-        if (countryStatus && !Array.isArray(data.countries) && (!data.countries || typeof data.countries !== "object")) countryStatus.textContent = "Country data not supplied by API";
-        return;
-      } catch (error) {
-        lastError = error;
-        if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 700 * (attempt + 1)));
-      }
-    }
-    if (countrySection) countrySection.hidden = true;
-    console.warn("Country visitor statistics unavailable:", lastError);
-  };
-  loadCountryStats();
-
   /* ---------- planned observability workflow (no stages marked as implemented) ---------- */
   const plannedStages = $$("#pipe .st");
   plannedStages.forEach((stage) => stage.classList.remove("done", "cur"));
@@ -534,5 +616,35 @@ addEventListener("keydown", (e) => {
   $$("[data-scr]").forEach((el, i) => setTimeout(() => decode(el, 1100), 150 + i * 160));
 
   /* Architecture request/response packets are animated in CSS on the live diagram. */
+
+  /* Project 2 animated architecture walkthrough (illustrative, not live telemetry). */
+  const p2Arch = $("#p2-architecture");
+  if (p2Arch) {
+    const p2Nodes = $$("[data-p2-step]", p2Arch);
+    const p2Title = $("#p2-arch-step-title", p2Arch);
+    const p2Copy = $("#p2-arch-step-copy", p2Arch);
+    const p2Counter = $("#p2-arch-counter", p2Arch);
+    const p2Replay = $("#p2-arch-replay", p2Arch);
+    const p2Steps = [
+      [0,"The project code is stored in GitHub","The repository holds the Terraform configuration and workflow files."],
+      [1,"Automated checks run","GitHub Actions validates the changes; deployment requires the configured approval."],
+      [2,"Terraform manages the cloud setup","Terraform describes and manages the Azure resources. Its state is stored remotely in Azure Storage."],
+      [3,"The Azure resources are ready","The platform's application and monitoring resources are available in Azure."],
+      [4,"The application handles requests","The portfolio frontend communicates with the Azure Function API."],
+      [5,"Application activity is recorded","Application Insights collects request and application telemetry, which can be queried in Log Analytics."],
+      [6,"Azure checks for problems","Azure Monitor evaluates the configured API failure and availability alerts."],
+      [7,"You receive an alert and investigate","The Action Group sends an email; the Azure Monitor Workbook helps review the situation." ]
+    ];
+    let p2Index = 0, p2Timer = null;
+    const showP2Step = (index) => {
+      p2Nodes.forEach((node) => { const n = Number(node.dataset.p2Step); node.classList.toggle("is-flow-active", n === p2Steps[index][0]); node.classList.toggle("is-flow-done", n < p2Steps[index][0]); });
+      p2Title.textContent = p2Steps[index][1]; p2Copy.textContent = p2Steps[index][2];
+      p2Counter.textContent = `${String(index + 1).padStart(2,"0")} / ${String(p2Steps.length).padStart(2,"0")}`;
+    };
+    const runP2 = () => { clearInterval(p2Timer); showP2Step(p2Index); p2Timer = setInterval(() => { p2Index = (p2Index + 1) % p2Steps.length; showP2Step(p2Index); }, RM ? 3000 : 2300); };
+    p2Replay?.addEventListener("click", () => { p2Index = 0; runP2(); });
+    if (RM) { showP2Step(0); } else { runP2(); }
+    document.addEventListener("visibilitychange", () => { if (document.hidden) clearInterval(p2Timer); else if (!RM) runP2(); });
+  }
 
 })();

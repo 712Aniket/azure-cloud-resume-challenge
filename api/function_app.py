@@ -485,3 +485,199 @@ def portfolio_event(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             mimetype="application/json"
         )
+
+# ============================================================
+# HTTP API - Portfolio Engagement Analytics
+# ============================================================
+
+ENGAGEMENT_SECTIONS = {
+    "profile",
+    "experience",
+    "skills",
+    "projects",
+    "certifications",
+    "contact"
+}
+
+
+def increment_engagement_counter(document_id, document, increments):
+    """Atomically increment one or more engagement counters."""
+
+    operations = [
+        {
+            "op": "incr",
+            "path": f"/{field}",
+            "value": value
+        }
+        for field, value in increments.items()
+    ]
+
+    try:
+        return container.patch_item(
+            item=document_id,
+            partition_key=document_id,
+            patch_operations=operations
+        )
+
+    except CosmosResourceNotFoundError:
+        try:
+            return container.create_item(body=document)
+
+        except CosmosResourceExistsError:
+            return container.patch_item(
+                item=document_id,
+                partition_key=document_id,
+                patch_operations=operations
+            )
+
+
+@app.route(
+    route="portfolio-engagement",
+    methods=["POST"],
+    auth_level=func.AuthLevel.ANONYMOUS
+)
+def portfolio_engagement(req: func.HttpRequest) -> func.HttpResponse:
+    """Record daily portfolio sessions and section engagement."""
+
+    try:
+        data = req.get_json()
+
+        if not isinstance(data, dict):
+            return func.HttpResponse(
+                json.dumps({"error": "Request body must be a JSON object."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        event_type = data.get("event_type")
+
+        allowed_events = {
+            "session",
+            "section_view",
+            "section_time"
+        }
+
+        if not isinstance(event_type, str) or event_type not in allowed_events:
+            return func.HttpResponse(
+                json.dumps({"error": "Invalid engagement event type."}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        event_date = datetime.now(timezone.utc).strftime("%Y%m%d")
+
+        if event_type == "session":
+            active_seconds = data.get("active_seconds")
+
+            if (
+                isinstance(active_seconds, bool)
+                or not isinstance(active_seconds, int)
+                or not 0 <= active_seconds <= 21600
+            ):
+                return func.HttpResponse(
+                    json.dumps({"error": "active_seconds must be between 0 and 21600."}),
+                    status_code=400,
+                    mimetype="application/json"
+                )
+
+            document_id = f"engagement-session-{event_date}"
+
+            increments = {
+                "session_count": 1,
+                "total_active_seconds": active_seconds
+            }
+
+            document = {
+                "id": document_id,
+                "metric_type": "session",
+                "event_date": event_date,
+                "session_count": 1,
+                "total_active_seconds": active_seconds
+            }
+
+        elif event_type in {"section_view", "section_time"}:
+            section_id = data.get("section_id")
+
+            if (
+                not isinstance(section_id, str)
+                or section_id not in ENGAGEMENT_SECTIONS
+            ):
+                return func.HttpResponse(
+                    json.dumps({"error": "Invalid section_id."}),
+                    status_code=400,
+                    mimetype="application/json"
+                )
+
+            document_id = (
+                f"engagement-section-{section_id}-{event_date}"
+            )
+
+            if event_type == "section_view":
+                increments = {"view_count": 1}
+                initial_views = 1
+                initial_seconds = 0
+
+            else:
+                active_seconds = data.get("active_seconds")
+
+                if (
+                    isinstance(active_seconds, bool)
+                    or not isinstance(active_seconds, int)
+                    or not 1 <= active_seconds <= 21600
+                ):
+                    return func.HttpResponse(
+                        json.dumps({"error": "Invalid section active_seconds."}),
+                        status_code=400,
+                        mimetype="application/json"
+                    )
+
+                increments = {
+                    "total_active_seconds": active_seconds
+                }
+                initial_views = 0
+                initial_seconds = active_seconds
+
+            document = {
+                "id": document_id,
+                "metric_type": "section",
+                "section_id": section_id,
+                "event_date": event_date,
+                "view_count": initial_views,
+                "total_active_seconds": initial_seconds
+            }
+
+
+        result = increment_engagement_counter(
+            document_id,
+            document,
+            increments
+        )
+
+        return func.HttpResponse(
+            json.dumps({
+                "message": "Portfolio engagement recorded.",
+                "event_type": event_type,
+                "event_date": event_date,
+                "counters": result
+            }, default=str),
+            status_code=200,
+            mimetype="application/json"
+        )
+
+    except ValueError:
+        return func.HttpResponse(
+            json.dumps({"error": "Invalid JSON request."}),
+            status_code=400,
+            mimetype="application/json"
+        )
+
+    except Exception:
+        logging.exception(
+            "Failed to record portfolio engagement."
+        )
+
+        return func.HttpResponse(
+            json.dumps({"error": "Unable to record portfolio engagement."}),
+            status_code=500,
+            mimetype="application/json"
+        )
