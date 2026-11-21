@@ -137,6 +137,32 @@ updateLocation();
     return { pts, to: [la, lo], name: NAMES[i], speed: 0.16 + (i % 4) * 0.035, off: i * 0.37 };
   });
   let W = 0, H = 0, DPR = 1, vis = true, drag = 0, dragV = 0, down = null;
+  let appreciationSignalStartedAt = 0;
+  const appreciationSignalDuration = 1500;
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const networkSvg = document.createElementNS(SVG_NS, "svg");
+  networkSvg.id = "portfolio-heart-pune-link";
+  networkSvg.setAttribute("aria-hidden", "true");
+
+  const networkPath = document.createElementNS(SVG_NS, "path");
+  networkPath.setAttribute("class", "portfolio-network-path");
+
+  // Seven small data points matching the existing globe packets.
+  const signalDots = Array.from({ length: 7 }, (_, i) => {
+    const dot = document.createElementNS(SVG_NS, "circle");
+    dot.setAttribute("class", "portfolio-network-dot");
+    dot.setAttribute("r", String(2.6 - i * 0.3));
+    dot.setAttribute("fill", `rgb(255, ${190 + i * 6}, ${80 + i * 20})`);
+    dot.style.opacity = "0";
+    return dot;
+  });
+
+  networkSvg.append(networkPath, ...signalDots);  document.body.appendChild(networkSvg);
+
+  const heartAnchor = document.querySelector(
+    ".portfolio-like-control--explorer .portfolio-like-orb"
+  );
   const size = () => { DPR = Math.min(innerWidth < 700 ? 1.5 : 2, devicePixelRatio || 1); const r = cv.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W * DPR; cv.height = H * DPR; };
   size(); addEventListener("resize", size);
   new IntersectionObserver(([e]) => (vis = e.isIntersecting)).observe(cv);
@@ -162,6 +188,84 @@ updateLocation();
       if ((z > 0) === front) { const X = cx + x * Rr, Y = cy - y * Rr; pen ? g.lineTo(X, Y) : g.moveTo(X, Y); pen = true; } else pen = false; }
     g.strokeStyle = front ? "rgba(150,175,210,.16)" : "rgba(150,175,210,.07)"; g.lineWidth = 1; g.setLineDash([2, 5]); g.stroke(); g.setLineDash([]);
   }
+  function updateHeartPuneConnector(puneX, puneY, visible) {
+    const heartRect = heartAnchor?.getBoundingClientRect();
+
+    if (!heartRect || !visible) {
+      networkSvg.style.opacity = "0";
+      signalDots.forEach(dot => dot.style.opacity = "0");
+      return;
+    }
+
+    networkSvg.setAttribute("viewBox", `0 0 ${innerWidth} ${innerHeight}`);
+
+    // Fixed heart; moving Pune destination.
+    const sx = heartRect.left + heartRect.width / 2;
+    const sy = heartRect.top + heartRect.height / 2;
+    const ex = puneX;
+    const ey = puneY;
+
+    // Preserve the existing broad curved connection.
+    const dx = ex - sx;
+    const dy = ey - sy;
+    const distance = Math.hypot(dx, dy) || 1;
+    const bend = Math.min(220, Math.max(140, distance * 0.24));
+    const nx = dy / distance;
+    const ny = -dx / distance;
+
+    const c1x = sx + dx * 0.30 + nx * bend;
+    const c1y = sy + dy * 0.30 + ny * bend;
+    const c2x = sx + dx * 0.70 + nx * bend;
+    const c2y = sy + dy * 0.70 + ny * bend;
+
+    networkPath.setAttribute(
+      "d",
+      `M ${sx} ${sy} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${ex} ${ey}`
+    );
+
+    const age = appreciationSignalStartedAt
+      ? performance.now() - appreciationSignalStartedAt
+      : -1;
+
+    const duration = appreciationSignalDuration;
+    const active = age >= 0 && age <= duration + 350;
+
+    networkSvg.classList.toggle("is-active", active);
+
+    if (!active) {
+      networkSvg.style.opacity = "0";
+      signalDots.forEach(dot => dot.style.opacity = "0");
+      return;
+    }
+
+    const progress = Math.max(0, Math.min(1, age / duration));
+    const eased = progress * progress * (3 - 2 * progress);
+
+    const fadeIn = Math.min(1, age / 160);
+    const fadeOut = Math.max(0, Math.min(1, (duration + 350 - age) / 350));
+    networkSvg.style.opacity = String(Math.min(fadeIn, fadeOut));
+
+    // IMPORTANT: obtain packet coordinates from the curved SVG path.
+    // The path is recalculated each frame as Pune moves with the globe.
+    const pathLength = networkPath.getTotalLength();
+
+    signalDots.forEach((dot, i) => {
+      const dotProgress = Math.max(0, eased - i * 0.018);
+      const point = networkPath.getPointAtLength(
+        pathLength * dotProgress
+      );
+
+      dot.setAttribute("cx", point.x);
+      dot.setAttribute("cy", point.y);
+
+      const opacity = (1 - i / 7) * 0.95;
+      dot.style.opacity =
+        age <= duration && eased > 0
+          ? String(opacity)
+          : "0";
+    });
+  }
+
   function draw(ms) {
     const t = ms / 1000;
     if (!down) { drag += dragV; dragV *= 0.94; }
@@ -203,15 +307,113 @@ updateLocation();
         if (ez > 0.35 && W > 500) { g.font = "500 10.5px 'Geist Mono', monospace"; g.fillStyle = `rgba(139,155,179,${Math.min(0.75, (ez - 0.35) * 2).toFixed(2)})`; g.fillText(a.name, X + 7, Y + 3); } }
     }
     for (const sv of SATS) { orbitPath(sv, cx, cy, Rr, true); sat(sv, t, cx, cy, Rr, true); }
+
     // Pune
     const [px, py, pz] = proj(...PUNE, lat0, lon0);
+
     if (pz > 0) {
-      const X = cx + px * Rr, Y = cy - py * Rr, pu = RM ? 0.5 : (t % 2.2) / 2.2;
-      g.strokeStyle = `rgba(255,178,36,${(1 - pu) * 0.8})`; g.lineWidth = 1.5; g.beginPath(); g.arc(X, Y, 5 + pu * 26, 0, 7); g.stroke();
-      g.fillStyle = "#ffb224"; g.shadowColor = "#ffb224"; g.shadowBlur = 16; g.beginPath(); g.arc(X, Y, 4.5, 0, 7); g.fill(); g.shadowBlur = 0;
-      if (W > 500) { g.font = "500 12px 'Geist Mono', monospace"; g.fillStyle = "rgba(232,238,246,.85)"; g.fillText("pune · IST", X + 12, Y - 10); }
+      const X = cx + px * Rr;
+      const Y = cy - py * Rr;
+      const pu = RM ? 0.5 : (t % 2.2) / 2.2;
+
+      const canvasRect = cv.getBoundingClientRect();
+
+      // Update the destination on every globe frame.
+      updateHeartPuneConnector(
+        canvasRect.left + X,
+        canvasRect.top + Y,
+        true
+      );
+
+      const signalAge = appreciationSignalStartedAt
+        ? performance.now() - appreciationSignalStartedAt
+        : -1;
+
+      // Brief arrival illumination at Pune.
+      if (
+        signalAge >= appreciationSignalDuration &&
+        signalAge < appreciationSignalDuration + 850
+      ) {
+        const impact = 1 -
+          (signalAge - appreciationSignalDuration) / 850;
+
+        const pulseRadius = 8 + (1 - impact) * 19;
+
+        g.save();
+
+        // Warm golden glow surrounding the Pune node.
+        const glow = g.createRadialGradient(X, Y, 1, X, Y, 25);
+        glow.addColorStop(0, `rgba(220,255,235,${impact * 0.9})`);
+        glow.addColorStop(0.3, `rgba(74,222,128,${impact * 0.5})`);
+        glow.addColorStop(1, "rgba(74,222,128,0)");
+
+        g.fillStyle = glow;
+        g.beginPath();
+        g.arc(X, Y, 25, 0, Math.PI * 2);
+        g.fill();
+
+        // Expanding golden arrival pulse.
+        g.strokeStyle = `rgba(74,222,128,${impact * 0.9})`;
+        g.lineWidth = 1.6;
+        g.beginPath();
+        g.arc(X, Y, pulseRadius, 0, Math.PI * 2);
+        g.stroke();
+
+        // Bright golden centre.
+        g.fillStyle = "#eafff1";
+        g.shadowColor = "#4ade80";
+        g.shadowBlur = 24;
+        g.beginPath();
+        g.arc(X, Y, 5.5, 0, Math.PI * 2);
+        g.fill();
+
+        g.restore();
+      }
+
+      // Existing Pune marker, unchanged.
+      g.strokeStyle = `rgba(255,178,36,${(1 - pu) * 0.8})`;
+      g.lineWidth = 1.5;
+      g.beginPath();
+      g.arc(X, Y, 5 + pu * 26, 0, 7);
+      g.stroke();
+
+      g.fillStyle = "#ffb224";
+      g.shadowColor = "#ffb224";
+      g.shadowBlur = 16;
+      g.beginPath();
+      g.arc(X, Y, 4.5, 0, 7);
+      g.fill();
+      g.shadowBlur = 0;
+
+      if (W > 500) {
+        g.font = "500 12px 'Geist Mono', monospace";
+        g.fillStyle = "rgba(232,238,246,.85)";
+        g.fillText("pune · IST", X + 12, Y - 10);
+      }
+
+      if (
+        appreciationSignalStartedAt &&
+        signalAge > appreciationSignalDuration + 700
+      ) {
+        appreciationSignalStartedAt = 0;
+      }
+    } else {
+      updateHeartPuneConnector(0, 0, false);
     }
   }
+  // Clicking the Explorer heart launches the direct signal towards Pune.
+  document.addEventListener("click", (event) => {
+    const button = event.target instanceof Element
+      ? event.target.closest(
+          ".portfolio-like-control--explorer [data-like-button]"
+        )
+      : null;
+
+    if (!button) return;
+
+    appreciationSignalStartedAt = performance.now();
+  });
+
   let raf;
   const loop = (ms) => { if (vis) draw(ms); raf = requestAnimationFrame(loop); };
   if (RM) { draw(0); addEventListener("resize", () => draw(0)); } else raf = requestAnimationFrame(loop);
