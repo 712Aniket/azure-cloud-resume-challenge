@@ -54,18 +54,6 @@
 <header class="nav" id="nav">
   <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   <a class="logo" href="#top" aria-label="Aniket Pawar, home"><span class="dot" aria-hidden="true"></span><span>aniket<span class="m">.pawar</span></span></a>
-  <div class="portfolio-like-control portfolio-like-control--explorer"
-         data-portfolio-like>
-      <button class="portfolio-like-button" type="button"
-              data-like-button aria-pressed="false">
-        <span class="portfolio-like-orb" aria-hidden="true">
-          <svg viewBox="0 0 32 32">
-            <path d="M16 27s-11-6.8-11-14.1A6.2 6.2 0 0 1 16 9.1a6.2 6.2 0 0 1 11 3.8C27 20.2 16 27 16 27Z"/>
-          </svg>
-        </span>
-        <span class="portfolio-like-pill">Like this portfolio</span>
-      </button>
-    </div>
   <nav aria-label="Main">
     <a href="#log">Career</a><a href="#work">Projects</a><a href="#stack">Stack</a><a href="#certs">Certifications</a><a href="#contact">Contact</a>
   </nav>
@@ -141,14 +129,6 @@
       <a class="btn ghost" href="https://www.linkedin.com/in/aniketprakash" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
-  <div class="portfolio-like-toast portfolio-like-toast--explorer"
-       data-like-toast role="status" aria-live="polite" hidden>
-    <span class="portfolio-like-toast-heart" aria-hidden="true">♥</span>
-    <span><strong>Thank You! ❤️</strong>
-      <small>Your appreciation means a lot.</small></span>
-    <button type="button" data-like-toast-close aria-label="Dismiss">×</button>
-  </div>
-
   <aside class="idcard" aria-label="Profile">
     <div class="ph frame"><img src="assets/aniket-photo.webp" width="261" height="261" alt="Aniket Pawar"><b class="c tl"></b><b class="c tr"></b><b class="c bl"></b><b class="c br"></b><span class="scan"></span><span class="ring"></span></div>
     <div class="idt">
@@ -207,7 +187,7 @@
   <p class="eyebrow mono">// Projects</p>
   <h2>Cloud projects &amp; operations.</h2>
 
-  <article class="proj project-one">
+  <article class="proj">
     <div class="proj-h">
       <div>
         <p class="pstat mono"><span class="ok">●</span> completed · live</p>
@@ -267,16 +247,7 @@
       <p class="arch-disclaimer mono">ILLUSTRATIVE SIMULATION · NOT LIVE AZURE TELEMETRY</p>
       <figcaption class="mono">Serverless API · Persistent visitor data · Application monitoring</figcaption>
     </figure>
-
-    <p class="mono project-diagram-note">IMPLEMENTED TECHNOLOGY PIPELINE</p>
-    <div class="pipe project-pipeline project-one-pipeline" aria-label="Implemented Project 1 visitor counter architecture">
-      <div class="st done"><b>Portfolio Website</b><span>Frontend · HTML · CSS · JavaScript</span></div>
-      <div class="st done"><b>Azure Functions</b><span>Python HTTP-triggered API</span></div>
-      <div class="st done"><b>Azure Cosmos DB</b><span>Visitor-counter data</span></div>
-      <div class="st done"><b>Visitor Counter</b><span>Displays available visitor information</span></div>
-    </div>
-
-    <div class="contribution project-one-contribution">
+    <div class="contribution">
       <p class="mono k">my role &amp; contribution</p>
       <ul>
         <li>Built and maintained the portfolio frontend.</li>
@@ -287,79 +258,24 @@
     </div>
   </article>
 
-  <article class="proj two project-complete">
+  <article class="proj two">
     <div class="proj-h">
       <div>
-        <p class="pstat mono"><span class="ok">●</span> completed</p>
+        <p class="pstat mono"><span class="amber">◐</span> in progress</p>
         <h3>Azure Cloud Operations &amp; Observability Platform</h3>
-        <p>Implemented an Azure operations and observability platform using Terraform, Azure Monitor, Application Insights and Log Analytics. Configured API failure and availability alerts with email notifications, built KQL queries and Workbooks, and automated infrastructure validation and approved deployment through GitHub Actions with Microsoft Entra ID OIDC.</p>
-      </div>
-      <div class="plinks"><a class="btn ghost" href="https://github.com/712Aniket/azure-cloud-operations-observability" target="_blank" rel="noopener">GitHub repository ↗</a></div>
-    </div>
-    <p class="project-techline">Terraform · Azure Monitor · Application Insights · Log Analytics · KQL · Workbooks · GitHub Actions · Entra ID OIDC</p>
-    <figure class="p2-architecture p2-story-flow" id="p2-architecture" aria-label="Simple animated overview of how the platform is deployed and monitored">
-      <div class="p2-arch-head"><div><span class="mono p2-arch-kicker">HOW THE PLATFORM WORKS</span><small>PROJECT 2 · BUILD, DEPLOY, MONITOR</small></div><span class="p2-arch-live"><i></i> PROJECT OVERVIEW</span></div>
-      <div class="story-lane-title"><span>1</span><div><b>Build and deploy</b><small>How the cloud platform is prepared</small></div></div>
-      <div class="story-flow-track p2-story-track" aria-label="GitHub, automated checks and deployment, Terraform, Azure resources">
-        <div class="story-step p2-story-node" data-p2-step="0"><span class="story-step-icon">01</span><b>GitHub</b><small>Stores the project code.</small></div><span class="story-arrow">→</span>
-        <div class="story-step p2-story-node" data-p2-step="1"><span class="story-step-icon">02</span><b>Automated checks</b><small>GitHub Actions validates the changes and runs approved deployments.</small></div><span class="story-arrow">→</span>
-        <div class="story-step p2-story-node" data-p2-step="2"><span class="story-step-icon">03</span><b>Terraform</b><small>Creates and manages the cloud setup.</small></div><span class="story-arrow">→</span>
-        <div class="story-step p2-story-node" data-p2-step="3"><span class="story-step-icon">04</span><b>Azure is ready</b><small>The required cloud resources are in place.</small></div>
-      </div>
-      <div class="story-lane-title p2-monitor-title"><span>2</span><div><b>Monitor and respond</b><small>How the running application is looked after</small></div></div>
-      <div class="story-flow-track p2-story-track" aria-label="Application activity, monitoring, problem detection, email notification and investigation">
-        <div class="story-step p2-story-node" data-p2-step="4"><span class="story-step-icon">05</span><b>Application runs</b><small>Your portfolio and API handle requests.</small></div><span class="story-arrow">→</span>
-        <div class="story-step p2-story-node" data-p2-step="5"><span class="story-step-icon">06</span><b>Activity is monitored</b><small>Azure records requests and application activity.</small></div><span class="story-arrow">→</span>
-        <div class="story-step p2-story-node" data-p2-step="6"><span class="story-step-icon">07</span><b>Problems are detected</b><small>Azure Monitor checks failures and availability.</small></div><span class="story-arrow">→</span>
-        <div class="story-step p2-story-node" data-p2-step="7"><span class="story-step-icon">08</span><b>You are notified</b><small>Email alerts help you investigate.</small></div>
-      </div>
-      <div class="p2-arch-status story-flow-caption" aria-live="polite"><span class="p2-arch-pulse"></span><div><b id="p2-arch-step-title">The project code is stored in GitHub</b><p id="p2-arch-step-copy">The journey begins with the code and configuration for the platform.</p></div><span class="p2-arch-counter" id="p2-arch-counter">01 / 08</span></div>
-      <div class="p2-arch-footer"><span class="mono">SIMPLE PROJECT OVERVIEW · NOT A LIVE SYSTEM STATUS</span><button type="button" id="p2-arch-replay">↻ Replay</button></div>
-      <figcaption>One flow explains how the platform is deployed; the other explains how it is monitored.</figcaption>
-    </figure>
-    <p class="mono project-diagram-note">IMPLEMENTED PLATFORM · ANALYTICS ENHANCEMENT IS A FUTURE EXTENSION</p>
-    <div class="pipe project-pipeline" aria-label="Project 2 completed workflow">
-      <div class="st done"><b>Terraform</b><span>Infrastructure as code</span></div>
-      <div class="st done"><b>Azure Monitor</b><span>Monitoring</span></div>
-      <div class="st done"><b>Log Analytics</b><span>KQL and Workbooks</span></div>
-      <div class="st done"><b>Alerts</b><span>Failure and availability</span></div>
-      <div class="st done"><b>Action Group</b><span>Email notifications</span></div>
-      <div class="st done"><b>GitHub Actions</b><span>OIDC · approval · deploy</span></div>
-    </div>
-    <div class="project-extension-note"><span class="extension-pulse" aria-hidden="true"></span><div><b>Next enhancement · Resume &amp; Certificate Analytics</b><p>Planned extension within this project: document view/download events, Cosmos DB analytics, country-level aggregation and a private dashboard. The original platform remains completed; this enhancement is not yet implemented.</p></div></div>
-
-    <div class="contribution project-two-contribution">
-      <p class="mono k">my role &amp; contribution</p>
-      <ul>
-        <li>Provisioned and managed Azure infrastructure using Terraform.</li>
-        <li>Configured Azure Monitor, Application Insights and Log Analytics for application observability.</li>
-        <li>Created KQL queries and Workbooks to investigate application activity.</li>
-        <li>Configured API failure and availability alerts with Action Group email notifications.</li>
-        <li>Automated infrastructure validation and approved deployment using GitHub Actions.</li>
-        <li>Configured Microsoft Entra ID OIDC for secure GitHub Actions authentication.</li>
-      </ul>
-    </div>
-</article>
-
-  <article class="proj three project-progress">
-    <div class="proj-h"><div><p class="pstat mono"><span class="amber">◐</span> in progress</p><h3>Production-Style Kubernetes Platform</h3><p>Building a production-oriented container platform with infrastructure provisioned through Terraform, container workloads orchestrated by Kubernetes, Helm-based deployment and Prometheus/Grafana observability. Implementation is in progress; planned components are shown as the target workflow, not as deployed services.</p></div>
-      <div class="plinks">
-        <a class="btn ghost" href="https://github.com/712Aniket/production-style-kubernetes-platform" target="_blank" rel="noopener noreferrer">GitHub repository ↗</a>
+        <p>An Azure-focused cloud operations and observability project in progress. The current stage is architecture and implementation planning; the target scope covers infrastructure automation, centralised monitoring, log analytics, alerting and operational troubleshooting. No deployed project components are being presented as complete.</p>
       </div>
     </div>
-    <p class="project-techline">Terraform · Docker · Kubernetes · AKS · Helm · Prometheus · Grafana · CI/CD</p>
-    <p class="mono project-diagram-note">PROJECT 3 IMPLEMENTATION WORKFLOW · PLANNED STAGES</p>
-    <div class="pipe project-pipeline project-three-pipeline" aria-label="Project 3 implementation stages">
-      <div class="st done"><b>Terraform</b><span>Infrastructure</span></div>
-      <div class="st cur"><b>Docker</b><span>Container images</span></div>
-      <div class="st"><b>Kubernetes / AKS</b><span>Orchestration</span></div>
-      <div class="st"><b>Helm</b><span>Package &amp; release</span></div>
-      <div class="st"><b>Prometheus</b><span>Metrics</span></div>
-      <div class="st"><b>Grafana + CI/CD</b><span>Dashboards &amp; delivery</span></div>
+    <p class="mono project-diagram-note">Target workflow · architecture plan only</p>
+    <p class="project-techline">Planned focus: Terraform · Azure Monitor · Log Analytics · alerting · Python · CI/CD pipeline</p>
+    <div class="pipe" id="pipe">
+      <div class="st"><b>Terraform</b><span>provision</span></div>
+      <div class="st"><b>Azure Monitor</b><span>collect</span></div>
+      <div class="st"><b>Log Analytics</b><span>query</span></div>
+      <div class="st"><b>Alerts</b><span>detect</span></div>
+      <div class="st"><b>Python</b><span>auto-remediate</span></div>
+      <div class="st"><b>CI/CD pipeline</b><span>planned delivery</span></div>
     </div>
-
-    <p class="project-note">Current portfolio status: In Progress. Architecture and implementation stages will be updated as components are built and verified.</p>
-
   </article>
 
 </section>
@@ -436,7 +352,7 @@
 </main>
 
 <!-- COUNTRY-WISE VISITORS -->
-<section class="country-stats wrap" aria-labelledby="country-title">
+<section class="country-stats wrap" aria-labelledby="country-title" hidden>
   <div class="country-head">
     <div><p class="eyebrow mono">// global reach</p><h2 id="country-title">Visitors around the <em>world.</em></h2></div>
     <p class="country-note mono" id="country-status" aria-live="polite">Country statistics appear when data is available.</p>
@@ -465,6 +381,4 @@
 
 
   <script src="resume-viewer.js" defer></script>
-  <script src="engagement-analytics.js" defer></script>
-  <script src="portfolio-like.js" defer></script>
 </body></html>

@@ -28,6 +28,13 @@
     });
   };
 
+  /* ---------- resume view tracking ---------- */
+  $$('a[data-analytics-item="resume"]').forEach((link) => {
+    link.addEventListener("click", () => {
+      trackPortfolioEvent("resume", "resume", "view");
+    });
+  });
+
   /* ---------- nav ---------- */
   const nav = $("#nav"), burger = $("#burger"), dw = $("#dw"), panel = $("#menu");
   const onScroll = () => nav.classList.toggle("solid", scrollY > 20);
@@ -137,32 +144,6 @@ updateLocation();
     return { pts, to: [la, lo], name: NAMES[i], speed: 0.16 + (i % 4) * 0.035, off: i * 0.37 };
   });
   let W = 0, H = 0, DPR = 1, vis = true, drag = 0, dragV = 0, down = null;
-  let appreciationSignalStartedAt = 0;
-  const appreciationSignalDuration = 1500;
-
-  const SVG_NS = "http://www.w3.org/2000/svg";
-  const networkSvg = document.createElementNS(SVG_NS, "svg");
-  networkSvg.id = "portfolio-heart-pune-link";
-  networkSvg.setAttribute("aria-hidden", "true");
-
-  const networkPath = document.createElementNS(SVG_NS, "path");
-  networkPath.setAttribute("class", "portfolio-network-path");
-
-  // Seven small data points matching the existing globe packets.
-  const signalDots = Array.from({ length: 7 }, (_, i) => {
-    const dot = document.createElementNS(SVG_NS, "circle");
-    dot.setAttribute("class", "portfolio-network-dot");
-    dot.setAttribute("r", String(2.6 - i * 0.3));
-    dot.setAttribute("fill", `rgb(255, ${190 + i * 6}, ${80 + i * 20})`);
-    dot.style.opacity = "0";
-    return dot;
-  });
-
-  networkSvg.append(networkPath, ...signalDots);  document.body.appendChild(networkSvg);
-
-  const heartAnchor = document.querySelector(
-    ".portfolio-like-control--explorer .portfolio-like-orb"
-  );
   const size = () => { DPR = Math.min(innerWidth < 700 ? 1.5 : 2, devicePixelRatio || 1); const r = cv.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W * DPR; cv.height = H * DPR; };
   size(); addEventListener("resize", size);
   new IntersectionObserver(([e]) => (vis = e.isIntersecting)).observe(cv);
@@ -188,84 +169,6 @@ updateLocation();
       if ((z > 0) === front) { const X = cx + x * Rr, Y = cy - y * Rr; pen ? g.lineTo(X, Y) : g.moveTo(X, Y); pen = true; } else pen = false; }
     g.strokeStyle = front ? "rgba(150,175,210,.16)" : "rgba(150,175,210,.07)"; g.lineWidth = 1; g.setLineDash([2, 5]); g.stroke(); g.setLineDash([]);
   }
-  function updateHeartPuneConnector(puneX, puneY, visible) {
-    const heartRect = heartAnchor?.getBoundingClientRect();
-
-    if (!heartRect || !visible) {
-      networkSvg.style.opacity = "0";
-      signalDots.forEach(dot => dot.style.opacity = "0");
-      return;
-    }
-
-    networkSvg.setAttribute("viewBox", `0 0 ${innerWidth} ${innerHeight}`);
-
-    // Fixed heart; moving Pune destination.
-    const sx = heartRect.left + heartRect.width / 2;
-    const sy = heartRect.top + heartRect.height / 2;
-    const ex = puneX;
-    const ey = puneY;
-
-    // Preserve the existing broad curved connection.
-    const dx = ex - sx;
-    const dy = ey - sy;
-    const distance = Math.hypot(dx, dy) || 1;
-    const bend = Math.min(220, Math.max(140, distance * 0.24));
-    const nx = dy / distance;
-    const ny = -dx / distance;
-
-    const c1x = sx + dx * 0.30 + nx * bend;
-    const c1y = sy + dy * 0.30 + ny * bend;
-    const c2x = sx + dx * 0.70 + nx * bend;
-    const c2y = sy + dy * 0.70 + ny * bend;
-
-    networkPath.setAttribute(
-      "d",
-      `M ${sx} ${sy} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${ex} ${ey}`
-    );
-
-    const age = appreciationSignalStartedAt
-      ? performance.now() - appreciationSignalStartedAt
-      : -1;
-
-    const duration = appreciationSignalDuration;
-    const active = age >= 0 && age <= duration + 350;
-
-    networkSvg.classList.toggle("is-active", active);
-
-    if (!active) {
-      networkSvg.style.opacity = "0";
-      signalDots.forEach(dot => dot.style.opacity = "0");
-      return;
-    }
-
-    const progress = Math.max(0, Math.min(1, age / duration));
-    const eased = progress * progress * (3 - 2 * progress);
-
-    const fadeIn = Math.min(1, age / 160);
-    const fadeOut = Math.max(0, Math.min(1, (duration + 350 - age) / 350));
-    networkSvg.style.opacity = String(Math.min(fadeIn, fadeOut));
-
-    // IMPORTANT: obtain packet coordinates from the curved SVG path.
-    // The path is recalculated each frame as Pune moves with the globe.
-    const pathLength = networkPath.getTotalLength();
-
-    signalDots.forEach((dot, i) => {
-      const dotProgress = Math.max(0, eased - i * 0.018);
-      const point = networkPath.getPointAtLength(
-        pathLength * dotProgress
-      );
-
-      dot.setAttribute("cx", point.x);
-      dot.setAttribute("cy", point.y);
-
-      const opacity = (1 - i / 7) * 0.95;
-      dot.style.opacity =
-        age <= duration && eased > 0
-          ? String(opacity)
-          : "0";
-    });
-  }
-
   function draw(ms) {
     const t = ms / 1000;
     if (!down) { drag += dragV; dragV *= 0.94; }
@@ -307,113 +210,15 @@ updateLocation();
         if (ez > 0.35 && W > 500) { g.font = "500 10.5px 'Geist Mono', monospace"; g.fillStyle = `rgba(139,155,179,${Math.min(0.75, (ez - 0.35) * 2).toFixed(2)})`; g.fillText(a.name, X + 7, Y + 3); } }
     }
     for (const sv of SATS) { orbitPath(sv, cx, cy, Rr, true); sat(sv, t, cx, cy, Rr, true); }
-
     // Pune
     const [px, py, pz] = proj(...PUNE, lat0, lon0);
-
     if (pz > 0) {
-      const X = cx + px * Rr;
-      const Y = cy - py * Rr;
-      const pu = RM ? 0.5 : (t % 2.2) / 2.2;
-
-      const canvasRect = cv.getBoundingClientRect();
-
-      // Update the destination on every globe frame.
-      updateHeartPuneConnector(
-        canvasRect.left + X,
-        canvasRect.top + Y,
-        true
-      );
-
-      const signalAge = appreciationSignalStartedAt
-        ? performance.now() - appreciationSignalStartedAt
-        : -1;
-
-      // Brief arrival illumination at Pune.
-      if (
-        signalAge >= appreciationSignalDuration &&
-        signalAge < appreciationSignalDuration + 850
-      ) {
-        const impact = 1 -
-          (signalAge - appreciationSignalDuration) / 850;
-
-        const pulseRadius = 8 + (1 - impact) * 19;
-
-        g.save();
-
-        // Warm golden glow surrounding the Pune node.
-        const glow = g.createRadialGradient(X, Y, 1, X, Y, 25);
-        glow.addColorStop(0, `rgba(220,255,235,${impact * 0.9})`);
-        glow.addColorStop(0.3, `rgba(74,222,128,${impact * 0.5})`);
-        glow.addColorStop(1, "rgba(74,222,128,0)");
-
-        g.fillStyle = glow;
-        g.beginPath();
-        g.arc(X, Y, 25, 0, Math.PI * 2);
-        g.fill();
-
-        // Expanding golden arrival pulse.
-        g.strokeStyle = `rgba(74,222,128,${impact * 0.9})`;
-        g.lineWidth = 1.6;
-        g.beginPath();
-        g.arc(X, Y, pulseRadius, 0, Math.PI * 2);
-        g.stroke();
-
-        // Bright golden centre.
-        g.fillStyle = "#eafff1";
-        g.shadowColor = "#4ade80";
-        g.shadowBlur = 24;
-        g.beginPath();
-        g.arc(X, Y, 5.5, 0, Math.PI * 2);
-        g.fill();
-
-        g.restore();
-      }
-
-      // Existing Pune marker, unchanged.
-      g.strokeStyle = `rgba(255,178,36,${(1 - pu) * 0.8})`;
-      g.lineWidth = 1.5;
-      g.beginPath();
-      g.arc(X, Y, 5 + pu * 26, 0, 7);
-      g.stroke();
-
-      g.fillStyle = "#ffb224";
-      g.shadowColor = "#ffb224";
-      g.shadowBlur = 16;
-      g.beginPath();
-      g.arc(X, Y, 4.5, 0, 7);
-      g.fill();
-      g.shadowBlur = 0;
-
-      if (W > 500) {
-        g.font = "500 12px 'Geist Mono', monospace";
-        g.fillStyle = "rgba(232,238,246,.85)";
-        g.fillText("pune · IST", X + 12, Y - 10);
-      }
-
-      if (
-        appreciationSignalStartedAt &&
-        signalAge > appreciationSignalDuration + 700
-      ) {
-        appreciationSignalStartedAt = 0;
-      }
-    } else {
-      updateHeartPuneConnector(0, 0, false);
+      const X = cx + px * Rr, Y = cy - py * Rr, pu = RM ? 0.5 : (t % 2.2) / 2.2;
+      g.strokeStyle = `rgba(255,178,36,${(1 - pu) * 0.8})`; g.lineWidth = 1.5; g.beginPath(); g.arc(X, Y, 5 + pu * 26, 0, 7); g.stroke();
+      g.fillStyle = "#ffb224"; g.shadowColor = "#ffb224"; g.shadowBlur = 16; g.beginPath(); g.arc(X, Y, 4.5, 0, 7); g.fill(); g.shadowBlur = 0;
+      if (W > 500) { g.font = "500 12px 'Geist Mono', monospace"; g.fillStyle = "rgba(232,238,246,.85)"; g.fillText("pune · IST", X + 12, Y - 10); }
     }
   }
-  // Clicking the Explorer heart launches the direct signal towards Pune.
-  document.addEventListener("click", (event) => {
-    const button = event.target instanceof Element
-      ? event.target.closest(
-          ".portfolio-like-control--explorer [data-like-button]"
-        )
-      : null;
-
-    if (!button) return;
-
-    appreciationSignalStartedAt = performance.now();
-  });
-
   let raf;
   const loop = (ms) => { if (vis) draw(ms); raf = requestAnimationFrame(loop); };
   if (RM) { draw(0); addEventListener("resize", () => draw(0)); } else raf = requestAnimationFrame(loop);
@@ -433,143 +238,28 @@ updateLocation();
   $$("[data-count]").forEach((b) => cio.observe(b));
 
   /* ---------- country-wise visitor statistics (Azure Function + Cosmos DB) ---------- */
-  const countryList = $("#country-list");
-  const countryStatus = $("#country-status");
+  const countryList = $("#country-list"), countryStatus = $("#country-status");
   const countrySection = document.querySelector(".country-stats");
   const local = new URLSearchParams(location.search).has("nocount");
-
-  const showCountryMessage = (message, status) => {
-    if (countrySection) countrySection.hidden = false;
-    if (countryStatus) countryStatus.textContent = status;
-
-    if (countryList) {
-      const note = document.createElement("p");
-      note.className = "country-empty";
-      note.textContent = message;
-      countryList.replaceChildren(note);
-    }
-  };
-
-  const countryArray = (input) => {
-    if (Array.isArray(input)) return input;
-
-    if (input && typeof input === "object") {
-      return Object.entries(input).map(([code, value]) =>
-        value && typeof value === "object"
-          ? { ...value, code: value.code || code }
-          : { code, count: value }
-      );
-    }
-
-    return [];
-  };
-
-  const renderCountries = (input) => {
+  if (countrySection) countrySection.hidden = true;
+  const safeText = (v) => String(v ?? "").replace(/[<>]/g, "");
+  const renderCountries = (countries) => {
     if (!countryList) return;
-
-    const rows = countryArray(input).map((c) => ({
-      name: String(c.name || c.country_name || c.country || c.code || "Unknown"),
-      code: String(c.code || c.country_code || "").toUpperCase(),
-      flag: String(c.flag || c.emoji || "🌐"),
+    const source = Array.isArray(countries) ? countries : (countries && typeof countries === "object" ? Object.entries(countries).map(([code, value]) => ({ code, ...(typeof value === "object" ? value : { count: value }) })) : []);
+    const rows = source.map((c) => ({
+      code: safeText(c.code || c.country_code || "").toUpperCase(),
+      name: safeText(c.name || c.country_name || c.code || "Unknown"),
+      flag: safeText(c.flag || "🌐"),
       count: Number(c.count ?? c.visitor_count ?? 0)
-    }))
-    .filter(c => Number.isFinite(c.count) && c.count > 0)
-    .sort((a, b) => b.count - a.count);
-
+    })).filter((c) => Number.isFinite(c.count) && c.count > 0).sort((a, b) => b.count - a.count);
     if (!rows.length) {
-      showCountryMessage(
-        "Country statistics will appear when the visitor API returns country data.",
-        "No country data available"
-      );
+      if (countrySection) countrySection.hidden = true;
       return;
     }
-
-    countryList.replaceChildren();
-
-    rows.forEach(c => {
-      const card = document.createElement("article");
-      card.className = "country-card";
-
-      const flag = document.createElement("span");
-      flag.className = "country-flag";
-      flag.setAttribute("aria-hidden", "true");
-      flag.textContent = c.flag;
-
-      const name = document.createElement("span");
-      name.className = "country-name";
-      name.append(document.createTextNode(c.name));
-
-      const code = document.createElement("small");
-      code.textContent = c.code;
-      name.appendChild(code);
-
-      const count = document.createElement("b");
-      count.textContent = c.count.toLocaleString("en-IN");
-
-      const visits = document.createElement("span");
-      visits.className = "country-visits";
-      visits.textContent = "visits";
-
-      card.append(flag, name, count, visits);
-      countryList.appendChild(card);
-    });
-
+    countryList.innerHTML = rows.map((c) => `<article class="country-card"><span class="country-flag" aria-hidden="true">${c.flag}</span><span class="country-name">${c.name}<small>${c.code}</small></span><b>${c.count.toLocaleString("en-IN")}</b><span class="country-visits">visits</span></article>`).join("");
+    if (countryStatus) countryStatus.textContent = `${rows.length} ${rows.length === 1 ? "country" : "countries"} represented`;
     if (countrySection) countrySection.hidden = false;
-    if (countryStatus) {
-      countryStatus.textContent =
-        `${rows.length} ${rows.length === 1 ? "country" : "countries"} represented`;
-    }
   };
-
-  const loadCountryStats = async () => {
-    if (!countryList) return;
-
-    if (local) {
-      showCountryMessage(
-        "Country statistics are not loaded in this local preview.",
-        "Local preview"
-      );
-      return;
-    }
-
-    const endpoint = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
-    let lastError;
-
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const response = await fetch(endpoint, {
-          method: "GET",
-          mode: "cors",
-          cache: "no-store",
-          headers: { "Accept": "application/json" }
-        });
-
-        if (!response.ok) {
-          throw new Error(`API returned HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-        renderCountries(data.countries ?? data.country_visitors ?? []);
-        return;
-
-      } catch (error) {
-        lastError = error;
-        if (attempt < 2) {
-          await new Promise(resolve => setTimeout(resolve, 700 * (attempt + 1)));
-        }
-      }
-    }
-
-    showCountryMessage(
-      "Country statistics are temporarily unavailable. Please check the API connection.",
-      "API unavailable"
-    );
-
-    console.warn("Country visitor statistics unavailable:", lastError);
-  };
-
-  loadCountryStats();
-
   /* ---------- interactive Azure architecture walkthrough (illustrative only) ---------- */
   const arch = $(".arch-showcase");
   if (arch) {
@@ -697,6 +387,32 @@ updateLocation();
     start(true);
   }
 
+  const loadCountryStats = async () => {
+    if (!countryList) return;
+    if (local) {
+      if (countrySection) countrySection.hidden = true;
+      return;
+    }
+    const endpoint = "https://aniket-portfolio-api.azurewebsites.net/api/visitor-count";
+    let lastError;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const response = await fetch(endpoint, { method: "GET", mode: "cors", cache: "no-store", headers: { "Accept": "application/json" } });
+        if (!response.ok) throw new Error(`API returned HTTP ${response.status}`);
+        const data = await response.json();
+        renderCountries(data.countries);
+        if (countryStatus && !Array.isArray(data.countries) && (!data.countries || typeof data.countries !== "object")) countryStatus.textContent = "Country data not supplied by API";
+        return;
+      } catch (error) {
+        lastError = error;
+        if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 700 * (attempt + 1)));
+      }
+    }
+    if (countrySection) countrySection.hidden = true;
+    console.warn("Country visitor statistics unavailable:", lastError);
+  };
+  loadCountryStats();
+
   /* ---------- planned observability workflow (no stages marked as implemented) ---------- */
   const plannedStages = $$("#pipe .st");
   plannedStages.forEach((stage) => stage.classList.remove("done", "cur"));
@@ -818,35 +534,5 @@ addEventListener("keydown", (e) => {
   $$("[data-scr]").forEach((el, i) => setTimeout(() => decode(el, 1100), 150 + i * 160));
 
   /* Architecture request/response packets are animated in CSS on the live diagram. */
-
-  /* Project 2 animated architecture walkthrough (illustrative, not live telemetry). */
-  const p2Arch = $("#p2-architecture");
-  if (p2Arch) {
-    const p2Nodes = $$("[data-p2-step]", p2Arch);
-    const p2Title = $("#p2-arch-step-title", p2Arch);
-    const p2Copy = $("#p2-arch-step-copy", p2Arch);
-    const p2Counter = $("#p2-arch-counter", p2Arch);
-    const p2Replay = $("#p2-arch-replay", p2Arch);
-    const p2Steps = [
-      [0,"The project code is stored in GitHub","The repository holds the Terraform configuration and workflow files."],
-      [1,"Automated checks run","GitHub Actions validates the changes; deployment requires the configured approval."],
-      [2,"Terraform manages the cloud setup","Terraform describes and manages the Azure resources. Its state is stored remotely in Azure Storage."],
-      [3,"The Azure resources are ready","The platform's application and monitoring resources are available in Azure."],
-      [4,"The application handles requests","The portfolio frontend communicates with the Azure Function API."],
-      [5,"Application activity is recorded","Application Insights collects request and application telemetry, which can be queried in Log Analytics."],
-      [6,"Azure checks for problems","Azure Monitor evaluates the configured API failure and availability alerts."],
-      [7,"You receive an alert and investigate","The Action Group sends an email; the Azure Monitor Workbook helps review the situation." ]
-    ];
-    let p2Index = 0, p2Timer = null;
-    const showP2Step = (index) => {
-      p2Nodes.forEach((node) => { const n = Number(node.dataset.p2Step); node.classList.toggle("is-flow-active", n === p2Steps[index][0]); node.classList.toggle("is-flow-done", n < p2Steps[index][0]); });
-      p2Title.textContent = p2Steps[index][1]; p2Copy.textContent = p2Steps[index][2];
-      p2Counter.textContent = `${String(index + 1).padStart(2,"0")} / ${String(p2Steps.length).padStart(2,"0")}`;
-    };
-    const runP2 = () => { clearInterval(p2Timer); showP2Step(p2Index); p2Timer = setInterval(() => { p2Index = (p2Index + 1) % p2Steps.length; showP2Step(p2Index); }, RM ? 3000 : 2300); };
-    p2Replay?.addEventListener("click", () => { p2Index = 0; runP2(); });
-    if (RM) { showP2Step(0); } else { runP2(); }
-    document.addEventListener("visibilitychange", () => { if (document.hidden) clearInterval(p2Timer); else if (!RM) runP2(); });
-  }
 
 })();
