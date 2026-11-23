@@ -2,7 +2,9 @@
 
 A personal cloud engineering project demonstrating how to build, deploy, secure and monitor a serverless portfolio website using Microsoft Azure.
 
-**Live Portfolio:** https://gentle-glacier-047897600.3.azurestaticapps.net
+**Live Portfolio (custom domain):** https://aniketpawar.is-a.dev
+
+**Azure Static Web Apps fallback URL:** https://gentle-glacier-047897600.3.azurestaticapps.net
 
 **GitHub Repository:** https://github.com/712Aniket/azure-cloud-resume-challenge
 
@@ -10,13 +12,13 @@ A personal cloud engineering project demonstrating how to build, deploy, secure 
 
 ## 1. Project Overview
 
-This project implements a cloud-hosted personal portfolio website with a serverless visitor counter.
+This project implements a cloud-hosted personal portfolio website with a serverless visitor counter and event-tracking capabilities.
 
-The frontend is hosted on Azure Static Web Apps. A Python-based Azure Function handles visitor counter requests and stores the counter in Azure Cosmos DB.
+The frontend is hosted on Azure Static Web Apps. A Python-based Azure Function handles visitor-counter requests and stores counter data in Azure Cosmos DB. The frontend also records resume and certificate view/download events and portfolio appreciation/engagement events.
 
-Terraform is used to manage Azure infrastructure, while GitHub Actions automates frontend deployment.
+Terraform configuration is maintained in the repository for Azure infrastructure. GitHub Actions automates the Static Web Apps frontend deployment; the Python Function App backend is published separately using Azure Functions Core Tools.
 
-The project demonstrates practical experience with cloud infrastructure, serverless computing, Infrastructure as Code (IaC), CI/CD, identity management and application monitoring.
+**Branch/deployment boundary:** the Static Web Apps workflow in this repository triggers on pushes to `main`. The later Project 2 backend extension source (portfolio analytics and protected cost-cache endpoints) is maintained on the `resume-develop` branch. The Function App is a shared live resource; the Static Web Apps workflow does not deploy the Python backend.
 
 ## 2. Architecture
 
@@ -76,7 +78,7 @@ The portfolio includes a dynamic visitor counter powered by Azure Functions and 
 4. The function connects to Azure Cosmos DB using Managed Identity.
 5. The visitor counter is incremented.
 6. The updated count is returned as a JSON response.
-7. The frontend displays the visitor count.
+7. The frontend renders country-level visitor aggregates when the API returns them. The overall aggregate visit total is intentionally not displayed in the public portfolio UI.
 
 ### API Endpoint
 
@@ -112,18 +114,53 @@ Azure role assignments provide the Function App identity with the required permi
 
 ### Additional Security Measures
 
-- HTTPS-only access for the Storage Account.
-- Minimum TLS version configured as 1.2 for Storage.
-- Managed Identity for passwordless Azure resource access.
-- CORS configuration for the portfolio website origin.
-- GitHub Secrets for the Static Web Apps deployment token.
-- GitHub CodeQL for source-code security scanning.
-- Dependabot for dependency monitoring and updates.
-- GitHub push protection to help prevent accidental secret exposure.
+- Function App HTTPS-only is enabled; HTTP health requests were verified to redirect to HTTPS.
+- Storage Account HTTPS-only access is enabled and its minimum TLS version is configured as 1.2.
+- Function App system-assigned Managed Identity is used for Cosmos DB and Function host storage access.
+- Cosmos DB local/key authentication is disabled (`disableLocalAuth=true`).
+- Cosmos DB SQL RBAC grants the Function App identity the built-in Data Contributor role scoped to the `portfolio-db/visitor-counters` container.
+- Cosmos DB selected-network firewall contains 31 specific IP entries plus the `0.0.0.0` Azure-datacenter exception (32 rules total).
+- CORS is configured for browser access from the portfolio origin.
+- GitHub Secrets are used for the Static Web Apps deployment token.
+- GitHub CodeQL workflow and Dependabot configuration are present in the repository.
 
-**Note:** The visitor counter HTTP endpoint uses anonymous authorization. Visitors do not need to authenticate to access the counter API. Managed Identity protects the Function App's access to Azure resources; it does not authenticate website visitors. CORS is a browser security mechanism, not an API authentication mechanism.
+**Network-security caveat:** The Cosmos DB `0.0.0.0` rule permits network connection attempts from Azure datacenters generally, not only from this Function App. Cosmos DB still requires Microsoft Entra ID authorization because local/key authentication is disabled.
 
-## 7. Infrastructure as Code – Terraform
+**API authorization:** Visitor-facing routes (`health`, `visitor-count`, `portfolio-event`, and `portfolio-engagement`) use anonymous Function authorization because the public website needs them. The Project 2 extension routes `cost-analytics` and `cost-cache-refresh` require a Function key. The aggregated `portfolio-analytics` route is anonymous for the Azure Workbook. Managed Identity protects server-to-service access; it does not authenticate visitors. CORS is a browser control, not API authentication.
+
+**Residual risk:** The Function App identity has account-scope `Storage Blob Data Owner` access on `aniketportfolio07`, which also stores Terraform remote state. This is broader than a cache-only permission and could allow the Function App identity to access Terraform state. Storage separation was deferred; review this before reusing or decommissioning the shared account.
+
+## 7. API and Analytics Capabilities
+
+The core Project 1 backend contains the following public website endpoints:
+
+| Endpoint | Purpose | Authorization |
+|---|---|---|
+| `GET /api/health` | Health status for monitoring | Anonymous |
+| `GET /api/visitor-count` | Update/read visitor-counter aggregates | Anonymous |
+| `POST /api/portfolio-event` | Record resume and certificate views/downloads | Anonymous |
+| `POST /api/portfolio-engagement` | Record daily likes/appreciations and accepts session/section engagement event types | Anonymous |
+
+The frontend records:
+- Resume views and downloads through `resume-viewer.js`.
+- Certificate views and downloads through `app.js`.
+- Portfolio appreciation through `portfolio-like.js`.
+- Session and section-view/section-time events through `engagement-analytics.js`.
+
+The Project 2 extension adds the following functions to the same live Function App. Their latest source is maintained on the `resume-develop` branch:
+
+| Endpoint / trigger | Purpose | Authorization |
+|---|---|---|
+| `GET /api/portfolio-analytics` | Return aggregated visitor, resume, certificate and portfolio engagement metrics for the Azure Workbook | Anonymous, read-only aggregate response |
+| `GET /api/cost-analytics` | Read the cached cost snapshot | Function key |
+| `POST /api/cost-cache-refresh` | On-demand cost cache refresh | Function key |
+| `daily_cost_cache_refresh` | Scheduled daily cost cache refresh | Timer trigger |
+
+The Azure Workbook's cost panels query Azure Cost Management through the Workbook ARM endpoint directly; they do not depend on the `/api/cost-analytics` function endpoint.
+
+Source for the Project 2 API extension: [`resume-develop/api`](https://github.com/712Aniket/azure-cloud-resume-challenge/tree/resume-develop/api). This extension source has been deployed to the shared live Function App, but has not yet been promoted into the `main` branch.
+
+## 8. Infrastructure as Code – Terraform
 
 Terraform is used to define and manage the Azure infrastructure.
 
@@ -140,9 +177,11 @@ The configuration covers resources including:
 - Application Insights
 - Required identity and access role assignments
 
-Terraform makes the infrastructure configuration repeatable and easier to maintain.
+Terraform makes the declared infrastructure configuration repeatable and easier to maintain. The repository includes both resource-specific configuration and generated import configuration in `terraform/generated-imports.tf`.
 
-Sensitive configuration and Terraform state files are excluded from source control.
+Sensitive configuration and Terraform state files are excluded from source control. The reviewed Project 1 Terraform directory does not include a tracked `backend.tf` file; therefore, this README does not claim that Project 1's own Terraform state is configured with a remote backend.
+
+**Drift warning:** The generated Terraform import snapshot currently records the Function App's `https_only` setting as `false`, while the live Function App was subsequently hardened to `httpsOnly=true`. The live Cosmos DB local-authentication and firewall changes were also applied through Azure/Portal operations and are not fully represented by the checked-in Terraform configuration. Review and reconcile Terraform configuration and state before any future `terraform apply`; an unreviewed apply could reintroduce weaker settings.
 
 ## 8. CI/CD – GitHub Actions
 
@@ -158,11 +197,11 @@ Workflow file:
 
 ### Deployment Process
 
-1. A developer pushes changes to the `resume-develop` branch.
-2. GitHub Actions starts the workflow.
+1. A developer pushes changes to the `main` branch.
+2. GitHub Actions starts the Static Web Apps workflow.
 3. The repository is checked out using GitHub Actions.
-4. The Azure Static Web Apps deployment action builds and deploys the frontend.
-5. The updated website becomes available through Azure Static Web Apps.
+4. The Azure Static Web Apps deployment action builds and deploys the `./frontend` folder.
+5. The updated frontend becomes available through Azure Static Web Apps.
 
 ### Workflow Details
 
@@ -170,7 +209,7 @@ Workflow file:
 |---|---|
 | CI/CD Platform | GitHub Actions |
 | Runner | Ubuntu Latest |
-| Trigger Branch | resume-develop |
+| Trigger Branch | main |
 | Deployment Target | Azure Static Web Apps |
 | Frontend Location | `./frontend` |
 | Deployment Action | Azure/static-web-apps-deploy@v1 |
@@ -178,9 +217,7 @@ Workflow file:
 
 ### Pull Request Preview
 
-Pull requests targeting `resume-develop` also trigger preview deployment workflows.
-
-When a pull request is closed, the corresponding preview environment is cleaned up.
+The checked-in Static Web Apps workflow does not declare a `pull_request` trigger. Pull-request preview deployment is therefore not claimed as a configured workflow.
 
 ### Backend Deployment
 
@@ -208,11 +245,20 @@ azure-cloud-resume-challenge/
 │   └── deployment-architecture.png
 │
 ├── frontend/
-│   ├── images/
-│   │   └── certificates/
 │   ├── index.html
+│   ├── compact.html
+│   ├── app.js
+│   ├── land.js
+│   ├── style.css
+│   ├── engagement-analytics.js
+│   ├── portfolio-like.js
+│   ├── resume-viewer.js
+│   ├── resume-viewer.css
+│   ├── view-transition.js
+│   ├── view-transition.css
 │   ├── css/
-│   └── js/
+│   ├── js/
+│   └── assets/
 │
 ├── infrastructure/
 │
@@ -255,19 +301,22 @@ During development, the following areas were explored:
 
 ## 12. Future Improvements
 
-Potential enhancements include:
+Potential next improvements include:
 
-- Automating Python Azure Functions deployment.
-- Adding automated backend tests.
-- Improving application monitoring and alerting.
-- Implementing additional visitor analytics.
-- Configuring a custom domain.
-- Further improving CI/CD security and deployment approvals.
+- Add a tested GitHub Actions deployment workflow for the Python Function App with protected approvals and rollback-aware release handling.
+- Add automated unit, integration and API contract tests for the Python Functions.
+- Reconcile the Terraform configuration with live HTTPS-only, Cosmos DB authentication and firewall settings before using Terraform for further changes.
+- Consider a narrower, stable-egress network design (for example, VNet integration with controlled egress) if budget and hosting constraints justify it.
+- Separate Function runtime/cache storage from Terraform state storage to reduce the impact of a compromised Function App identity.
+- Add an explicit Azure budget and alert policy if cost governance notifications are required.
+- Continue improving rate limiting, abuse protection and API monitoring for anonymous visitor-facing endpoints.
 
 ## 13. Project Status
 
-**Status: Completed – Core Implementation and Documentation**
+**Status: Completed – Core Portfolio Scope and Live Backend Integration**
 
-The portfolio website, serverless visitor counter, Azure infrastructure configuration, frontend CI/CD workflow, security configuration and architecture documentation are in place.
+The public portfolio frontend, serverless visitor counter, resume/certificate event capture, portfolio appreciation/engagement event capture, Azure infrastructure configuration, frontend CI/CD workflow, and core security controls are in place.
 
-Further enhancements can be implemented as separate iterations.
+The additional Project 2 analytics and cost API functions have been deployed to the shared Function App from the `resume-develop` source branch. The latest API extension source has not yet been merged into `main`; the Static Web Apps frontend workflow continues to deploy from `main`.
+
+The README documents the current live configuration as verified during the November 2026 security review. Future changes should reconcile Terraform drift before applying infrastructure changes.
