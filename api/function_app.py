@@ -744,3 +744,7 @@ def portfolio_engagement(req: func.HttpRequest) -> func.HttpResponse:
 # Read-only dynamic analytics endpoint for the Project 2 Azure Workbook.
 from portfolio_analytics_endpoint import create_portfolio_analytics_blueprint
 app.register_functions(create_portfolio_analytics_blueprint(container))
+
+# Project 2 daily Azure Cost Management cache API and timer.
+from cost_analytics_endpoint import create_cost_analytics_blueprint
+app.register_functions(create_cost_analytics_blueprint())
