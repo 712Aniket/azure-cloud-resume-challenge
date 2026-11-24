@@ -128,7 +128,7 @@ Azure role assignments provide the Function App identity with the required permi
 
 **API authorization:** Visitor-facing routes (`health`, `visitor-count`, `portfolio-event`, and `portfolio-engagement`) use anonymous Function authorization because the public website needs them. The Project 2 extension routes `cost-analytics` and `cost-cache-refresh` require a Function key. The aggregated `portfolio-analytics` route is anonymous for the Azure Workbook. Managed Identity protects server-to-service access; it does not authenticate visitors. CORS is a browser control, not API authentication.
 
-**Residual risk:** The Function App identity has account-scope `Storage Blob Data Owner` access on `aniketportfolio07`, which also stores Terraform remote state. This is broader than a cache-only permission and could allow the Function App identity to access Terraform state. Storage separation was deferred; review this before reusing or decommissioning the shared account.
+**Residual risk:** The Function App identity retains account-scope `Storage Blob Data Owner` on `aniketportfolio07`, which supports Function runtime storage and the auxiliary cost cache. This is broader than a cache-only permission. Project 1 and Project 2 Terraform state have since moved to the separate `aniketterraformstate26` account; the Function App identity has no direct role assignment on that dedicated state account.
 
 ## 7. API and Analytics Capabilities
 
@@ -162,28 +162,51 @@ Source for the Project 2 API extension: [`resume-develop/api`](https://github.co
 
 ## 8. Infrastructure as Code – Terraform
 
-Terraform is used to define and manage the Azure infrastructure.
+Terraform adopts and manages the Project 1-owned Azure resources. Existing resources were imported into state rather than recreated.
 
-Infrastructure configuration is maintained in the `terraform/` directory.
+### Dedicated remote state
 
-The configuration covers resources including:
+| Setting | Value |
+|---|---|
+| Resource Group | `rg-portfolio` |
+| Storage Account | `aniketterraformstate26` |
+| Container | `project1-tfstate` |
+| State Key | `project1.tfstate` |
+| Local authentication | Microsoft Entra ID / Azure CLI |
+| Backend access | Storage Blob Data Contributor scoped to the Project 1 container |
 
-- Azure Resource Group
-- Azure Storage Account
-- Azure Cosmos DB account
-- Cosmos DB SQL database and container
-- Azure Functions Service Plan
-- Azure Static Web Apps
-- Application Insights
-- Required identity and access role assignments
+The shared resource group and the shared Function runtime/cache storage account `aniketportfolio07` are intentionally excluded from Project 1 state. Application Insights (`aniket-portfolio-api`) is shared telemetry and is owned by Project 2 Terraform state. Each Azure resource should have one Terraform state owner.
 
-Terraform makes the declared infrastructure configuration repeatable and easier to maintain. The repository includes both resource-specific configuration and generated import configuration in `terraform/generated-imports.tf`.
+### Eight imported resources
 
-Sensitive configuration and Terraform state files are excluded from source control. The reviewed Project 1 Terraform directory does not include a tracked `backend.tf` file; therefore, this README does not claim that Project 1's own Terraform state is configured with a remote backend.
+1. Cosmos DB account — `azurerm_cosmosdb_account.portfolio`
+2. Cosmos SQL database — `azurerm_cosmosdb_sql_database.portfolio`
+3. Cosmos SQL container — `azurerm_cosmosdb_sql_container.visitor_counters`
+4. Function App service plan — `azurerm_service_plan.portfolio`
+5. Function App Flex Consumption app — `azurerm_function_app_flex_consumption.portfolio`
+6. Function App Managed Identity Cosmos SQL role assignment — `azurerm_cosmosdb_sql_role_assignment.function_identity`
+7. Function App Managed Identity Storage Blob Data Owner assignment — `azurerm_role_assignment.storage_blob_owner`
+8. Static Web App — `azurerm_static_web_app.portfolio`
 
-**Drift warning:** The generated Terraform import snapshot currently records the Function App's `https_only` setting as `false`, while the live Function App was subsequently hardened to `httpsOnly=true`. The live Cosmos DB local-authentication and firewall changes were also applied through Azure/Portal operations and are not fully represented by the checked-in Terraform configuration. Review and reconcile Terraform configuration and state before any future `terraform apply`; an unreviewed apply could reintroduce weaker settings.
+### Drift reconciliation
 
-## 8. CI/CD – GitHub Actions
+The import exposed differences between generated configuration and live Azure settings. The reviewed configuration records:
+
+- Function App HTTPS-only is enabled (`https_only = true`).
+- Cosmos DB local/key authentication is disabled, public network access is enabled, virtual network filtering is disabled, and Azure-services ACL bypass is disabled.
+- CORS retains all six verified origins: the Static Web Apps fallback URL, `https://aniketpawar.is-a.dev`, local development origins on ports 8000, 5000 and 5500, and `https://portal.azure.com`.
+- Function App app settings are excluded from Terraform change detection because the generated import snapshot does not contain the complete operational settings. A separate controlled process is required to manage those settings.
+- The Cosmos DB firewall currently has 31 explicit IP entries plus the `0.0.0.0` Azure-datacenter exception (32 entries total). In this source branch, `ip_range_filter` is intentionally ignored until the complete verified allowlist is maintained in source control. The live firewall list must not be replaced by an incomplete list.
+
+The earlier local reconciliation run produced `No changes. Your infrastructure matches the configuration. Plan: 0 to add, 0 to change, 0 to destroy.` This documentation/source synchronization branch still needs its own `terraform fmt`, `terraform validate` and `terraform plan` review before merge. Do not apply a plan that proposes replacement or deletion of Cosmos DB, the Function App, Static Web App or their data.
+
+### Shared cost governance
+
+The `portfolio-monthly-budget` budget is configured at the `rg-portfolio` scope for ₹300 per month, with notifications at 50%, 80% and 100% actual spend and 100% forecast spend. It covers Project 1 and Project 2 resources in the shared resource group; it is not a Project 1-only budget. Budget notifications do not stop or cap spending.
+
+Terraform state files and plan files must never be committed to Git.
+
+## 9. CI/CD – GitHub Actions
 
 GitHub Actions automates the frontend deployment process.
 
@@ -223,7 +246,7 @@ The checked-in Static Web Apps workflow does not declare a `pull_request` trigge
 
 The Static Web Apps workflow described above deploys the frontend only. It does not deploy the Python Azure Functions backend.
 
-## 9. Repository Structure
+## 10. Repository Structure
 
 ```text
 azure-cloud-resume-challenge/
@@ -263,6 +286,7 @@ azure-cloud-resume-challenge/
 ├── infrastructure/
 │
 ├── terraform/
+│   ├── backend.tf
 │   ├── main.tf
 │   ├── functionapp.tf
 │   ├── cosmos.tf
@@ -276,7 +300,7 @@ azure-cloud-resume-challenge/
 └── README.md
 ```
 
-## 10. Monitoring and Observability
+## 11. Monitoring and Observability
 
 Application Insights is integrated with the Azure Function App to collect application telemetry.
 
@@ -284,7 +308,7 @@ It supports monitoring and diagnostics of application requests and runtime behav
 
 The integration provides a foundation for investigating application issues and understanding backend activity.
 
-## 11. Challenges and Technical Learning
+## 12. Challenges and Technical Learning
 
 During development, the following areas were explored:
 
@@ -299,24 +323,24 @@ During development, the following areas were explored:
 - Applying GitHub security features such as CodeQL and Dependabot.
 - Managing development and stable branches using Git.
 
-## 12. Future Improvements
+## 13. Future Improvements
 
 Potential next improvements include:
 
 - Add a tested GitHub Actions deployment workflow for the Python Function App with protected approvals and rollback-aware release handling.
 - Add automated unit, integration and API contract tests for the Python Functions.
-- Reconcile the Terraform configuration with live HTTPS-only, Cosmos DB authentication and firewall settings before using Terraform for further changes.
+- Maintain the verified Cosmos DB firewall allowlist in source control; the current review branch intentionally ignores `ip_range_filter` rather than risk overwriting the live 32-entry list.
 - Consider a narrower, stable-egress network design (for example, VNet integration with controlled egress) if budget and hosting constraints justify it.
 - Separate Function runtime/cache storage from Terraform state storage to reduce the impact of a compromised Function App identity.
-- Add an explicit Azure budget and alert policy if cost governance notifications are required.
+- Review the shared ₹300 monthly Resource Group budget and tune thresholds only when actual usage justifies a change.
 - Continue improving rate limiting, abuse protection and API monitoring for anonymous visitor-facing endpoints.
 
-## 13. Project Status
+## 14. Project Status
 
-**Status: Completed – Core Portfolio Scope and Live Backend Integration**
+**Status: Completed – Core Portfolio Scope and Live Backend Integration; Terraform source synchronization under review**
 
 The public portfolio frontend, serverless visitor counter, resume/certificate event capture, portfolio appreciation/engagement event capture, Azure infrastructure configuration, frontend CI/CD workflow, and core security controls are in place.
 
 The additional Project 2 analytics and cost API functions have been deployed to the shared Function App from the `resume-develop` source branch. The latest API extension source has not yet been merged into `main`; the Static Web Apps frontend workflow continues to deploy from `main`.
 
-The README documents the current live configuration as verified during the November 2026 security review. Future changes should reconcile Terraform drift before applying infrastructure changes.
+The dedicated Project 1 remote backend and ownership boundaries are documented in this README. The latest infrastructure synchronization is being reviewed separately from the live application: validate the review branch and its Terraform plan before merging it into `main` or applying any infrastructure changes.
