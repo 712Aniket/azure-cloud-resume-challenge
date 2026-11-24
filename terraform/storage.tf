@@ -1,12 +1,2 @@
-resource "azurerm_storage_account" "portfolio" {
-  name                     = "aniketportfolio07"
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
-  account_kind             = "StorageV2"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  https_traffic_only_enabled      = true
-  min_tls_version                 = "TLS1_2"
-  allow_nested_items_to_be_public = false
-}
+# aniketportfolio07 is shared by the Function App runtime and application cache.
+# It is intentionally excluded from Project 1 Terraform state.
