@@ -78,7 +78,7 @@ resource "azurerm_function_app_flex_consumption" "portfolio" {
     application_insights_key                      = null # sensitive
     container_registry_managed_identity_client_id = null
     container_registry_use_managed_identity       = false
-    default_documents                             = ["Default.htm", "Default.html", "Default.asp", "index.htm", "index.html", "iisstart.htm", "iisstart.html", "default.aspx", "index.php"]
+    default_documents                             = ["Default.htm", "Default.html", "Default.asp", "index.htm", "index.html", "iisstart.htm", "default.aspx", "index.php"]
     elastic_instance_minimum                      = 0
     http2_enabled                                 = false
     ip_restriction_default_action                 = "Allow"
